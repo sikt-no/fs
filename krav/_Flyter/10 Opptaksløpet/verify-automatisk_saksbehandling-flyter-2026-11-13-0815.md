@@ -26,12 +26,12 @@ Stiene er forkortet:
 
 Tallene for hele kjøringen, regnet ut fra tabellene under.
 
-- Scenarioer: 22 funnet, 15 ikke funnet, 0 usikker, av 37
+- Scenarioer: 23 funnet, 14 ikke funnet, 0 usikker, av 37
 - Mangler: fs-plattform 6 scenarioer, fs-admin 4, min-kompetanse ikke med i kjøringen
-- Forslag: 0 kan leveres, 0 delvis levert, 0 kan slettes, 9 kan leveres når det er avklart, 4 blir stående
+- Forslag: 0 kan leveres, 0 delvis levert, 0 kan slettes, 8 kan leveres når det er avklart, 4 blir stående
 - Tilgang og datakonsistens: ingen rader (bare flyter og avhengigheter i omfanget)
 - Regler i koden uten scenario: 0
-- Endringer gjort: 1 krav og 4 deler fikk ny status, og 3 krav ble rettet (019, 025 og AUT-001), 0 filer og 0 blokker slettet
+- Endringer gjort: 1 krav og 5 deler fikk ny status, og 4 krav ble rettet (019, 025, 028 og AUT-001), 0 filer og 0 blokker slettet
 - Åpne spørsmål: 1 regel og 3 scenarioer i gating-settet, 0 utenfor gating (`@draft`)
 
 ## Forslag til endringer
@@ -42,7 +42,6 @@ Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis lever
 
 - `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature`): kan få `@implemented` når de seks fasene som ikke er levert, er levert. Alle overleveringene i de leverte fasene er funnet (12/12) `[P ✓ · A –]`. Det som holder fasene igjen, står i kravene under.
 - `@OPT-BEH-BEH-015` — Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/automatisk_gsk_konklusjon.feature:435`): kan få `@implemented` når «Automatikken kan sette en ny konklusjon etter annulleringen» (`:462`) er bygget `[P ✗]`: `P/autosak/gsk/GskVedtakAutoService.java:69-71` og `P/soknad/gskvedtak/GskVedtakConditions.java:14-15` regner `KVALIFISERT_MEN_ANNULLERT` som gjeldende konklusjon, så automatikken setter ingen ny · mangler i fs-plattform (1). Holder igjen AUT-fasen «Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG».
-- `@OPT-BEH-BEH-028` — Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/automatiske_tilleggspoeng.feature:79`): kan få `@implemented` på hele regelen når «Bare beståtte emner teller» (`:119`) er bygget eller avklart `[P ✗]`: `P/regelverk/poeng/PoengService.java:278` summerer uten filter på bestått, og `P/vitnemalsportalen/ElmoMapper.java` leser ikke statusen passed/failed · mangler i fs-plattform (1). Holder igjen AUT-fasen «Søknaden får tilleggspoeng når grunnlaget er satt».
 - `@OPT-BEH-BEH-025` — Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/ferdigbehandle_sak.feature:96`): funnet i fs-plattform, men har ingen statustag (`P/autosak/FerdigbehandlingService.java:78` → `P/saksbehandling/ManglerPublisering.java:49-53`). «Søkeren ser … i Min kompetanse» er ikke sjekket. Verifiser med kravet i scope. Holder igjen AUT-fasen «Saken blir ferdig behandlet …».
 - `@OPT-BEH-BEH-029` — Regel: Saksloggen viser endringene i behandlingsstatusen (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/behandlingsstatus.feature:139`): kan få `@implemented` når «Saksloggen viser endring av behandlingsstatus når <årsak>» (`:141`) er bygget `[P ✗ · A ~]`: `P-mig/V480__stopp_endringslogg.sql` fjerner audit-triggerne (BAT-324), og ingen kode skriver saksloggen · mangler i fs-plattform (1), fs-admin (1). Holder igjen AUT-fasen «Saken blir ferdig behandlet …».
 - `@OPT-BEH-BEH-026` — Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/beregne_automatisk_på_nytt.feature:164`): funnet i fs-plattform, men har ingen statustag (`P/saksbehandling/regelverksoppdatering/RegelverksoppdateringKjoringService.java:257` → `P/saksbehandling/ManglerPublisering.java:41-45`). Min kompetanse er ikke sjekket. Verifiser med kravet i scope. Holder igjen AUT-fasen «Søknadsalternativene beregnes på nytt når regelverket er rettet».
@@ -52,7 +51,7 @@ Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis lever
 
 **Blir stående**
 
-- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`@planned`, 13/20 funnet): 12 av 18 faser levert. 7 scenarioer er ikke funnet fordi fasen ikke er levert: «Søknaden får GSK-konklusjonen …», «Søknaden får tilleggspoeng …», «Saken får mangeltekster …», «Mangelen for GSK som fullføres i vår …», «Saken blir ferdig behandlet …» (2 scenarioer) og «Søknadsalternativene beregnes på nytt …».
+- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`@planned`, 14/20 funnet): 13 av 18 faser levert. 6 scenarioer er ikke funnet fordi fasen ikke er levert: «Søknaden får GSK-konklusjonen …», «Saken får mangeltekster …», «Mangelen for GSK som fullføres i vår …», «Saken blir ferdig behandlet …» (2 scenarioer) og «Søknadsalternativene beregnes på nytt …».
 - `@FLY-OPT-VIT-001` — Importere VGS-vitnemål fra KREG (`@planned`, 8/9 funnet): 6 av 7 faser levert. «Importen starter når jobbplanleggeren kjører jobben» er ikke funnet: fasen er ikke levert, fordi `@OPT-BEH-BEH-033` er `@planned`.
 - `@FLY-OPT-VAL-001` — Automatisk saksbehandling på vitnemålet saksbehandleren velger (`@draft`, 1/2 funnet): 1 av 2 faser levert. «Saken er ferdig behandlet på det valgte vitnemålet» venter på `@FLY-OPT-AUT-001` og regelen om grunnlag, poeng og kravelementer i `@OPT-BEH-BEH-039`. Flyten er `@draft`, og må valideres med `fs-krav` før den kan få ny status.
 - `@FLY-OPT-SAM-001` — Automatisk saksbehandling på sammensatt vitnemål (`@draft`, 0/6 funnet): 0 av 4 faser levert, og én fase mangler krav. Sammensatt vitnemål finnes ikke i koden · mangler i fs-plattform (5), fs-admin (4).
@@ -69,6 +68,7 @@ Det som er endret i kravfilene og i resultatet: i kjøringen (det sikre, når br
 | `@OPT-BEH-BEH-039` | Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger | `@implemented` på delen | Begge scenarioene funnet i fs-plattform og fs-admin (!3415) og bekreftet av kontrollen. `@draft`-scenarioet om sammensatt vitnemål under regelen står urørt |
 | `@OPT-BEH-BEH-039` | Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt; Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt; Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt | `@implemented` på delene | Brukeren: det samme for den andre VAL-fasen. Funnet i fs-plattform og bekreftet av kontrollen. «Sammensatt vitnemål …» står urørt, så regelen og VAL-fasen er fortsatt ikke levert, og fasen venter også på `@FLY-OPT-AUT-001` |
 | `@FLY-OPT-VAL-001` | Scenario: Saken behandles automatisk på vitnemålet saksbehandleren velger | `ikke funnet` → `funnet` | Fasen er levert etter taggingen over, og overleveringen er funnet i begge repoene |
+| `@OPT-BEH-BEH-028` | Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng | `@implemented` på regelen (fra scenarioene), og avklaring på «Bare beståtte emner teller» | Brukeren: tjenesten for resultater fra høyere utdanning gir bare gyldige resultater, så backenden trenger ikke å filtrere. Scenarioet er levert. `ikke funnet` → `funnet`. AUT-fasen «Søknaden får tilleggspoeng …» er dermed levert, og overleveringen er funnet |
 | `@OPT-BEH-BEH-019` | Scenario: Søker med flere ulike vitnemål behandles ikke automatisk | rettet på stedet (tittel, `Gitt` og kommentaren under regelen) | Brukeren: «to ulike vitnemål». Koden (!6741) regner identiske vitnemål som ett, og det er levert. Rettet på stedet fordi koden allerede gjør det teksten nå sier. `usikker` → `funnet` |
 | `@OPT-BEH-BEH-025` | Scenario: Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål; Scenario: To identiske vitnemål regnes som ett vitnemål (nytt) | «to ulike vitnemål» i `Gitt`, og nytt scenario under den leverte regelen (ingen statustag) | Brukeren: 025 eier regelen om identiske vitnemål, og den er levert |
 | `@FLY-OPT-AUT-001` | Regel: To identiske vitnemål reknes som ett vitnemål | `@wont` og `@openquestion` fjernet, `@depends-on-OPT-BEH-BEH-025` lagt til; kommentaren om `@wont`-fasene rettet | Brukeren: fasen er levert. Fasen er levert, og overleveringen er funnet i koden |
@@ -84,7 +84,7 @@ Hvor mange scenarioer som er funnet i hvert krav, og hvor mange som mangler i hv
 
 | Feature-ID | Egenskap | Funnet | Mangler i P | Mangler i A | Mangler i M | Hva som gjenstår |
 | --- | --- | --- | --- | --- | --- | --- |
-| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 13/20 | 0 | – | – | 6 faser venter på kravene de bygger på (7 scenarioer, «fasen er ikke levert») |
+| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 14/20 | 0 | – | – | 5 faser venter på kravene de bygger på (6 scenarioer, «fasen er ikke levert») |
 | `@FLY-OPT-VIT-001` | Importere VGS-vitnemål fra KREG | 8/9 | 0 | – | – | Fasen om jobbplanleggeren venter på `@OPT-BEH-BEH-033` |
 | `@FLY-OPT-VAL-001` | Automatisk saksbehandling på vitnemålet saksbehandleren velger | 1/2 | 0 | 0 | – | Fasen «Resten av saken …» venter på `@FLY-OPT-AUT-001` og regelen om grunnlag, poeng og kravelementer i `@OPT-BEH-BEH-039` |
 | `@FLY-OPT-SAM-001` | Automatisk saksbehandling på sammensatt vitnemål | 0/6 | 6 | 4 | – | Sammensatt vitnemål finnes ikke, og én fase mangler krav |
@@ -107,7 +107,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | `@FLY-OPT-AUT-001` | To identiske vitnemål reknes som ett vitnemål | `@OPT-BEH-BEH-025` (`@in-progress`, Regel: Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk levert; scenarioet «To identiske vitnemål regnes som ett vitnemål» lagt til i denne kjøringen) | ja |
 | `@FLY-OPT-AUT-001` | Saken får grunnlag fra vitnemålet | `@OPT-BEH-BEH-019` (`@in-progress`, tre regler levert) | ja |
 | `@FLY-OPT-AUT-001` | Poengene beregnes fra grunnlaget og rangeringsregelverket | `@OPT-BEH-BEH-018` (`@in-progress`, tre regler levert), `@OPT-REG-RAN-001` (`@implemented`), `@OPT-REG-RAN-002` (`@implemented`) | ja |
-| `@FLY-OPT-AUT-001` | Søknaden får tilleggspoeng når grunnlaget er satt | `@OPT-BEH-BEH-028` (`@in-progress`, Regel: Poeng for høyere utdanning … ikke levert: «Bare beståtte emner teller») | nei |
+| `@FLY-OPT-AUT-001` | Søknaden får tilleggspoeng når grunnlaget er satt | `@OPT-BEH-BEH-028` (`@in-progress`, fire regler levert; Regel: Poeng for høyere utdanning … levert etter avklaringen 13.11.2026) | ja |
 | `@FLY-OPT-AUT-001` | Søknaden dobbeltrangeres automatisk etter 23/5-regelen (`@wont`) | – | mangler krav |
 | `@FLY-OPT-AUT-001` | Kravelementene vurderes mot vitnemålet når poengene er beregnet | `@OPT-BEH-BEH-020` (`@in-progress`, tre regler levert) | ja |
 | `@FLY-OPT-AUT-001` | Kvotespørsmålene med algoritme besvares automatisk | `@OPT-BEH-BEH-012` (`@implemented`), `@OPT-REG-KVO-002` (`@implemented`) | ja |
@@ -132,7 +132,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | `@FLY-OPT-SAM-001` | Søknaden får ikke grunnlaget for førstegangsvitnemål på det sammensatte vitnemålet | `@OPT-BEH-BEH-019` (`@in-progress`, Regel: Grunnlaget velges ut fra egenskapene … levert), `@OPT-BEH-BEH-039` (`@planned`) | nei |
 | `@FLY-OPT-SAM-001` | Resten av saken behandles som i den automatiske saksbehandlingen | `@FLY-OPT-AUT-001` (`@planned`) | nei |
 
-`@FLY-OPT-AUT-001`: 12 av 18 faser levert (fasen med `@wont` er ikke telt med).
+`@FLY-OPT-AUT-001`: 13 av 18 faser levert (fasen med `@wont` er ikke telt med).
 `@FLY-OPT-VIT-001`: 6 av 7 faser levert.
 `@FLY-OPT-VAL-001`: 1 av 2 faser levert.
 `@FLY-OPT-SAM-001`: 0 av 4 faser levert.
@@ -152,7 +152,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-018` | Automatisk beregning av vitnemålspoeng | `@in-progress` | 5/5 | 5/5 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` | Rangeringsregelverk | `@implemented` | 5/5 | – | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` | Poengberegning | `@implemented` | 10/10 | – | – | – |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` | Automatiske tilleggspoeng | `@in-progress` | 19/20 | 19/20 | «Bare beståtte emner teller» (`:119`, ikke funnet) | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` | Automatiske tilleggspoeng | `@in-progress` | 20/20 | 20/20 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` | Automatisk vurdering av spesielle opptakskrav | `@in-progress` | 18/18 | 17/18 | – | «Ingen automatisk vurdering når <grunn>» (`:190`, usikker) |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-012` | Automatisk kvoteplassering | `@implemented` | 8/8 | 8/8 | – | – |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-002` | Kvotespørsmål | `@implemented` | 7/7 | – | – | – |
@@ -170,7 +170,7 @@ Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og 
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 0/2 | 0/1 | «Saken behandles automatisk på et sammensatt vitnemål» (`:54`, ikke sjekket i koden); «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
 | `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 7/7 | 7/7 | – | – |
 
-`@FLY-OPT-AUT-001`: 212 av 226 scenarioer i 18 krav er levert, og 184 av 203 er funnet i koden (23 har bare status fra taggene).
+`@FLY-OPT-AUT-001`: 213 av 226 scenarioer i 18 krav er levert, og 185 av 203 er funnet i koden (23 har bare status fra taggene).
 `@FLY-OPT-VIT-001`: 41 av 42 scenarioer i 5 krav er levert, og 41 av 42 er funnet i koden.
 `@FLY-OPT-VAL-001`: 5 av 6 scenarioer i 1 krav er levert, og 5 av 6 er funnet i koden.
 `@FLY-OPT-SAM-001`: 7 av 9 scenarioer i 2 krav er levert, og 7 av 8 er funnet i koden (1 har bare status fra taggene).
@@ -191,7 +191,7 @@ Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avh
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-018` Automatisk beregning av vitnemålspoeng | 1 | `@in-progress` | 5/5 | ankrene: tre regler |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` Rangeringsregelverk | 1 | `@implemented` | – | bare status |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` Poengberegning | 1 | `@implemented` | – | bare status |
-| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` Automatiske tilleggspoeng | 1 | `@in-progress` | 19/20 | ankrene: fire regler; 1 ikke funnet |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` Automatiske tilleggspoeng | 1 | `@in-progress` | 20/20 | ankrene: fire regler; «Bare beståtte emner teller» avklart 13.11.2026 |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` Automatisk vurdering av spesielle opptakskrav | 1 | `@in-progress` | 17/18 | ankrene: fire regler; 1 usikker (identiske vitnemål) |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-012` Automatisk kvoteplassering | 1 | `@implemented` | 8/8 | ankrene: tre regler |
 | `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-002` Kvotespørsmål | 1 | `@implemented` | – | bare status |
@@ -334,7 +334,7 @@ Stiforkortelser i tabellen som ikke står over: `SYNC` = `P/saksbehandling/GskFu
 | `@OPT-BEH-BEH-028` | Poeng for høyere utdanning | funnet | P ✓ · A – — P/regelverk/poeng/HoyereUtdanningspoeng.java:12; HoyereUtdanningspoengAlgoritme.java:9 |
 | `@OPT-BEH-BEH-028` | Poengene for høyere utdanning viser hvor mange studiepoeng de er regnet ut for | funnet | P ✓ · A ✓ — PoengService.java:131; PCR:228 |
 | `@OPT-BEH-BEH-028` | Søker uten resultater fra høyere utdanning får 0 poeng | funnet | P ✓ · A – — PoengService.java:279 |
-| `@OPT-BEH-BEH-028` | Bare beståtte emner teller | ikke funnet | P ✗ · A – — PoengService.java:278 filtrerer på EMNE, SP, NKR 6–8 og ikke innpasset, men ikke på bestått; importen (vitnemalsportalen/ElmoMapper.java:82-200) lagrer bare resultLabel. Søkt «bestått», «bestatt», «bestaatt», «STRYK», «passed», «resultatstatus» i main og !6714 |
+| `@OPT-BEH-BEH-028` | Bare beståtte emner teller | funnet | P ✓ · A – — avklart 13.11.2026: tjenesten for resultater fra høyere utdanning gir bare gyldige resultater, så opptakssystemet filtrerer ikke selv. Summen er P/regelverk/poeng/PoengService.java:278-288 |
 | `@OPT-BEH-BEH-028` | Fagskolepoeng teller ikke | funnet | P ✓ · A – — PoengService.java:285 |
 | `@OPT-BEH-BEH-028` | Innpassede emner telles bare én gang | funnet | P ✓ · A – — PoengService.java:286 |
 | `@OPT-BEH-BEH-028` | Innpassede emner telles med studiepoengene fra lærestedet der de ble tatt | funnet | P ✓ · A – — PoengService.java:286 |
@@ -450,7 +450,6 @@ Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i ko
 | Feature-ID | Scenario | Resultat | Bevis |
 | --- | --- | --- | --- |
 | `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-015` «Automatikken kan sette en ny konklusjon etter annulleringen» (automatisk_gsk_konklusjon.feature:462), ikke funnet i koden: `P/autosak/gsk/GskVedtakAutoService.java:69-71` stopper på en annullert konklusjon (`KVALIFISERT_MEN_ANNULLERT`). Overleveringen selv finnes: `P/autosak/KregImportService.java:98` → `GskKonklusjonEtterImportService` |
-| `@FLY-OPT-AUT-001` | Søknaden får tilleggspoengene for grunnlaget | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-028` «Bare beståtte emner teller» (automatiske_tilleggspoeng.feature:119), ikke funnet i koden: `P/regelverk/poeng/PoengService.java:278` summerer studiepoeng uten filter på bestått |
 | `@FLY-OPT-AUT-001` | Saken får mangeltekst for kravelementet vitnemålet ikke oppfyller | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-036` «Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene» (automatiske_mangler.feature:71), usikker: navnet på kravlisten skrives ikke (`P/regelverk/kvalifisering/ManglendeKravTekstService.java:22-31`); «Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene» (:92), funnet etter at !3421 ble merget 09:11 (`A/SakDrawer/components/ManglerCard/ManglerCard.tsx:217`), men uten statustag; «Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet» (:98), usikker: fs-plattform publiserer, Min kompetanse ikke sjekket |
 | `@FLY-OPT-AUT-001` | Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-036` «Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår» (automatiske_mangler.feature:227), ikke funnet: saksloggen viser ikke grunnen (V480); «Saken får ikke mangel når ingen mangelkode er merket» (:234), ikke funnet: varselet til opptaksforvalteren finnes ikke; «Opptaksforvalteren får varselet bare første gang» (:240), ikke funnet; «Søkeren ser den automatiske mangelen i Min kompetanse» (:246), usikker: vises ikke mens saken er ubehandlet (`P-mig/V514__behandlingsstatus_fjern_ferdig_behandlet.sql:16-20`); «Mangelen slettes når søkeren endrer søknaden» (:257), ikke funnet: saksloggen (V480); «Mangelen sjekkes ut når saken er behandlet helautomatisk» (:279), ikke funnet: utsjekkingen finnes (`P/autosak/FerdigbehandlingService.java:69,222-236`), men ikke saksloggen |
 | `@FLY-OPT-AUT-001` | Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-025` «Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet» (ferdigbehandle_sak.feature:96), usikker: funnet i fs-plattform (`P/autosak/FerdigbehandlingService.java:78`), Min kompetanse ikke sjekket, og taggen mangler; `@OPT-BEH-BEH-029` «Saksloggen viser endring av behandlingsstatus når <årsak>» (behandlingsstatus.feature:141), ikke funnet: `P-mig/V480__stopp_endringslogg.sql` stoppet saksloggen |
@@ -471,6 +470,7 @@ Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i ko
 | `@FLY-OPT-AUT-001` | Saken behandles helautomatisk når søkeren har to identiske vitnemål | funnet | P ✓ · A – — lages: `P/vgs/HentVgsVitnemaalService.java:190-211` (begge vitnemålene importeres) · brukes: `P/autosak/AutomatikkensVitnemaal.java:108-116,168-197` (`velgBlantIdentiske` velger ett) → `P/autosak/FerdigbehandlingService.java:89-103` |
 | `@FLY-OPT-AUT-001` | Saken får grunnlag | funnet | P ✓ · A – — lages: `P/autosak/AutomatiskSaksbehandlingService.java:170,214-223` · brukes: `P/autosak/SetteGrunnlagService.java:111-133,186-204` |
 | `@FLY-OPT-AUT-001` | Søknadsalternativet får poengsum | funnet | P ✓ · A – — lages: `P/autosak/SetteGrunnlagService.java:186-204` · brukes: `P/saksbehandling/PropageringService.java:105-108` → `P/regelverk/poeng/AutomatiskPoengberegningService.java:41-115` |
+| `@FLY-OPT-AUT-001` | Søknaden får tilleggspoengene for grunnlaget | funnet | P ✓ · A – — lages: `P/autosak/SetteGrunnlagService.java:186-204` (grunnlaget, kalt i `P/autosak/AutomatiskSaksbehandlingService.java:173-174`) · brukes: `P/autosak/AutomatiskSaksbehandlingService.java:179` → `P/saksbehandling/PropageringService.java:107-110` (poengradene fra grunnlaget, og `beregnAlgoritmepoengIsolert`) → `P/regelverk/poeng/AlgoritmepoengService.java:34-46`. Lest av lead-en etter avklaringen, ikke kontrollert av `fs-verify-kontroll` |
 | `@FLY-OPT-AUT-001` | Kravelementet er vurdert mot vitnemålet | funnet | P ✓ · A – — lages: `P/regelverk/kvalifisering/KvalifiseringKravelementV2OppdateringService.java:41-90` · brukes: `P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:100-116,180-198` |
 | `@FLY-OPT-AUT-001` | Kvotespørsmålet er besvart automatisk | funnet | P ✓ · A – — lages: `P/saksbehandling/SoknadKvoteOppretterService.java:58-64` · brukes: `P/autosak/KvotesporsmalAlgoritmeService.java:64-76,131-165,228-254` |
 | `@FLY-OPT-AUT-001` | Søkeren er kvalifisert når vitnemålet oppfyller kravelementene | funnet | P ✓ · A – — lages: `P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:180-190` · brukes: `P/regelverk/kvalifisering/KvalifiseringOppdateringService.java:152-156,194-205` |
