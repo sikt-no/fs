@@ -163,7 +163,7 @@
 # - OPT-BEH-BEH-014: publiseringen av svaret til søkerne står der.
 # - OPT-OPT-UTD-010: regelen «Median poengsum fra forrige opptak brukes når poenggrensen
 #   ikke er satt» bygger på medianen, som vises på utdanningstilbudet der.
-@OPT-BEH-BEH-007 @must @in-progress @scope-tidlig-opptak @depends-on-OPT-BEH-BEH-013 @depends-on-OPT-OPT-UTD-004 @depends-on-OPT-BEH-BEH-010 @ref-OPT-BEH-BEH-014
+@OPT-BEH-BEH-007 @must @implemented @scope-tidlig-opptak @depends-on-OPT-BEH-BEH-013 @depends-on-OPT-OPT-UTD-004 @depends-on-OPT-BEH-BEH-010 @ref-OPT-BEH-BEH-014
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Som opptaksforvalter
   ønsker jeg å gjennomføre tidligopptaket
@@ -173,7 +173,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Gitt søkeren har søkt om tidlig opptak
     Og "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
 
-  @implemented
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
@@ -377,7 +376,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Medianen kommer fra Samordna opptak, og registreres ikke av opptaksforvalter.
 
     # Poenggrensen går foran medianen, både når den er høyere og når den er lavere.
-    @implemented
     Scenariomal: Tilbudsgaranti ut fra poenggrensen eller medianen fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak
       Og poenggrensen for tidlig opptak på "Vernepleie, høst 2027" er <poenggrense>
@@ -396,7 +394,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50          | 45     | 47    | får ikke |
         | 45          | 50     | 48    | får      |
 
-    @implemented
     Scenario: Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
       Og "Vernepleie, høst 2027" har ingen median poengsum fra forrige opptak
@@ -432,7 +429,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Søkere med saker uten konklusjon telles med, også når sakene er ferdig behandlet:
     # de er ikke med i tidligopptaket, og opptaksforvalteren gjør det samme med begge
     # (avklart 13.10.2026). En søker med flere slike saker telles én gang.
-    @implemented
     Scenario: Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon
       Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
       Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
@@ -517,7 +513,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 50 prosent av kvoten får tilbudsgaranti
       Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 50 prosent av kvoten for "Sykepleie, høst 2027"
 
-    @ref-OPT-OVO-INN-004 @implemented
+    @ref-OPT-OVO-INN-004
     Scenario: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
       Gitt opptaket har ikke nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud
       Når opptaksforvalter gjennomfører tidligopptaket
@@ -530,7 +526,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature. Reglene er flyttet
   # 14.10.2026, fordi de gjelder alle tilbudsgarantier, ikke bare tidlig opptak
   # (STEK-241, STEK-188).
-  @implemented
   Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket
 
     Scenario: Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket
