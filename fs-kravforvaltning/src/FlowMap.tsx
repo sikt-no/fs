@@ -3,7 +3,8 @@
 // åpnes (lazy i Flyter.tsx), så React Flow ikke gjør resten av appen tregere å starte.
 import '@xyflow/react/dist/base.css';
 import { Background, Controls, Handle, MarkerType, MiniMap, Panel, Position, ReactFlow, ReactFlowProvider, useReactFlow, type Edge, type Node } from '@xyflow/react';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { createContext } from 'preact';
+import { useContext, useEffect, useMemo, useState } from 'preact/hooks';
 import { Dot, phaseLook, stColor } from './flowLook';
 import { flowMapLayout, KRAV_W, PHASE_W, type MapEdge, type MapKrav, type MapPhase } from './flowLayout';
 import type { Depth, Flow, FlowIndex, FlowTree, Focus, Follow } from './flows';
@@ -23,8 +24,17 @@ interface Props {
   onFull: (on: boolean) => void;
 }
 
-type PhaseData = { m: MapPhase; overview: boolean; dim: boolean };
-type KravData = { m: MapKrav; dim: boolean; hl: boolean };
+type PhaseData = { m: MapPhase; overview: boolean };
+type KravData = { m: MapKrav };
+
+// Kravet musen står over, og det som henger direkte sammen med det. Det går til kortene gjennom en context, ikke
+// gjennom data på nodene: nye node-objekter mister målene i React Flow, og skjules til de er målt på nytt, så kartet
+// blinket når musen gikk over et krav
+const HoverCtx = createContext<{ hover: string | null; near: Set<string> | null }>({ hover: null, near: null });
+const useDim = (id: string) => {
+  const { near } = useContext(HoverCtx);
+  return !!near && !near.has(id);
+};
 
 const Handles = () => (
   <>
@@ -37,7 +47,8 @@ const Handles = () => (
 );
 
 function PhaseNode({ data }: { data: PhaseData }) {
-  const { m, overview, dim } = data;
+  const { m, overview } = data;
+  const dim = useDim(m.id);
   const p = m.phase;
   const look = phaseLook(m.status, overview);
   return (
@@ -62,7 +73,9 @@ function PhaseNode({ data }: { data: PhaseData }) {
 }
 
 function KravNode({ data }: { data: KravData }) {
-  const { m, dim, hl } = data;
+  const { m } = data;
+  const dim = useDim(m.id);
+  const hl = useContext(HoverCtx).hover === m.id;
   return (
     <div class={'fl-mn fl-mn-krav' + (m.flow ? ' isflow' : '') + (!m.exists ? ' broken' : '') + (dim ? ' dim' : '') + (hl ? ' hl' : '')} style={{ width: KRAV_W + 'px' }} title={m.flow ? 'Åpne flyten' : 'Åpne kravet i Krav'}>
       <Handles />
@@ -90,7 +103,7 @@ function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav, full, onFul
   const [hover, setHover] = useState<string | null>(null);
   const layout = useMemo(() => flowMapLayout(ix, flow, tree, depth, follow), [ix, flow, tree, depth, follow]);
 
-  // Kravet musen står over, og det som henger direkte sammen med det: resten tones ned
+  // Resten tones ned
   const near = useMemo(() => {
     if (!hover) return null;
     const s = new Set([hover]);
@@ -102,10 +115,10 @@ function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav, full, onFul
     () =>
       layout.nodes.map(m =>
         m.kind === 'phase'
-          ? { id: m.id, type: 'phase', position: { x: m.x, y: m.y }, data: { m, overview: flow.overview, dim: !!near && !near.has(m.id) } }
-          : { id: m.id, type: 'krav', position: { x: m.x, y: m.y }, data: { m, dim: !!near && !near.has(m.id), hl: hover === m.id } },
+          ? { id: m.id, type: 'phase', position: { x: m.x, y: m.y }, data: { m, overview: flow.overview } }
+          : { id: m.id, type: 'krav', position: { x: m.x, y: m.y }, data: { m } },
       ),
-    [layout, near, hover, flow.overview],
+    [layout, flow.overview],
   );
   const x = useMemo(() => new Map(layout.nodes.map(n => [n.id, n.x])), [layout]);
   const edges: Edge[] = useMemo(
@@ -151,50 +164,54 @@ function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav, full, onFul
     return () => clearTimeout(t);
   }, [flow.id, depth, follow, full]);
 
+  const hoverCtx = useMemo(() => ({ hover, near }), [hover, near]);
+
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      nodesConnectable={false}
-      elementsSelectable={false}
-      minZoom={0.2}
-      maxZoom={1.6}
-      fitView
-      proOptions={{ hideAttribution: true }}
-      onNodeClick={(_: unknown, n: Node) => {
-        const d = n.data as PhaseData | KravData;
-        if (d.m.kind === 'phase') toPhase(d.m.phase.n);
-        else openKrav(d.m.kravId, d.m.focus);
-      }}
-      onNodeMouseEnter={(_: unknown, n: Node) => n.type === 'krav' && setHover(n.id)}
-      onNodeMouseLeave={() => setHover(null)}
-    >
-      <Background gap={18} size={1.2} color="var(--line2)" />
-      <Controls showInteractive={false} position="bottom-left" />
-      <MiniMap pannable zoomable position="bottom-right" nodeColor={(n: Node) => (n.type === 'phase' ? 'var(--k-rule-soft)' : 'var(--line2)')} maskColor="rgba(120, 120, 120, .12)" />
-      {!full && (
-        <Panel position="top-left">
-          <button class="fl-fullbtn" onClick={() => onFull(true)} title="Vis kartet i hele vinduet">
-            <span aria-hidden="true">⤢</span> Fullskjerm
-          </button>
+    <HoverCtx.Provider value={hoverCtx}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        minZoom={0.2}
+        maxZoom={1.6}
+        fitView
+        proOptions={{ hideAttribution: true }}
+        onNodeClick={(_: unknown, n: Node) => {
+          const d = n.data as PhaseData | KravData;
+          if (d.m.kind === 'phase') toPhase(d.m.phase.n);
+          else openKrav(d.m.kravId, d.m.focus);
+        }}
+        onNodeMouseEnter={(_: unknown, n: Node) => n.type === 'krav' && setHover(n.id)}
+        onNodeMouseLeave={() => setHover(null)}
+      >
+        <Background gap={18} size={1.2} color="var(--line2)" />
+        <Controls showInteractive={false} position="bottom-left" />
+        <MiniMap pannable zoomable position="bottom-right" nodeColor={(n: Node) => (n.type === 'phase' ? 'var(--k-rule-soft)' : 'var(--line2)')} maskColor="rgba(120, 120, 120, .12)" />
+        {!full && (
+          <Panel position="top-left">
+            <button class="fl-fullbtn" onClick={() => onFull(true)} title="Vis kartet i hele vinduet">
+              <span aria-hidden="true">⤢</span> Fullskjerm
+            </button>
+          </Panel>
+        )}
+        <Panel position="top-right" className="fl-maplegend">
+          <span>
+            <svg width="26" height="6" aria-hidden="true">
+              <line x1="0" y1="3" x2="26" y2="3" stroke="var(--st-implemented)" stroke-width="1.6" />
+            </svg>
+            levert
+          </span>
+          <span>
+            <svg width="26" height="6" aria-hidden="true">
+              <line x1="0" y1="3" x2="26" y2="3" stroke="var(--st-planned)" stroke-width="1.6" stroke-dasharray="5 4" />
+            </svg>
+            {follow === 'part' ? 'delen er ikke levert' : 'kravet er ikke levert'}
+          </span>
         </Panel>
-      )}
-      <Panel position="top-right" className="fl-maplegend">
-        <span>
-          <svg width="26" height="6" aria-hidden="true">
-            <line x1="0" y1="3" x2="26" y2="3" stroke="var(--st-implemented)" stroke-width="1.6" />
-          </svg>
-          levert
-        </span>
-        <span>
-          <svg width="26" height="6" aria-hidden="true">
-            <line x1="0" y1="3" x2="26" y2="3" stroke="var(--st-planned)" stroke-width="1.6" stroke-dasharray="5 4" />
-          </svg>
-          {follow === 'part' ? 'delen er ikke levert' : 'kravet er ikke levert'}
-        </span>
-      </Panel>
-    </ReactFlow>
+      </ReactFlow>
+    </HoverCtx.Provider>
   );
 }
 
