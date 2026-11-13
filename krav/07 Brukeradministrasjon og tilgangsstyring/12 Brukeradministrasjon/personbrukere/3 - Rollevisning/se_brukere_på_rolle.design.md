@@ -36,8 +36,8 @@ personbrukere.
 ### Rollens oversiktsside
 
 - Overskrift: rollekoden, med beskrivelsen under.
-- Seksjonen for listen har ingen synlig overskrift. Overskriften «Brukere med rollen» leses bare
-  av skjermlesere.
+- Seksjonen for listen har ingen synlig overskrift. Overskriften «Tildelinger av rollen» leses
+  bare av skjermlesere.
 - Listen har sin egen overskrift, «Tildelinger», fordi den viser tildelingene av rollen (Kjetil,
   13.11.2026).
 - Knappen «Gi rollen til en person» ligger i listens egen flate, som handlingselement for
@@ -77,7 +77,7 @@ Velge en rolle i rolleoversikten åpner rollens oversiktsside.
 | Laster | Samme lasteindikator som personbrukere-listen |
 | Tom rolleoversikt | Det finnes ingen roller å vise (uten filter). Teksten under |
 | Tom rolleoversikt med filter | Ingen roller passer filteret. Teksten under |
-| Tom liste på rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen aktivt tildelt. Teksten under. Knappen «Gi rollen til en person» vises fortsatt |
+| Tom liste på rollens oversiktsside | Ingen tildelinger av rollen som brukeradministratoren kan se. Teksten under. Knappen «Gi rollen til en person» vises fortsatt |
 | Tom liste med filter | Ingen tildelinger passer filteret. Teksten under |
 | Feil ved henting | Felles feilvisning som på personbrukere-listen |
 | Bruker uten navn | Navnet er ikke kjent: personen har ikke logget inn, eller påloggingen oppga ikke navnet (BRU-PER-GRU-013, regelen «Navnet hentes fra påloggingen»). Navnekolonnen viser personens nummer i stedet. **Status 13.11.2026:** API-et har ikke nummeret ennå, og FS Admin viser «Navn ikke kjent». Det er et avvik som rettes i koden (Kjetil, 13.11.2026) |
@@ -98,8 +98,10 @@ tekstene. Tekstene merket «fra fs-admin !3046, ikke godkjent» er bygget, men i
 | Rolleoversikten, filter | Alltid | «Utgåtte roller», med valgene «Skjul utgåtte» og «Vis utgåtte» (fra fs-admin !3046, ikke godkjent) | – | Utgåtte roller vises ikke i rolleoversikten som standard |
 | Rolleoversikten, ved rollekoden | Rollen er utgått | «Utgått» (fra fs-admin !3046, ikke godkjent) | – | En utgått rolle er merket når utgåtte roller vises |
 | Rolleoversikten | Ingen roller passer filteret | «Ingen roller funnet», «Endre eller tøm filtrene for å vise flere roller.» (fra fs-admin !3046, ikke godkjent) | – | Søke fram en rolle |
-| Rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen | «Ingen brukere du har tilgang til, har denne rollen.» | – | Vise tildelingene av en rolle |
-| Rollens oversiktsside | Ingen tildelinger passer filteret | «Ingen brukere funnet», «Endre eller tøm filtrene for å vise flere brukere.» (fra fs-admin !3046, ikke godkjent) | – | Filtrere tildelingene på organisasjon |
+| Seksjonens overskrift, bare for skjermlesere | Alltid | «Tildelinger av rollen» (godkjent av Kjetil 13.11.2026) | – | Vise tildelingene av en rolle |
+| Rollens oversiktsside | Ingen tildelinger av rollen som brukeradministratoren kan se | «Ingen tildelinger av rollen du har tilgang til.» (godkjent av Kjetil 13.11.2026) | – | Vise tildelingene av en rolle |
+| Rollens oversiktsside | Tildelingene kunne ikke hentes | «Kunne ikke hente tildelingene av rollen» (godkjent av Kjetil 13.11.2026) | – | Vise tildelingene av en rolle |
+| Rollens oversiktsside | Ingen tildelinger passer filteret | «Ingen tildelinger funnet», «Endre eller tøm filtrene for å vise flere tildelinger.» (godkjent av Kjetil 13.11.2026) | – | Filtrere tildelingene på organisasjon |
 | Listens overskrift | Alltid | «Tildelinger» | – | Vise tildelingene av en rolle |
 | Antallet over listen | Alltid | «{antall} tildelinger i listen», med «tildeling» i entall | entall og flertall | Antallet på rollens oversiktsside teller tildelinger |
 | Kolonneoverskrift | Alltid | «Gjelder for organisasjon» (finnes i fs-admin) | – | Vise tildelingene av en rolle |
@@ -183,5 +185,7 @@ Et tomt søkefelt sendes som ingen filtrering.
   personen (BRU-PER-GRU-014). Avklart 13.11.2026 (Kjetil).
 - Menypunktet heter «Roller». Avklart 13.11.2026 (Kjetil).
 - Listen har overskriften «Tildelinger», fordi den viser tildelingene av rollen. Seksjonens
-  overskrift, «Brukere med rollen», leses bare av skjermlesere. Avklart 13.11.2026 (Kjetil). Det
+  overskrift, «Tildelinger av rollen», leses bare av skjermlesere. Avklart 13.11.2026 (Kjetil). Det
   erstatter avklaringen om at listen ikke skulle ha noen synlig overskrift.
+- Tekstene på rollens oversiktsside snakker om tildelinger, ikke brukere: seksjonens overskrift,
+  tom liste, feil ved henting og tom liste med filter. Avklart 13.11.2026 (Kjetil).

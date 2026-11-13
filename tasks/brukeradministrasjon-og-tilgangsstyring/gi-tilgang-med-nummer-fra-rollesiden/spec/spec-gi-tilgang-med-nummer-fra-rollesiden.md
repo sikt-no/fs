@@ -159,3 +159,8 @@ Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
   allerede bare har en overskrift for skjermlesere. Listen har overskriften «Tildelinger», fordi
   den viser tildelingene av rollen. Det er ikke lenger et avvik i FS Admin at listen har en
   overskrift; fs-admin viser i dag «Brukere», og teksten skal være «Tildelinger».
+- **Tekstene på rollens oversiktsside, 13.11.2026 (Kjetil):** de snakker om tildelinger, ikke
+  brukere, som i fs-admin !3432: seksjonens overskrift for skjermlesere «Tildelinger av rollen»,
+  tom liste «Ingen tildelinger av rollen du har tilgang til.», feil «Kunne ikke hente
+  tildelingene av rollen», og tom liste med filter «Ingen tildelinger funnet» / «Endre eller tøm
+  filtrene for å vise flere tildelinger.». Alle er godkjent.
