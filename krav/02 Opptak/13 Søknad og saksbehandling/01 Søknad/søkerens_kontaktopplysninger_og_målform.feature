@@ -21,7 +21,6 @@ Egenskap: Søkerens kontaktopplysninger og målform
   # Svarer til HK-9433 (innhenting og informasjon om personopplysninger for ID-porten-søker).
 
   Regel: Kontaktopplysningene og målformen hentes fra KRR når søkeren logger inn
-    # AVKLART (Håkon Hjelde Wold 13.11.2026): opplysningene fra KRR kan være opptil 30 dager gamle.
 
     Scenario: Søkeren som finnes i KRR, får kontaktopplysningene og målformen fra KRR
       Gitt at søkeren finnes i KRR med målform nynorsk
@@ -36,10 +35,12 @@ Egenskap: Søkerens kontaktopplysninger og målform
       Når søkeren logger inn i Min kompetanse
       Så er søkeren registrert med målformen nynorsk
 
-    Scenario: Opplysningene fra KRR er ikke eldre enn 30 dager
+  Regel: Opplysningene fra KRR er ferske
+    # AVKLART (Håkon Hjelde Wold 13.11.2026)
+
+    Scenario: Opplysningene fra KRR hentes på nytt når de er 30 dager gamle
       Gitt at søkeren finnes i KRR
-      Og at søkeren ikke har logget inn i Min kompetanse på 30 dager
-      Når det har gått 30 dager siden opplysningene sist ble hentet fra KRR
+      Når det har gått 30 dager siden kontaktopplysningene og målformen til søkeren ble hentet fra KRR
       Så hentes kontaktopplysningene og målformen til søkeren fra KRR på nytt
 
   Regel: Søkeren som finnes i KRR, endrer kontaktopplysningene og målformen i KRR
