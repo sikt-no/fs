@@ -14,13 +14,13 @@ Det som testes, er kravene som er `@implemented`, og de leverte delene i krav so
 
 | Krav | Feature-ID | Status | Scenarioer i testen |
 |---|---|---|---|
-| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/072f40ee/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | `@in-progress` (delvis levert) | 25 |
+| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/93a20ea5/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | `@implemented` | 28 |
 
-De leverte delene:
+Hele kravet er levert (2026-11-13). Reglene i testen:
 
-- Regel: Opptaksforvalter gjennomfører tidligopptaket (20 scenarioer)
-- Regel: Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt: «Tilbudsgaranti ut fra poenggrensen eller medianen fra forrige opptak» og «Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak»
-- Regel: Opptaksforvalter ser utfallet av tidligopptaket: «Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon» og «Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak»
+- Regel: Opptaksforvalter gjennomfører tidligopptaket (21 av 22 scenarioer: «Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak» hører til plasstildelingen)
+- Regel: Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt (3 scenarioer)
+- Regel: Opptaksforvalter ser utfallet av tidligopptaket (3 scenarioer, og 6 utsatte som ikke er med)
 - Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket (1 scenario)
 
 Ingen av scenarioene i testen har et åpent spørsmål. Spørsmålet om «Reservert studieplass gir tilbudsgaranti uten kvalifisering» ble lukket 09.11.2026, etter verifiseringen: tilbudsgaranti er tilbudsgaranti, uansett kvalifisering.
@@ -35,7 +35,7 @@ De automatiske testene av de samme kravene: `npx playwright test --grep "@OPT-BE
 
 | Krav | Feature-ID | Regler med åpent spørsmål | Scenarioer med åpent spørsmål | Scenarioer i testen |
 |---|---|---|---|---|
-| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/072f40ee/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | 0 av 4 | 0 av 27 | 25 |
+| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/93a20ea5/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | 0 av 4 | 0 av 29 | 28 |
 
 I tillegg har 6 utsatte scenarioer (`@draft @openquestion`) spørsmålet «Utsatt fra første leveranse (09.11.2026). Om og hvordan dette skal bygges, avgjøres etter testen av første leveranse: trenger sjekken av innstillingene og prøvekjøringen en grundig gjennomgang?». De er ikke med i testen. Testen av denne leveransen er derfor også grunnlaget for det spørsmålet.
 
@@ -71,9 +71,7 @@ Testleder vurderer om leveransen trenger et avhengighetskart. Teamet lister da d
 
 Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen når de er `@implemented`. For et krav som er delvis levert, står delene som ikke er levert, her.
 
-| Krav | Feature-ID | Status | Hva som venter |
-|---|---|---|---|
-| [Gi tilbudsgaranti ved tidlig opptak](https://github.com/sikt-no/fs/blob/072f40ee/krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | `@OPT-BEH-BEH-007` | `@in-progress` | Scenarioene «Utdanningstilbud med median fra forrige opptak mangler ikke poenggrense» og «Se antall utdanningstilbud med mangelfulle innstillinger»: prøvekjøringen i fs-admin viser ikke avvikene (`TidligOpptakResultModal.tsx:28-38`). Kommentert på STEK-489 |
+Ingen. Alle scenarioene i kravet er funnet (2026-11-13).
 
 ## Regler uten scenario
 
@@ -87,18 +85,19 @@ Kravene er laget, men `fs-verify` har ikke funnet alt ennå. De tas med i testen
 | `@OPT-BEH-BEH-007` | Poengsummen tas bare fra kvoter søkeren skal kvoteplasseres i og som tilbudet har, og fra grunnlag rangeringsregelverket åpner for | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:922-927, 937-960` | ja | nei |
 | `@OPT-BEH-BEH-007` | Kvalifiseringen: ett kvalifisert grunnlag holder. Søkeren er ikke kvalifisert bare når alle grunnlagene er vurdert til nei, ellers er kvalifiseringen ikke vurdert | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:790-813` | ja | nei |
 | `@OPT-BEH-BEH-007` | Trukne søknadsalternativer og saker som ikke er aktive, er ikke med | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:534, 544, 868-869` | ja | nei |
-| `@OPT-BEH-BEH-007` | En søker som ikke har søkt om tidlig opptak, men har et tidligopptakstilbud på et søknadsalternativ, er med og får tilbudsgaranti fra tidligopptaket | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:520-545` | ja | uklart om ønsket: avklares med `fs-krav` |
-| `@OPT-BEH-BEH-007` | Reservert studieplass i kolonnen til opptaksforvalter erstattes av tilbudsgarantien fra tidligopptaket | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:692-694, 1022-1024` | ja | ja (`fs-krav`) |
+| `@OPT-BEH-BEH-007` | En søker som ikke har søkt om tidlig opptak, men har et tidligopptakstilbud på et søknadsalternativ, er med og får tilbudsgaranti fra tidligopptaket | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:520-545` | ja | har fått scenario: «Tidligopptakstilbud fra tilbyder gjelder også uten søknad om tidlig opptak» (2026-11-13) |
+| `@OPT-BEH-BEH-007` | Reservert studieplass i kolonnen til opptaksforvalter erstattes av tilbudsgarantien fra tidligopptaket | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:692-694, 1022-1024` | ja | har fått scenario: «Reservert studieplass fra opptaksforvalter blir erstattet» (2026-11-13) |
 | `@OPT-BEH-BEH-007` | Treffer en skriving ingen rad, stoppes hele gjennomføringen og rulles tilbake | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:1005-1012` | nei: krever samtidige endringer | nei |
 | `@OPT-BEH-BEH-007` | Gjennomføringen er sperret i fs-admin til prøvekjøringen har gitt en oppsummering, når poenggrenser ikke er lagret, og når prøvekjøringen gir feil | `fs-admin/…/TidligOpptakResultModal.tsx:150-154, 162-165` | ja | nei |
-| `@OPT-BEH-BEH-007` | Antallet i meldingen etter gjennomføringen teller avvik (ett utdanningstilbud kan ha flere), tar med overskredet kvote, og vises bare når det er over 0 | `fs-admin/…/KjorTidligopptakButton.tsx:129-134` | nei: venter på at avvikene vises i prøvekjøringen | uklart om ønsket |
+| `@OPT-BEH-BEH-007` | «Feilkonfigurerte utdanningstilbud» i dialogen teller mangler, ikke utdanningstilbud (ett utdanningstilbud kan ha flere), og tar med overskredet kvote | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:383-440`, `fs-admin/…/TidligOpptakResultModal.tsx:140` | ja, i «Se antall utdanningstilbud med mangelfulle innstillinger»: tallet går opp med 1 | nei: kjent og akseptert unøyaktighet (2026-11-13) |
+| `@OPT-BEH-BEH-007` | Dialogen blir stående med resultatet etter gjennomføringen («Resultat for tidligopptak»), med «Lukk» og uten knapp for å kjøre igjen | `fs-admin/…/TidligOpptakResultModal.tsx:182-188, 223-225` | ja, i alle scenarioene som gjennomfører | nei |
 | `@OPT-BEH-BEH-007` | Kvotevarselet er 30 prosent når grensen ikke er angitt | `fs-plattform/…/TidligopptakTilbudsgarantiService.java:96-97` | nei: kvotevarselet er utsatt | nei: dekkes av det utsatte scenarioet |
 
 ## Ikke med i denne testen
 
 | Hva | Hvorfor |
 |---|---|
-| `@OPT-BEH-BEH-007` «Utdanningstilbud med median fra forrige opptak mangler ikke poenggrense» og «Se antall utdanningstilbud med mangelfulle innstillinger» | Venter på verifisering: mangler i fs-admin |
+| `@OPT-BEH-BEH-007` «Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak» | Resultatet kan bare ses når hovedopptaket kjøres, og hører til plasstildelingen (`@OPT-PLA-TIL-002`) |
 | `@OPT-BEH-BEH-007` «Se utfallet for hver søker» | Kommer senere: utsatt fra første leveranse |
 | `@OPT-BEH-BEH-007` «Se hva som mangler for hvert utdanningstilbud med mangelfulle innstillinger» | Kommer senere: utsatt fra første leveranse |
 | `@OPT-BEH-BEH-007` «Varsel når tilbudsgarantiene overskrider kvoten», «Kvotevarselet tar med tilbudsgarantier fra en tidligere gjennomføring», «Kvotevarsel ved 30 prosent når grensen ikke er angitt» og «Angi grensen for kvotevarsel» | Kommer senere: utsatt fra første leveranse |
