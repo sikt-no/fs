@@ -172,6 +172,36 @@ Egenskap: Se meldinger om egne søknader
       Så får søkeren beskjed om at det ikke finnes uleste meldinger
       Og søkeren kan gå videre til meldingsoversikten
 
+  # Avklart 2026-11-05 i møte med Nikolai, Marit, Ingrid og Mathis.
+  @draft @openquestion @ref-OPT-PLA-SVA-002
+  Regel: Søkeren får ett samlet varsel om uleste meldinger
+    # ÅPNE SPØRSMÅL:
+    # - Skal varselet gå på e-post, SMS eller begge deler? Møtet ønsker mulighet for begge.
+    # - Hvor lenge etter en ny melding sendes varselet? Varselet er ikke tidskritisk, og kan gå ut dagen etter.
+    # - Varselet sendes ikke i stilletid. Når er stilletid?
+    # - Hva skal standardteksten i varselet være? Den vises på språket søkeren har valgt.
+    # - Hører regelen hjemme her, i en egen feature-fil, eller i 10 Felleskrav sammen med andre varsler (BRU-PER-ETT-004, OPT-PLA-SVA-002)? Gjelder samlingen også påminnelser om svarfrist?
+
+    # Varselet går til søkeren utenfor Min kompetanse. Antallet i Min kompetanse står i «Søkeren ser antall uleste meldinger».
+    # Påminnelse om svarfrist står i varsler_og_meldinger_i_plasstildelingen.feature.
+
+    Scenario: Søkeren får varsel om en ny melding
+      Gitt at søkeren ikke har fått varsel om uleste meldinger etter at søkeren sist logget inn i Min kompetanse
+      Når søkeren mottar en ny melding
+      Så får søkeren et varsel om at søkeren har uleste meldinger
+
+    Scenario: Flere nye meldinger før søkeren logger inn gir ett varsel
+      Gitt at søkeren ikke har fått varsel om uleste meldinger etter at søkeren sist logget inn i Min kompetanse
+      Når søkeren mottar tre nye meldinger før søkeren logger inn i Min kompetanse igjen
+      Så får søkeren ett varsel om uleste meldinger
+      Men søkeren får ikke ett varsel for hver melding
+
+    Scenario: Nye meldinger etter innlogging gir et nytt varsel
+      Gitt at søkeren har fått varsel om uleste meldinger
+      Og søkeren har logget inn i Min kompetanse etter varselet
+      Når søkeren mottar en ny melding
+      Så får søkeren et nytt varsel om uleste meldinger
+
   Regel: Kvitteringsmeldinger viser hvilken søknad de gjelder
 
     Scenario: Søkeren åpner en kvittering for en levert søknad
