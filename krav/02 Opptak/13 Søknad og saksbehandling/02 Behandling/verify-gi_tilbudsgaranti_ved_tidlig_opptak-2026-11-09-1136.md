@@ -8,8 +8,9 @@
 - **Omfang:** `@in-progress` (valgt)
 - **Avhengigheter:** 1 nivå, bare status
 - **Kontroll:** `fs-verify-kontroll`
-- **Menneskelig kontroll:** [Fylles ut: navn og dato for personen som har kontrollert rapporten]
+- **Menneskelig kontroll:** Daniel Sachse, 2026-11-09 (i Confluence): «Daniel Sachse synes rapporten ser OK ut. Det éne åpne spørsmål som var, er nå lukket. Det som gjelder visning av varsel ved feilkonfigurert utdanningstilbud, er en reell forseelse som fikses snarest.»
 - **Skjermbilder:** nei (spørsmålet ble hoppet over)
+- **Confluence:** https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598
 
 Gating-sett: scenarioene som ikke er tagget `@draft`, `@deprecated` eller `@demo` (`@openquestion` alene er med).
 

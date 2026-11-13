@@ -1,6 +1,21 @@
 # language: no
 # Oppsett for testene i tester-agent/02 Opptak/13 Søknad og saksbehandling/02 Behandling/ (samme sti under _Oppsett/)
 #
+# Oppsettet har to deler, én for hver testfil i mappa. En kjøring av bare én av testfilene kjører bare den delen.
+#
+# ===== Del 1: gi_tilbudsgaranti_ved_tidlig_opptak.feature (@OPT-BEH-BEH-007) =====
+#
+# Kjøres først i hver kjøring. Lager testdataene gjennom løsningen. Agenten skriver det som er satt, i
+# «Kjøringens testdata» i resultat.md. Feiler et scenario, får nøkkelen ingen verdi, og testene som bruker den,
+# blir «Ikke testet».
+#
+# Søkerne testene bruker («sak-tidlig-opptak-…»), lages ikke her. De trenger kvalifisering og poengsum i en
+# bestemt tilstand, som ikke kan lages gjennom løsningen i én kjøring, og en søker kan ikke brukes på nytt etter
+# en gjennomføring. De står som lister i miljøfila. Opptaket, utdanningstilbudene og tilbudsgarantitypene er
+# grunndata i miljøfila.
+#
+# ===== Del 2: tildele_saksbehandlende_organisasjon.feature (@OPT-BEH-BEH-011), og flyten i _Løp/10 Opptaksløpet/ =====
+#
 # Kjøres først i hver kjøring, før testene i mappa og før flyten i _Løp/10 Opptaksløpet/. Lager reglene, unntakene og søknadene testene bruker, gjennom
 # FS Admin og Min kompetanse, med {KJØRING} i kodene og navnene. Agenten skriver navn og URL i «Kjøringens testdata». Feiler et scenario, får nøkkelen
 # ingen verdi, og testene som bruker den, blir «Ikke testet».
@@ -50,10 +65,29 @@
 #   studieønsker uten egen regel», «Bare tilbyderen – bare dette studieønsket» eller «Tilbydere i samme sektor», og «Velg organisasjon» for sektor),
 #   «Legg til unntak» under «Unntak for utdanningsbakgrunn» («Utdanningsbakgrunn», «Fordeles til») og under «Unntak for lærested» («Saksbehandles av»,
 #   «På vegne av»). Velg «Lagre». «Tildelingsregelen er lagret.» vises.
-@OPPSETT-OPT-BEH @ref-OPT-BEH-BEH-011 @ref-OPT-OVO-FRI-001
-Egenskap: Oppsett for tildele saksbehandlende organisasjon
-  Lager behandlertildelingsreglene og søknadene testene for tildele saksbehandlende organisasjon bruker, i utgangstilstanden testene forutsetter.
+@OPPSETT-OPT-BEH @ref-OPT-BEH-BEH-007 @ref-OPT-BEH-BEH-011 @ref-OPT-OVO-FRI-001
+Egenskap: Oppsett for behandling
+  Del 1 setter poenggrensene for tidlig opptak på utdanningstilbudene testene for tidligopptaket bruker, i utgangstilstanden
+  testene forutsetter. Testene som endrer en poenggrense, setter den tilbake til verdien her. Del 2 lager behandlertildelingsreglene
+  og søknadene testene for tildele saksbehandlende organisasjon bruker, i utgangstilstanden testene forutsetter.
 
+  # Del 1: gi_tilbudsgaranti_ved_tidlig_opptak.feature
+  Scenario: poenggrenser-tidlig-opptak
+    Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
+    Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
+    Når jeg skriver 0 i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>»
+    Og jeg skriver 0 i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-andre>»
+    Og jeg tømmer «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-med-median>»
+    Og jeg tømmer «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak-uten-median>»
+    Og jeg velger «Lagre poenggrenser»
+    Og «Poenggrensene er lagret.» vises
+    Og jeg laster inn siden på nytt
+    Så står 0 i poenggrensen for «utdanningstilbud-tidlig-opptak» og «utdanningstilbud-tidlig-opptak-andre»
+    Og poenggrensen for «utdanningstilbud-tidlig-opptak-med-median» og «utdanningstilbud-tidlig-opptak-uten-median» er tom
+    Og «Median i fjor» viser en median for «utdanningstilbud-tidlig-opptak-med-median», og «-» for «utdanningstilbud-tidlig-opptak-uten-median»
+    Og jeg skriver poenggrensene i «Kjøringens testdata» for «poenggrenser-tidlig-opptak»
+
+  # Del 2: tildele_saksbehandlende_organisasjon.feature
   Scenario: behandlertildelingsregler-i-opptaket
     Gitt jeg er logget inn som «opptak-forvalter-forvaltende»
     Og jeg har åpnet «Behandlertildelingsregler» fra opptaket «opptak-samordna-saksbehandlertildeling»

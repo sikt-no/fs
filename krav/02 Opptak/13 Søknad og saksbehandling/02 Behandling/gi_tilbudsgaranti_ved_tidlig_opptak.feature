@@ -46,9 +46,9 @@
 # - Poeng lik poenggrensen gir tilbudsgaranti.
 # - Søkeren får tilbudsgaranti bare på søknadsalternativer der søkeren er
 #   kvalifisert. Er kvalifiseringen ikke vurdert, gis det ikke garanti, og
-#   opptaksforvalteren ser det i utfallet. (Unntak 13.10.2026, foreløpig: reservert
-#   studieplass gir tilbudsgaranti uten at søkeren er kvalifisert, se notatet om
-#   reservert studieplass under.)
+#   opptaksforvalteren ser det i utfallet. (Unntak, avklart 13.10.2026 og bekreftet
+#   09.11.2026: reservert studieplass gir tilbudsgaranti uten at søkeren er kvalifisert,
+#   se notatet om reservert studieplass under.)
 # - Søkeren får tilbudsgaranti på høyst ett søknadsalternativ: det høyest
 #   prioriterte som oppfyller kravene (som i se_svar_på_tidlig_opptak.feature).
 # - En søknad som ikke er konkludert, er ikke med i tidligopptaket.
@@ -119,16 +119,22 @@
 #   plass fra et tidligere opptak. Uten de to betingelsene får søkeren ingen
 #   tilbudsgaranti fra tidligopptaket, og reservasjonen vises ikke som innvilget tidlig
 #   opptak (se_svar_på_tidlig_opptak.feature). Stemmer med STEK-503.
-#   (13.10.2026, foreløpig) Kvalifisering kreves heller ikke: søkeren får tilbudsgaranti
-#   med reservert studieplass (RSO eller RES) også når søkeren ikke er kvalifisert, eller
-#   kvalifiseringen ikke er vurdert. Fagperson avklarte dette, men har sendt spørsmålet
-#   videre til en annen domeneekspert, så avklaringen er foreløpig.
+#   (13.10.2026, bekreftet 09.11.2026) Kvalifisering kreves heller ikke: søkeren får
+#   tilbudsgaranti med reservert studieplass (RSO eller RES) også når søkeren ikke er
+#   kvalifisert, eller kvalifiseringen ikke er vurdert. Tilbudsgaranti er tilbudsgaranti.
+#   Fagperson avklarte dette, sendte spørsmålet videre til en annen domeneekspert, og har
+#   ikke fått innsigelser.
+#   (13.11.2026) Reservert studieplass fra opptaksforvalter (RSO) erstattes av
+#   tilbudsgarantien fra tidligopptaket, som de andre tilbudsgarantiene fra
+#   opptaksforvalter. Reservert studieplass fra behandler (RES) blir stående.
 # - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
 #   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
 #   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
 #   når søkeren har søkt om tidlig opptak) videreføres ikke. At tilbyder bare gir
 #   FOP eller FAL til søkere med godkjent grunn (fagperson i PR #654, 01.10.2026),
 #   er praksis, ikke en regel i systemet (avklart 12.10.2026).
+#   (13.11.2026) Tidligopptakstilbudet gjelder også når søkeren ikke har søkt om tidlig
+#   opptak: gjennomføringen tar søkeren med, og søkeren får svaret innvilget tidlig opptak.
 # - Kodeverkene tidlig opptak bygger på (begrunnelser, konklusjoner og
 #   tilbudsgarantityper) legges inn i databasen per opptak, og vedlikeholdes ikke i
 #   løsningen nå. At opptaksforvalter kan forvalte dem, kommer senere, bekreftet av
@@ -157,7 +163,7 @@
 # - OPT-BEH-BEH-014: publiseringen av svaret til søkerne står der.
 # - OPT-OPT-UTD-010: regelen «Median poengsum fra forrige opptak brukes når poenggrensen
 #   ikke er satt» bygger på medianen, som vises på utdanningstilbudet der.
-@OPT-BEH-BEH-007 @must @in-progress @scope-tidlig-opptak @depends-on-OPT-BEH-BEH-013 @depends-on-OPT-OPT-UTD-004 @depends-on-OPT-BEH-BEH-010 @ref-OPT-BEH-BEH-014
+@OPT-BEH-BEH-007 @must @implemented @scope-tidlig-opptak @depends-on-OPT-BEH-BEH-013 @depends-on-OPT-OPT-UTD-004 @depends-on-OPT-BEH-BEH-010 @ref-OPT-BEH-BEH-014
 Egenskap: Gi tilbudsgaranti ved tidlig opptak
   Som opptaksforvalter
   ønsker jeg å gjennomføre tidligopptaket
@@ -167,7 +173,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     Gitt søkeren har søkt om tidlig opptak
     Og "Sykepleie, høst 2027" tilbyr tidlig opptak med poenggrense 50
 
-  @implemented
   Regel: Opptaksforvalter gjennomfører tidligopptaket
 
     Scenariomal: Tilbudsgaranti ut fra poenggrensen
@@ -242,18 +247,23 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
-    @openquestion @ref-OPT-SØK-SØK-016
+    @ref-OPT-SØK-SØK-016
     Scenario: Reservert studieplass gir tilbudsgaranti uten kvalifisering
-      # ÅPNE SPØRSMÅL:
-      # - Gir reservert studieplass (RSO eller RES) tilbudsgaranti også når søkeren ikke er
-      #   kvalifisert, eller kvalifiseringen ikke er vurdert? Fagperson svarte ja 13.10.2026, men
-      #   har sendt spørsmålet videre til en annen domeneekspert, så svaret er foreløpig. Koden
-      #   gjør det (STEK-582). Se notatet om reservert studieplass øverst i fila.
+      # Avklart 13.10.2026, bekreftet 09.11.2026: tilbudsgaranti er tilbudsgaranti, og gjelder
+      # uansett kvalifisering. Se notatet om reservert studieplass øverst i fila.
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren har reservert studieplass på "Sykepleie, høst 2027"
       Og søkeren er ikke kvalifisert til "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
+
+    @ref-OPT-SØK-SØK-016
+    Scenario: Reservert studieplass fra opptaksforvalter blir erstattet
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og opptaksforvalter har satt reservert studieplass på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
+      Og søkeren har ikke lenger reservert studieplass fra opptaksforvalter på "Sykepleie, høst 2027"
 
     Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
@@ -311,6 +321,12 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så har søkeren fortsatt tidligopptakstilbud på "Sykepleie, høst 2027"
 
+    Scenario: Tidligopptakstilbud fra tilbyder gjelder også uten søknad om tidlig opptak
+      Gitt en annen søker har ikke søkt om tidlig opptak
+      Og tilbyder har gitt den andre søkeren tidligopptakstilbud på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så har den andre søkeren tidligopptakstilbud på "Sykepleie, høst 2027"
+
     Scenario: Prøvekjøre tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -360,7 +376,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Medianen kommer fra Samordna opptak, og registreres ikke av opptaksforvalter.
 
     # Poenggrensen går foran medianen, både når den er høyere og når den er lavere.
-    @implemented
     Scenariomal: Tilbudsgaranti ut fra poenggrensen eller medianen fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak
       Og poenggrensen for tidlig opptak på "Vernepleie, høst 2027" er <poenggrense>
@@ -379,7 +394,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
         | 50          | 45     | 47    | får ikke |
         | 45          | 50     | 48    | får      |
 
-    @implemented
     Scenario: Ingen tilbudsgaranti uten poenggrense og uten median fra forrige opptak
       Gitt "Vernepleie, høst 2027" tilbyr tidlig opptak uten poenggrense
       Og "Vernepleie, høst 2027" har ingen median poengsum fra forrige opptak
@@ -415,7 +429,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
     # Søkere med saker uten konklusjon telles med, også når sakene er ferdig behandlet:
     # de er ikke med i tidligopptaket, og opptaksforvalteren gjør det samme med begge
     # (avklart 13.10.2026). En søker med flere slike saker telles én gang.
-    @implemented
     Scenario: Se antall søkere med saker som ikke er ferdig behandlet eller mangler konklusjon
       Gitt 2 søkere som har søkt om tidlig opptak, har saker som ikke er ferdig behandlet
       Og 1 søker som har søkt om tidlig opptak, har en ferdig behandlet sak uten konklusjon
@@ -500,7 +513,7 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter prøvekjører tidligopptaket med varsel når mer enn 50 prosent av kvoten får tilbudsgaranti
       Så får opptaksforvalter varsel om at tilbudsgarantiene overskrider 50 prosent av kvoten for "Sykepleie, høst 2027"
 
-    @ref-OPT-OVO-INN-004 @implemented
+    @ref-OPT-OVO-INN-004
     Scenario: Tidligopptaket stopper uten én tilbudsgarantitype for tidlig opptak
       Gitt opptaket har ikke nøyaktig én aktiv tilbudsgarantitype for tidlig opptak som gir tilbud
       Når opptaksforvalter gjennomfører tidligopptaket
@@ -513,7 +526,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
   # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature. Reglene er flyttet
   # 14.10.2026, fordi de gjelder alle tilbudsgarantier, ikke bare tidlig opptak
   # (STEK-241, STEK-188).
-  @implemented
   Regel: Manuell tilbudsgaranti krever ikke deltakelse i tidligopptaket
 
     Scenario: Sette tilbudsgaranti når søkeren ikke deltar i tidligopptaket
