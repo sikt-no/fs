@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216, #598
-@OPT-REG-KVO-003 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
+@OPT-REG-KVO-003 @must @implemented @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette standard plassflyt i regelverkssamlingen
   Som opptaksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å sette én standard plassflyt i regelverkssamlingen
@@ -51,8 +51,11 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
   # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Er minst én kvote koblet, og plassflyten
   # ikke går i ring, finnes det alltid en kvote kjedene ender i. Plassflyten er bare uten hovedkvote når ingen
   # kvoter er koblet, og den kan da lagres. Kvotetypene får varselet om at plassflyten mangler, og kan ikke brukes
-  # før de er koblet. Det gjelder også en regelverkssamling med bare én kvotetype. Scenarioet «Plassflyten kan ikke
-  # lagres uten hovedkvote» er fjernet.
+  # før de er koblet. Scenarioet «Plassflyten kan ikke lagres uten hovedkvote» er fjernet.
+  # AVKLART 2026-11-13 (produkteier): Har regelverkssamlingen bare én kvotetype, er den hovedkvoten uten at noen
+  # velger det, fordi ledige plasser ikke har noe annet sted å gå. Kvotetypen regnes som koblet til plassflyten, og
+  # får ikke varselet. Det erstatter at varselet også gjelder en regelverkssamling med bare én kvotetype
+  # (avklart 2026-11-12).
   Regel: Regelverkssamlingen har én hovedkvote
 
     Scenario: Hovedkvoten er kvoten kjedene ender i
@@ -68,6 +71,11 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
       Når opptaksforvalter lagrer plassflyten
       Så blir plassflyten ikke lagret
       Og opptaksforvalter får beskjed om at plassflyten bare kan ha én hovedkvote
+
+    Scenario: Den eneste kvotetypen er hovedkvoten
+      Gitt at regelverkssamlingen "UHG 2027" bare har kvotetypen "Ordinær kvote (ORD)"
+      Så er "Ordinær kvote (ORD)" hovedkvote i standard plassflyt i regelverkssamlingen
+      Og opptaksforvalter ser ikke et varsel på kvotetypen "Ordinær kvote (ORD)" om at plassflyten mangler
 
   # AVKLART 2026-10-19 (produkteier): Utdanningstilbudene bruker bare noen av kvotene, og flyten skal kunne
   # gjenbrukes, så alle kvotetypene må være knyttet inn i flyten før de kan brukes. Teksten i den gjeldende skissen

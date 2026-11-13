@@ -72,9 +72,9 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake før hver kjøring | [Fylles ut av teamet] |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | 62 av 62 scenarioer i kravet er funnet. I flyten er 3 av 7 funnet (de tre som ikke er levert, er ikke funnet), og 1 var usikker fordi flyten brukte «SPE». Flyten bruker nå «UVH». Kontrollert av `fs-verify-kontroll` 04.11.2026. Venter på kontroll av en person |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget 04.11.2026 (`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`), ikke gått gjennom før kjøringen |
+| 6 | De agentiske testcasene (`fs-testcaser-agent`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget 04.11.2026 (`tester-agent/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`), ikke gått gjennom før kjøringen |
 | 7 | Flyttestcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Laget 05.11.2026, venter på gjennomgang av testansvarlig |
-| 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
+| 8 | Agenten er logget inn i FS Admin med Feide-testbrukeren (`tester-agent/.env`), i nettleseren Vibium starter, i en egen sesjon til testingen, kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | [Fylles ut av teamet] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 | 10 | Tilbudsgarantityper finnes i opptaket (`tilbudsgarantityper`). Bare en utvikler kan legge dem inn. Uten dem kan ikke tilbudsgaranti ved flytting og tilbyderens tilbudsgaranti testes | [Fylles ut av teamet] |
 | 11 | Ledige studieplasser har åpnet i opptaket, og ett utdanningstilbud ved UiO tilbyr dem (`ledige-studieplasser-apnet`) | [Fylles ut av teamet] |
@@ -130,7 +130,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 | Verifiseringsrapporten (fase 1) | [verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-tildele_saksbehandlende_organisasjon-2026-11-04-1317.md) |
 | Runde 1 | [Akseptansetesting saksbehandlertildeling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130911779/Akseptansetesting+saksbehandlertildeling) (Confluence 5130911779), [`akseptansetest/opptak-saksbehandlertildeling/`](../opptak-saksbehandlertildeling/) |
 | Agentisk testrapport (fase 2) | [testrapport-agentisk-2026-11-05.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173837827/Testrapport+agentisk+funksjonstest+Saksbehandlertildeling+runde+2+2026-11-05) |
-| Testcasene for fase 2 | [`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../cdp-tester/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/) |
+| Testcasene for fase 2 | [`tester-agent/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../tester-agent/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/) |
 | Testcasene for fase 3 | [testcaser-intern.md](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5173018630/Intern+akseptansetest+Saksbehandlertildeling+runde+2) |
 
 ## Læring

@@ -149,7 +149,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 2. Testplan | (denne siden) | Laget | 2026-10-22 |
 | 3. Testrapport – verifisering | [Testrapport – verifisering – Tilbudsgaranti i saksbehandlingen 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5131075597), [testrapport-verifisering-2026-10-22.md](testrapport-verifisering-2026-10-22.md) | Klar | 2026-10-22 |
 | 4. Intern akseptansetest | [Intern akseptansetest – Tilbudsgaranti i saksbehandlingen 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130289193), [testcaser-intern.md](testcaser-intern.md) | Klar til test | 2026-10-22 |
-| 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
+| 4b. Kjøring av agenttestene (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter | |
 | 7. Testrapport – ekstern | – | Venter | |

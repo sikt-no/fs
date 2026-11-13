@@ -395,7 +395,7 @@ Ikke med i første versjon:
 - Referansene mellom vanlige krav som ikke er en del av en kjede fra en flyt, og `@ref-` mellom vanlige krav. Visningen går alltid ut fra en flyt.
 - Den andre retningen: hva som bygger på et krav i kjeden. Det ville gjort treet til en graf i begge retninger.
 - Redigering av flytene i visningen (de endres i editoren eller med `fs-krav`).
-- CDP-testene for overleveringene i `cdp-tester/_Løp/`. Kan legges til senere som en seksjon per fase («Tester for overleveringen»).
+- Agenttestene for overleveringene i `tester-agent/_Løp/`. Kan legges til senere som en seksjon per fase («Tester for overleveringen»).
 - Verify-rapportene for flytene (`verify-<flyt>-<dato>-<HHMM>.md` ved siden av flyten). Kan legges til senere som lenke i hodet.
 
 ## 7. Spørsmål til designet

@@ -1,5 +1,5 @@
 # language: no
-@OPT-REG-KVO-005 @must @in-progress @scope-spesialvurdering-2027 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-GRU-001 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
+@OPT-REG-KVO-005 @must @implemented @scope-spesialvurdering-2027 @depends-on-OPT-REG-KVO-001 @depends-on-OPT-REG-GRU-001 @depends-on-OPT-REG-RAN-001 @depends-on-OPT-REG-RAN-002
 Egenskap: Opprette ventekvote for søkere uten poeng
   Som opptaksforvalter
   ønsker jeg å sette opp en ventekvote for søkere uten poeng i regelverkssamlingen
@@ -49,7 +49,6 @@ Egenskap: Opprette ventekvote for søkere uten poeng
       Når opptaksforvalteren angir at poengene i kvotetypen "Ventekvote (VENT)" skal skjules for søkeren
       Så er kvotetypen "Ventekvote (VENT)" lagret med skjulte poeng
 
-  @implemented
   Regel: Interne poeng settes opp i rangeringsregelverket med egne poengklasser og poengtyper
 
     Scenario: Opprette poengtype for interne poeng

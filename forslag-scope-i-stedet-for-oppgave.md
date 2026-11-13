@@ -117,7 +117,7 @@ Typenavnene i koden (`Task`, `TaskCard` og `buildTasks`) kan beholdes. Det er de
 - **`fs-specify` og `fs-specify-delta`:**
   - «Hent inn i en oppgave» blir «hent inn i et scope», og spesifikasjonen skrives til `tasks/<dom>/<slug>/spec/`.
   - Uten scope foreslås `fs-scope`, eller det skrives en minimal `scope.md` i stedet for `oppgave.md`.
-- **Inndata «oppgave» blir «scope»** i `fs-verify` (og `references/rapportmal.md`), `fs-verify-agent-teams` (globben `tasks/<dom>/*/oppgave.md` blir `*/scope.md`), `fs-testplan` (og `mal-testplan.md`), `fs-testcaser-cdp`, `fs-testrapport` (og `mal-rapport.md`), `fs-krav` og `.claude/references/akseptansetest/krav-fra-testplan.md`.
+- **Inndata «oppgave» blir «scope»** i `fs-verify` (og `references/rapportmal.md`), `fs-verify-agent-teams` (globben `tasks/<dom>/*/oppgave.md` blir `*/scope.md`), `fs-testplan` (og `mal-testplan.md`), `fs-testcaser-agent`, `fs-testrapport` (og `mal-rapport.md`), `fs-krav` og `.claude/references/akseptansetest/krav-fra-testplan.md`.
 - **Generell bruk av ordet beholdes:**
   - «oppgave uten flyt» og «oppgaver i arbeidsprosessen» i `fs-testcaser-intern`, `fs-testcaser-ekstern` og `testcase-regler.md`. Det gjelder bare der ordet betyr en arbeidsoppgave i testen. «Oppgavene i scope-tabellen» (`fs-testcaser-intern:128` og `fs-testcaser-ekstern:62`) endres.
   - Agent-teamets oppgaveliste i `.claude/agents/fs-verify-krav.md` og `fs-verify-agent-teams`.

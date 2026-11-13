@@ -1,7 +1,7 @@
 # language: no
 # BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # Jira: STEK-253
-@OPT-BEH-BEH-029 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-008 @ref-OPT-PLA-TIL-001
+@OPT-BEH-BEH-029 @must @implemented @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-008 @ref-OPT-PLA-TIL-001
 Egenskap: Behandlingsstatus
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg at hver sak har en behandlingsstatus
@@ -34,14 +34,13 @@ Egenskap: Behandlingsstatus
   Bakgrunn:
     Gitt at søkeren har en sak hos den saksbehandlende organisasjonen
 
-  @implemented
   Regel: En ny sak er Ikke behandlet
 
     Scenario: Ny sak er Ikke behandlet
       Når søknaden blir til en sak hos den saksbehandlende organisasjonen
       Så har saken behandlingsstatusen "Ikke behandlet"
 
-  @ref-OPT-BEH-BEH-032 @implemented
+  @ref-OPT-BEH-BEH-032
   Regel: Saksbehandleren kan sette behandlingsstatusen
 
     Scenariomal: Endre behandlingsstatus fra <fra> til <til>
@@ -56,7 +55,7 @@ Egenskap: Behandlingsstatus
         | Behandlet        | Under behandling |
         | Behandlet        | Ikke behandlet   |
 
-  @ref-FLY-OPT-AUT-001 @implemented
+  @ref-FLY-OPT-AUT-001
   Regel: Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag
 
     Scenariomal: Sette saken til Behandlet fra <fra> når saken har <innhold>
@@ -77,7 +76,7 @@ Egenskap: Behandlingsstatus
       Så har saken fortsatt behandlingsstatusen "Under behandling"
       Og saksbehandleren ser at saken må ha minst én mangel eller ett grunnlag for å bli "Behandlet"
 
-  @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-025 @implemented
+  @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-025
   Regel: Saken blir Under behandling når saksbehandleren endrer vurderingen
     # Avklart 2026-11-03: behandlingsstatusen endres ikke før saksbehandleren gjør en endring i
     # saken. Å se på saken eller et dokument er ikke en endring.
@@ -135,8 +134,9 @@ Egenskap: Behandlingsstatus
       Når det kommer ny dokumentasjon i saken
       Så har saken fortsatt behandlingsstatusen "Behandlet"
 
-  @ref-OPT-BEH-BEH-016 @ref-FLY-OPT-AUT-001
+  @ref-OPT-BEH-BEH-016 @deprecated
   Regel: Saksloggen viser endringene i behandlingsstatusen
+    # Avklart 13.11.2026: teamet ønsker ikke saksloggen. Den ble stoppet med V480 (BAT-324).
 
     Scenariomal: Saksloggen viser endring av behandlingsstatus når <årsak>
       Gitt at saken har behandlingsstatusen "Ikke behandlet"

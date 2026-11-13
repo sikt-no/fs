@@ -37,9 +37,8 @@ Egenskap: Automatisk saksbehandling
   # kvotene, poengene per kvote og mangeltekstene er ikke egne steg: de oppdateres automatisk ut fra
   # stegene før, og er gule i tegningen. Tegningen har kravelementene før poengene. Det er
   # unøyaktig: poengene beregnes først (OPT-BEH-BEH-020).
-  # To faser er med i flyten, men er utenfor scope i første fase (@wont): to identiske vitnemål
-  # som reknes som ett vitnemål, og automatisk dobbeltrangering etter 23/5-regelen i 2027.
-  # De står her så de blir med i neste fase.
+  # Automatisk dobbeltrangering etter 23/5-regelen i 2027 er med i flyten, men er utenfor scope
+  # i første fase (@wont). Den står her så den blir med i neste fase.
 
   Bakgrunn:
     Gitt at søkeren har en sak hos den saksbehandlende organisasjonen
@@ -96,12 +95,9 @@ Egenskap: Automatisk saksbehandling
       Når søknaden behandles automatisk
       Så behandles saken helautomatisk på vitnemålet
 
-  @wont @openquestion
+  @depends-on-OPT-BEH-BEH-025
+  # OPT-BEH-BEH-025: «Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk»
   Regel: To identiske vitnemål reknes som ett vitnemål
-    # ÅPNE SPØRSMÅL:
-    # - Utenfor scope i første fase. Fasen er med for å huske den til neste fase.
-    # - Ingen krav beskriver når to vitnemål er identiske, eller hvilket av dem saken
-    #   behandles helautomatisk på. Hvilket krav skal eie regelen: OPT-BEH-BEH-025 eller et nytt krav?
 
     Scenario: Saken behandles helautomatisk når søkeren har to identiske vitnemål
       Gitt at søkeren har to identiske vitnemål som gir GSK
@@ -235,7 +231,7 @@ Egenskap: Automatisk saksbehandling
 
   @depends-on-OPT-BEH-BEH-025 @depends-on-OPT-BEH-BEH-029 @ref-OPT-PLA-TIL-001 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-025: «Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort»
-  # OPT-BEH-BEH-029: «Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag», «Saksloggen viser endringene i behandlingsstatusen»
+  # OPT-BEH-BEH-029: «Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag»
   # Bare saker som er ferdig behandlet, er med i plasstildelingen. Det står i OPT-PLA-TIL-001.
   Regel: Saken blir ferdig behandlet og er klar til å være med i plasstildelingen
 

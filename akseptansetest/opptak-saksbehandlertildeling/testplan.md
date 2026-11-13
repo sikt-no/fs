@@ -183,7 +183,7 @@ Et funn med alvorlighetsgraden «Stopper» gir ikke godkjent, men resten av test
 | 2. Testplan | [Akseptansetesting saksbehandlertildeling](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5130911779/Akseptansetesting+saksbehandlertildeling) (testplan og testgjennomføring på én side) | Laget | 2026-10-23 |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | – | Venter | |
-| 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
+| 4b. Kjøring av agenttestene (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Ikke aktuell | |
 | 7. Testrapport – ekstern | – | Ikke aktuell | |

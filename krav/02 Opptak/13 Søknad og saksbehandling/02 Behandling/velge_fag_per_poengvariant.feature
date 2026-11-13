@@ -294,8 +294,8 @@ Egenskap: Velge fag per poengvariant
       # Forbedringer er tilleggsfag og forbedrede karakterer. Saksbehandleren
       # kan legge dem til i poengvarianten for kvoten for førstegangsvitnemål,
       # og får et varsel som ikke stopper noe, når poengene beregnes og brukes.
-      # Om et unntak gjelder (R2, poenggivende fag på yrkesfagsløpet), er
-      # saksbehandlerens vurdering. Avviker fra FS-klienten, der grunnlaget VOV
+      # Om et unntak gjelder (R2, og poenggivende fag på yrkesfagsløpet i L4c),
+      # er saksbehandlerens vurdering. Avviker fra FS-klienten, der grunnlaget VOV
       # ikke tillater tillegg. Teksten hører i
       # velge_fag_per_poengvariant.design.md.
       #
@@ -304,8 +304,10 @@ Egenskap: Velge fag per poengvariant
       # sidene «Kvoter» og «Poengberegning norske søkere»). Søkeren konkurrerer
       # i begge kvotene med hver sin poengsum, og mister ikke kvoten fordi et
       # tilleggsfag velges i ordinær kvote. Dette erstatter begrunnelsen fra
-      # 21.09.2026, som sa at søkeren kunne slås ut av kvoten. Unntakene står
-      # i de to scenarioene under. Fra 11.11.2026 er hovedregelen et varsel,
+      # 21.09.2026, som sa at søkeren kunne slås ut av kvoten. Unntaket for R2
+      # står i scenarioet under, og unntaket for poenggivende fag på
+      # yrkesfagsløpet i L4c (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).
+      # Fra 11.11.2026 er hovedregelen et varsel,
       # ikke en sperre.
       #
       # Hvilken poengvariant som hører til hvilken kvote, står i regelverket.
@@ -351,8 +353,10 @@ Egenskap: Velge fag per poengvariant
       # håndhever ikke unntakene. Saksbehandleren kan velge forbedringer i
       # poengvarianten for førstegangsvitnemål for alle søkere, og får varselet
       # i «Varsel om forbedringer i poengvarianten for førstegangsvitnemål når
-      # jeg <handling>». Dette scenarioet og det neste er eksempler på når
-      # saksbehandleren bruker forbedringen likevel.
+      # jeg <handling>». Dette scenarioet er et eksempel på når
+      # saksbehandleren bruker forbedringen likevel. Unntaket for poenggivende
+      # fag på yrkesfagsløpet står i L4c
+      # (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).
       #
       # Unntaket finnes fordi R2 ikke kan føres på samme vitnemål som
       # S-matematikk (Samordna opptaks wiki, «Kvoter»).
@@ -360,15 +364,11 @@ Egenskap: Velge fag per poengvariant
       # Wikiens tredje unntak, nytt førstegangsvitnemål etter komprimert løp,
       # er utelatt med vilje. Avklart 07.10.2026 at det ikke forekommer.
 
-    Scenario: Poenggivende fag på yrkesfagsløpet kan tas med i kvoten for førstegangsvitnemål
-      Gitt søkeren kvalifiserer til kvoten for førstegangsvitnemål med yrkesfaglig vitnemål og studiekompetansefagene
-      Og søkeren har et fag som gir språk- eller realfagspoeng
-      Og jeg har vurdert at faget er tatt senest det semesteret søkeren oppnådde generell studiekompetanse
-      Når jeg velger faget for poengvarianten for kvoten for førstegangsvitnemål
-      Så inngår faget i beregningen for poengvarianten
-      # Samordna opptaks wiki, «Kvoter»: fag som gir språk- eller
-      # realfagspoeng, tatt samtidig med studiekompetansefagene, kan tas med
-      # i kvoten for førstegangsvitnemål.
+    # «Poenggivende fag på yrkesfagsløpet kan tas med i kvoten for
+    # førstegangsvitnemål» er flyttet til L4c
+    # (behandle_yrkesfaglig_vitnemål_med_påbygging.feature, @OPT-BEH-BEH-046)
+    # 12.11.2026, i gjennomgangen med domeneekspertene. Yrkesfaglig vitnemål
+    # med påbygging er et unntak, og leveres etter L3 og L4a.
 
   # Reglene for beregning og lagring står i L2 (velge_vitnemål_som_grunnlag.feature,
   # «Poengene beregnes og lagres når saksbehandleren bruker dem»), og gjelder
@@ -402,7 +402,7 @@ Egenskap: Velge fag per poengvariant
         | realfagspoeng |
         | språkpoeng    |
       # AVKLART 07.10.2026: saksbehandleren kan legge inn realfagspoeng selv
-      # på poengvarianten, i tillegg til å markere fag med forsøkskode (L4a, endre_fag_i_grunnlaget.feature).
+      # på poengvarianten. Det dekker også fag med forsøkskode i R94 (endret 12.11.2026: markeringen av fag i L4a er fjernet).
       # Poengene låses på samme måte som når grunnlaget velges, og kan låses
       # opp med «Låse opp et poeng».
       #

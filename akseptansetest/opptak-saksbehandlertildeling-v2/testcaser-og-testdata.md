@@ -6,11 +6,11 @@
 
 ---
 
-Testcasene som skal lages, testbrukerne og testdataene for «Saksbehandlertildeling, runde 2». Siden synkes med testene i `cdp-tester/` og miljøfila (*Synk med testene og miljøfila* i `fs-testplan`). Testplanen: [Testplan – Saksbehandlertildeling, runde 2](testplan.md).
+Testcasene som skal lages, testbrukerne og testdataene for «Saksbehandlertildeling, runde 2». Siden synkes med testene i `tester-agent/` og miljøfila (*Synk med testene og miljøfila* i `fs-testplan`). Testplanen: [Testplan – Saksbehandlertildeling, runde 2](testplan.md).
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
@@ -61,7 +61,7 @@ Alt skjer i det felles testopptaket `opptak-samordna-saksbehandlertildeling`, og
 | `@OPT-BEH-BEH-011` | Regel i koden: tilbyderen ser praksisperiodene i saken | – | Se «Tilbyderen ser saksbehandlingen …» over | – |
 | `@OPT-BEH-BEH-011` | Regel i koden: tilbyderen ser bare sakene der den har et søknadsalternativ, ikke de andre sakene i søknaden | – | Se «Tilbyderen ser saksbehandlingen …» over | – |
 
-Testcasene står i `cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/` (lenke når de er laget). Fem regler i koden testes ikke i fase 2, fordi det er uklart om koden gjør det kravet ønsker: standardregelen uten verdi, organisasjon i unntak for utdanningsbakgrunn som ikke deltar, grunnlag og poeng som blir igjen i den gamle saken ved flytting, fristen som ikke er satt, og opptaksforvalterens innsyn i interne merknader etter flytting (se «Regler uten scenario» på [Omfang](omfang.md)). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+Testcasene står i `tester-agent/02 Opptak/13 Søknad og saksbehandling/02 Behandling/` (lenke når de er laget). Fem regler i koden testes ikke i fase 2, fordi det er uklart om koden gjør det kravet ønsker: standardregelen uten verdi, organisasjon i unntak for utdanningsbakgrunn som ikke deltar, grunnlag og poeng som blir igjen i den gamle saken ved flytting, fristen som ikke er satt, og opptaksforvalterens innsyn i interne merknader etter flytting (se «Regler uten scenario» på [Omfang](omfang.md)). Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
 
 ### Fase 3: intern akseptansetest
 
@@ -95,7 +95,7 @@ I tillegg til flytene har den interne testen tre deler (*Fase 3* i `akseptansete
 
 Testbruker 2 er opptaksforvalter ved NTNU, ikke ved UiO: miljøfila eier nøkkelen `opptak-forvalter-deltakende`, og NTNU er en av deltakerne i testopptaket.
 
-Kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasjon`) er alltid med, fordi den agentiske funksjonstesten (fase 2) bruker dem. Fra [test.md](../../cdp-tester/_Miljøer/test.md), hentet 2026-11-04:
+Kolonnene `Nøkkel` (etter `Nr`), `Innlogging` og `Start-URL` (etter `Organisasjon`) er alltid med, fordi den agentiske funksjonstesten (fase 2) bruker dem. Fra [test.md](../../tester-agent/_Miljøer/test.md), hentet 2026-11-04:
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
@@ -121,7 +121,7 @@ Fra tilgangsradene i verify-rapporten (2026-11-04 13:17). Den viser hvilke rolle
 
 ## Testdata
 
-Testdataene testene trenger, med nøkkel. Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager dataene sine selv: oppsettet (`cdp-tester/_Oppsett/`, lages av `fs-testcaser-cdp`) lager reglene, unntakene og søknadene gjennom løsningen i hver kjøring, med kjøringen i navnet. Bare opptaket og data testene ikke kan lage, må finnes i miljøet før testen, og navnet og `Søk/URL` for dem kopieres fra miljøfila: «Fra [test.md](../../cdp-tester/_Miljøer/test.md), hentet 2026-11-04». Testdata er syntetiske.
+Testdataene testene trenger, med nøkkel. Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager dataene sine selv: oppsettet (`tester-agent/_Oppsett/`, lages av `fs-testcaser-agent`) lager reglene, unntakene og søknadene gjennom løsningen i hver kjøring, med kjøringen i navnet. Bare opptaket og data testene ikke kan lage, må finnes i miljøet før testen, og navnet og `Søk/URL` for dem kopieres fra miljøfila: «Fra [test.md](../../tester-agent/_Miljøer/test.md), hentet 2026-11-04». Testdata er syntetiske.
 
 Alt skjer i opptaket `opptak-samordna-saksbehandlertildeling`. Ingenting utenfor det opptaket skal endres.
 

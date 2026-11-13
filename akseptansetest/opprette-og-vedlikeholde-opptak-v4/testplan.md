@@ -99,9 +99,9 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Oppsettet kjører uten feil i starten av kjøringen | Venter: ikke kjørt ennå. Opptak kan ikke slettes, så opptakene oppsettet og testene lager, blir liggende, med kjøringen i navnet |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | Personaene for testbruker 1–4 er bekreftet 28.10. [Fylles ut av teamet: at `OPPTAK_FORVALTER` ved NTNU gir `MEDLEM_OPPTAK`] |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | Nei (avvik, se over): 76 av 84 funnet, 5 ikke funnet, 3 usikre (28.10.2026). Kontrollert av `fs-verify-kontroll`. Venter på kontroll av en person |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) og oppsettet er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget og oppdatert 29.10.2026. Venter på gjennomgang |
+| 6 | De agentiske testcasene (`fs-testcaser-agent`) og oppsettet er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Laget og oppdatert 29.10.2026. Venter på gjennomgang |
 | 7 | Testcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
-| 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Radene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: verdiene for grunndataene som mangler] |
+| 8 | Agenten er logget inn i FS Admin med Feide-testbrukeren (`tester-agent/.env`), i nettleseren Vibium starter, i en egen sesjon til testingen, kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Radene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: verdiene for grunndataene som mangler] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent
@@ -155,7 +155,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 |---|---|
 | Verifiseringsrapporten (fase 1) | [Verifisering – Opprette og vedlikeholde opptak v3 – 2026-10-28 12:38](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5153554433) · [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-2026-10-28-1238.md) |
 | Agentisk testrapport (fase 2) | [Testrapport – agentisk funksjonstest – Opprette og vedlikeholde opptak v4](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5158567942) · [testrapport-agentisk-2026-10-30.md](testrapport-agentisk-2026-10-30.md) |
-| Testcasene for fase 2 | [`cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../cdp-tester/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), og [oppsettet](../../cdp-tester/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) |
+| Testcasene for fase 2 | [`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../tester-agent/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), og [oppsettet](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature) |
 | Testcasene for fase 3 | – |
 | Forrige testløp | [Testplan versjon 3](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5150965860), [testplan versjon 1](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128028165), [intern akseptansetest 22.10](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127209099), [ekstern akseptansetest](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137334279). Kjøringen av Opprette et opptak 27.10 (versjon 2, arkivert): `akseptansetest/opprette-og-vedlikeholde-opptak-v2/kjoring-2026-10-27-1200/` |
 

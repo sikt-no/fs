@@ -60,10 +60,15 @@ Egenskap: Kvotetype
       Når søknadene i opptaket behandles
       Så plasseres ingen søkere automatisk i kvotetypen "TestKvote"
 
-  @planned @scope-spesialvurdering-2027
+  @scope-spesialvurdering-2027
   Regel: En kvotetype kan være uten plasser
     # Ny regel 2026-11-06 (TAKE-492). At kvotetypen ikke kan være hovedkvote, motta plassflyt eller få
     # antall studieplasser, står i sette_plassflyt.feature og sette_antall_studieplasser_per_kvote.feature.
+    # AVKLART 2026-11-13 (produkteier, etter fs-verify): Det er ingen sperre mot at hovedkvoten settes uten
+    # plasser. En hovedkvote som tar imot ledige plasser, stoppes av scenarioet om plassflyt under, men den eneste
+    # kvotetypen i en regelverkssamling (som er hovedkvoten) kan settes uten plasser. Det er dumt, men vi ser om det
+    # blir et problem før kravet eventuelt gjøres strengere. Scenarioet «Hovedkvoten kan ikke være uten plasser»
+    # er fjernet.
 
     Scenario: Kvotetypen har plasser som standard
       Når opptaksforvalteren oppretter kvotetypen "Ordinær kvote (ORD)"
@@ -73,19 +78,13 @@ Egenskap: Kvotetype
       Når opptaksforvalteren oppretter kvotetypen "Ventekvote (VENT)" uten plasser
       Så har kvotetypen "Ventekvote (VENT)" ikke plasser
 
-    Scenario: Hovedkvoten kan ikke være uten plasser
-      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når opptaksforvalteren vil sette kvotetypen "Ordinær kvote (ORD)" til å være uten plasser
-      Så blir kvotetypen "Ordinær kvote (ORD)" ikke endret
-      Og opptaksforvalteren ser at hovedkvoten må ha plasser
-
     Scenario: En kvotetype som mottar plassflyt, kan ikke være uten plasser
       Gitt at "Samisk førstegangsvitnemål (SAMF)" sender ledige plasser til "Førstegangsvitnemål (ORDF)" i standard plassflyt
       Når opptaksforvalteren vil sette kvotetypen "Førstegangsvitnemål (ORDF)" til å være uten plasser
       Så blir kvotetypen "Førstegangsvitnemål (ORDF)" ikke endret
       Og opptaksforvalteren ser at en kvotetype som mottar plassflyt, må ha plasser
 
-  @planned @scope-spesialvurdering-2027
+  @scope-spesialvurdering-2027
   Regel: En kvotetype kan være standardkvote for utdanningstilbudene
     # Ny regel 2026-11-06 (TAKE-492). At nye utdanningstilbud får standardkvoten, står i
     # opptaksinnstillinger_utdanningstilbud.feature.
@@ -116,20 +115,36 @@ Egenskap: Kvotetype
       Så har utdanningstilbudet "Sykepleie, høst 2027" fortsatt utdanningskvoten "Ventekvote (VENT)"
       Men utdanningstilbud som legges til i opptaket etterpå, får ikke utdanningskvoten "Ventekvote (VENT)"
 
-  @planned @scope-spesialvurdering-2027
-  Regel: En kvotetype kan stenges for fjerning fra utdanningstilbudet
+  @scope-spesialvurdering-2027
+  Regel: En standardkvote kan stenges for fjerning fra utdanningstilbudet
     # Ny regel 2026-11-06 (TAKE-492). At kvoten ikke kan fjernes fra utdanningstilbudet, står i
     # opptaksinnstillinger_utdanningstilbud.feature.
     # AVKLART 2026-11-06 (produkteier): Innstillingen gjelder alle. Kvotetypen er enten stengt eller åpen for
     # fjerning, og opptaksforvalter ved organisasjonen som eier opptaket, kan ikke overstyre den.
+    # AVKLART 2026-11-13 (produkteier, etter fs-admin): Det er bare aktuelt å stenge en kvotetype for fjerning
+    # når den er standardkvote. Slutter kvotetypen å være standardkvote, er den åpen for fjerning igjen.
+    # Erstatter at alle kvotetyper kan stenges for fjerning. Regelen het «En kvotetype kan stenges for fjerning
+    # fra utdanningstilbudet».
 
     Scenario: Kvotetypen er åpen for fjerning som standard
       Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
       Så kan kvotetypen "Førstegangsvitnemål (ORDF)" fjernes fra utdanningstilbudene
 
-    Scenario: Stenge kvotetypen for fjerning
+    Scenario: Stenge standardkvoten for fjerning
+      Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
       Når opptaksforvalteren stenger kvotetypen "Ventekvote (VENT)" for fjerning fra utdanningstilbudene
       Så kan kvotetypen "Ventekvote (VENT)" ikke fjernes fra utdanningstilbudene
+
+    Scenario: En kvotetype som ikke er standardkvote, kan ikke stenges for fjerning
+      Gitt at kvotetypen "Førstegangsvitnemål (ORDF)" ikke er standardkvote
+      Når opptaksforvalteren endrer kvotetypen "Førstegangsvitnemål (ORDF)"
+      Så kan opptaksforvalteren ikke stenge kvotetypen "Førstegangsvitnemål (ORDF)" for fjerning fra utdanningstilbudene
+
+    Scenario: Kvotetypen åpnes for fjerning når den ikke lenger er standardkvote
+      Gitt at kvotetypen "Ventekvote (VENT)" er standardkvote
+      Og at kvotetypen "Ventekvote (VENT)" er stengt for fjerning fra utdanningstilbudene
+      Når opptaksforvalteren setter at kvotetypen "Ventekvote (VENT)" ikke er standardkvote
+      Så kan kvotetypen "Ventekvote (VENT)" fjernes fra utdanningstilbudene
 
     Scenario: Organisasjonen som eier opptaket, kan ikke overstyre stengingen
       Gitt at kvotetypen "Ventekvote (VENT)" er stengt for fjerning fra utdanningstilbudene
@@ -159,7 +174,7 @@ Egenskap: Kvotetype
         | IV     | individuell vurdering (uten poengberegning) |
         | IH     | individuell helhetsvurdering                |
 
-  @planned @scope-spesialvurdering-2027
+  @scope-spesialvurdering-2027
   Regel: En kvotetype kan skjule poengene for søkeren
     # AVKLART 2026-11-11 (produkteier): Om søkeren ser poengene, kan avhenge av kvoten, ikke bare grunnlaget.
     # Søkeren kan bli vurdert på samme grunnlag i en kvote som skjuler poengene (ventekvoten) og i en kvote

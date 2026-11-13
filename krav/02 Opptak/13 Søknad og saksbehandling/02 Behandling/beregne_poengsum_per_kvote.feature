@@ -78,8 +78,9 @@ Egenskap: Beregne poengsum per kvote
         | vurderingen av et kravelement endres   |
         | kvoteplasseringen endres               |
 
-    @ref-OPT-BEH-BEH-016
+    @ref-OPT-BEH-BEH-016 @deprecated
     Scenario: Uendret poengsum gir ikke nytt innslag i endringsloggen
+      # Avklart 13.11.2026: teamet ønsker ikke endringsloggen. Den ble stoppet med V480 (BAT-324).
       Gitt at søkeren har en poengsum i en kvotetype
       Når poengsummen regnes ut på nytt uten at den endres
       Så har endringsloggen ikke fått noe nytt innslag for poengsummen

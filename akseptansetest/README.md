@@ -23,8 +23,8 @@ Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den inte
 | 1 | Testrapport etter verifiseringen | `fs-testrapport` | `testrapport-verifisering-<dato>.md` | «Testrapport – verifisering – <leveranse>» |
 | 1 | Testplan: hovedsiden, og undersidene for omfanget og for testcasene og testdataene | `fs-testplan` | `testplan.md`, `omfang.md` og `testcaser-og-testdata.md` | «Testplan – <leveranse>», «Omfang – <leveranse>» og «Testcaser og testdata – <leveranse>» |
 | 1–3 | Sporbarhet per krav: scenario → kode → testcase → flyt | `fs-testplan` lager den, `fs-testrapport` fyller ut per fase | `sporbarhet.md` | «Sporbarhet – <leveranse>» |
-| 2 | Agentisk funksjonstest: testcasene | `fs-testcaser-cdp` lager testene i [`cdp-tester/`](../cdp-tester/README.md) | `cdp-tester/<kravstien>/<fil>.feature` | Ingen: testene ligger i repoet |
-| 2 | Agentisk funksjonstest: kjøringen | En agent kjører testene med `cdp`-skillen, mot testmiljøet | `kjoring-<dato>-<HHMM>/resultat.md` | Står i testrapporten |
+| 2 | Agentisk funksjonstest: testcasene | `fs-testcaser-agent` lager testene i [`tester-agent/`](../tester-agent/README.md) | `tester-agent/<kravstien>/<fil>.feature` | Ingen: testene ligger i repoet |
+| 2 | Agentisk funksjonstest: kjøringen | En agent kjører testene med Vibium, mot testmiljøet | `kjoring-<dato>-<HHMM>/resultat.md` | Står i testrapporten |
 | 2 | Testrapport etter den agentiske testen | `fs-testrapport` | `testrapport-agentisk-<dato>.md` | «Testrapport – agentisk funksjonstest – <leveranse>» |
 | 3 | Intern akseptansetest | `fs-testcaser-intern` | `testcaser-intern.md` | «Intern akseptansetest – <leveranse>» |
 | 3 | Testrapport etter den interne testen | `fs-testrapport` | `testrapport-intern-<dato>.md` | «Testrapport – intern akseptansetest – <leveranse>» |
@@ -34,7 +34,7 @@ Hver leveranse går gjennom fase 1–3: planen, den agentiske testen og den inte
 
 Planen (fase 1) starter med verifiseringen. `fs-verify` (eller `fs-verify-agent-teams` når det er mange feature-filer) setter `@implemented` på kravene der koden er funnet, og rapporten er grunnlaget for testplanen: det som er `@implemented`, er det som testes, og det verifiseringen ikke fant, står i «Venter på verifisering». `@implemented` betyr bare at koden er funnet. Om løsningen virker, sier testene i fase 2–4. Verifiseringen kjøres på leveransen (et scope, en oppgave, en mappe eller feature-filer), siden testplanen ikke finnes ennå. Rapporten har også reglene i koden som ikke har et scenario i kravet, og antall åpne spørsmål per krav.
 
-Testplanen planlegger: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, hvilke testdata som trengs (testene lager dem selv, i oppsettet), testbrukerne, åpne spørsmål, forutsetningene og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke testcasene. `fs-testcaser-cdp` lager testcasene for fase 2, og `fs-testcaser-intern` testcasene for fase 3.
+Testplanen planlegger: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, hvilke testdata som trengs (testene lager dem selv, i oppsettet), testbrukerne, åpne spørsmål, forutsetningene og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke testcasene. `fs-testcaser-agent` lager testcasene for fase 2, og `fs-testcaser-intern` testcasene for fase 3.
 
 Testplanen er hovedsiden i Confluence, og ligger alltid under [Testplaner](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5126062121/Testplaner), som er en underside til strategien. De andre sidene er undersider til testplanen. Verifiseringen fra fase 1 legges som underside når testplanen opprettes i Confluence (`fs-testplan`). Seksjonen «Status i flyten» i testplanen lenker til hver av dem.
 
@@ -82,14 +82,14 @@ Kravene står med Feature-ID i «Omfang» i testplanen (på undersiden «Omfang�
 
 ## Fase 2: agentisk funksjonstest
 
-Mesteparten av den funksjonelle testingen skjer her. En agent kjører testene i Chrome med `cdp`-skillen, mot testmiljøet. Testene er ikke en del av testplanen: de er varige, ligger i [`cdp-tester/`](../cdp-tester/README.md), og lages og oppdateres med `fs-testcaser-cdp`, fra kravene, reglene i koden uten scenario (fra verify-rapporten) og reglene agenten utleder. Det som hører til leveransen, er kjøringene. Gherkin-testene er ikke bundet til verktøyet: andre kan bruke dem også.
+Mesteparten av den funksjonelle testingen skjer her. En agent kjører testene i Chrome med [Vibium](../tester-agent/README.md#vibium), mot testmiljøet. Testene er ikke en del av testplanen: de er varige, ligger i [`tester-agent/`](../tester-agent/README.md), og lages og oppdateres med `fs-testcaser-agent`, fra kravene, reglene i koden uten scenario (fra verify-rapporten) og reglene agenten utleder. Det som hører til leveransen, er kjøringene. Gherkin-testene er ikke bundet til verktøyet: andre kan bruke dem også.
 
 - **Samme grunnlag.** Omfanget av testcasene («Testcaser som skal lages»), roller, testbrukere og testdata planlegges i testplanen, med de samme spørsmålene for alle fasene (se [`.claude/references/akseptansetest/roller-og-testdata.md`](../.claude/references/akseptansetest/roller-og-testdata.md)). `fs-testplan` fyller ut kolonnene `Nøkkel`, `Innlogging`, `Start-URL`, `Søk/URL`, `Utgangstilstand` og `Brukes av`, og leser koden for å vise hva løsningen krever.
-- **Testdata.** Testplanen sier hvilke testdata testene trenger, og i hvilken tilstand. Data i testmiljøet kan slettes eller nullstilles når som helst, så de automatiserte testene lager dataene sine selv: i fase 2 lager oppsettet i `cdp-tester/_Oppsett/` dem gjennom løsningen i hver kjøring. Bare grunndata (personaer, kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage, må finnes i miljøet, og står i miljøfila. Unntaket er fase 4: testdataene lages på forhånd, i tilstanden flytene forutsetter, og testmiljøet nullstilles ikke i testperioden, så eksterne testere ikke må lage eller lete fram data selv.
+- **Testdata.** Testplanen sier hvilke testdata testene trenger, og i hvilken tilstand. Data i testmiljøet kan slettes eller nullstilles når som helst, så de automatiserte testene lager dataene sine selv: i fase 2 lager oppsettet i `tester-agent/_Oppsett/` dem gjennom løsningen i hver kjøring. Bare grunndata (personaer, kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage, må finnes i miljøet, og står i miljøfila. Unntaket er fase 4: testdataene lages på forhånd, i tilstanden flytene forutsetter, og testmiljøet nullstilles ikke i testperioden, så eksterne testere ikke må lage eller lete fram data selv.
 - **Ingen egne testcaser for roller.** `fs-verify` har verifisert i koden at rollene og tilgangene er laget slik kravet sier (fase 1). Scenarioene i kravet, også om synlighet, testes som de står.
-- **Nøkler, ikke navn.** Testene bruker nøkler (`brukeradministrator-alle-miljoer`), som slås opp i miljøfila (`cdp-tester/_Miljøer/<miljø>.md`) ved kjøring. Testene kjenner ikke testplanen, og overlever en ny testplan med andre testbrukere. Testplanen har en kopi av testbrukerne til testerne, og `fs-testplan` holder den i synk med miljøfila og testene.
+- **Nøkler, ikke navn.** Testene bruker nøkler (`brukeradministrator-alle-miljoer`), som slås opp i miljøfila (`tester-agent/_Miljøer/<miljø>.md`) ved kjøring. Testene kjenner ikke testplanen, og overlever en ny testplan med andre testbrukere. Testplanen har en kopi av testbrukerne til testerne, og `fs-testplan` holder den i synk med miljøfila og testene.
 - **Resultatet** skrives til `akseptansetest/<slug>/kjoring-<YYYY-MM-DD>-<HHMM>/resultat.md` når kjøringen er en del av testplanen, og er et forslag: en tester bekrefter statusen, og `fs-testrapport` teller først etter det. Skjermbilder og annet legges i samme mappe, men `.gitignore` holder dem utenfor git: bare `resultat.md` committes.
-- **Frittstående kjøringer** (for eksempel regresjon senere) legger resultatet ved testene i `cdp-tester/`. De er ikke grunnlag for en testrapport. Se *Kjøring og resultat* i [`cdp-tester/README.md`](../cdp-tester/README.md).
+- **Frittstående kjøringer** (for eksempel regresjon senere) legger resultatet ved testene i `tester-agent/`. De er ikke grunnlag for en testrapport. Se *Kjøring og resultat* i [`tester-agent/README.md`](../tester-agent/README.md).
 - **Bare i testmiljø.** Agenten avbryter hvis URL-en er produksjon.
 
 ## Fase 3: intern akseptansetest
@@ -110,7 +110,7 @@ Kolonnene er `Nr | Scenario | Steg | Forventet resultat | Faktisk resultat | Sta
 - **Faktisk resultat** er det testeren så, som fritekst.
 - **Status** er `Bestått`, `Ikke bestått` eller `Ikke testet` (med en kort begrunnelse). Det er den testrapporten teller.
 
-Testcasene i fase 2 er Gherkin i `cdp-tester/`, og i fase 3 og 4 tabeller på testsiden. Fase 3 har de fire delene over: flytene har én testcase per flyt, med eget resultat per scenario.
+Testcasene i fase 2 er Gherkin i `tester-agent/`, og i fase 3 og 4 tabeller på testsiden. Fase 3 har de fire delene over: flytene har én testcase per flyt, med eget resultat per scenario.
 
 Reglene for testcasene står i [`.claude/references/akseptansetest/testcase-regler.md`](../.claude/references/akseptansetest/testcase-regler.md).
 

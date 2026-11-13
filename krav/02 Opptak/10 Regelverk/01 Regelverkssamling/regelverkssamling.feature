@@ -9,7 +9,7 @@ Egenskap: Regelverkssamling
 
   # Avklart 2026-11-09 og 2026-11-10 (svar 14 og 17 i avklaringsmøtet om tilgangsregler i opptak): alle som jobber
   # med opptak, ser alt regelverk. Det finnes ingen egen regelverksforvalter.
-  @draft
+  @planned
   Regel: Opptaksforvaltere, saksbehandlere og opptaksinformatører ser regelverkssamlingene ved alle organisasjoner
 
     Scenariomal: Se en regelverkssamling som en annen organisasjon eier
@@ -25,7 +25,7 @@ Egenskap: Regelverkssamling
         | opptaksinformatør |
 
   # Avklart 2026-11-10 (svar 17): saksbehandleren endrer ikke regelverket, heller ikke ved organisasjonen sin.
-  @draft
+  @planned
   Regel: Bare opptaksforvalter oppretter, endrer, kopierer og sletter regelverkssamlinger
 
     Scenariomal: Saksbehandler og opptaksinformatør ser regelverkssamlingen, men endrer den ikke
@@ -50,15 +50,20 @@ Egenskap: Regelverkssamling
         | saksbehandler     | ser jeg ikke muligheten til å opprette en regelverkssamling    |
         | opptaksinformatør | ser jeg ikke muligheten til å opprette en regelverkssamling    |
 
-  # Avklart 2026-11-10 (svar 16): for at brukerne ikke skal drukne i andres regelverkssamlinger, vises
-  # regelverket ved organisasjonen brukeren er ansatt ved, først. Om det løses med sortering eller filter, er åpent.
-  @draft
-  Regel: Regelverkssamlingene ved organisasjonen brukeren er ansatt ved, vises først
+  # Avklart 2026-11-10 (svar 16): brukerne skal ikke drukne i andres regelverkssamlinger.
+  # Avklart 2026-11-13 (produkteier): det løses med et filter på organisasjon, ikke med at regelverkssamlingene ved
+  # organisasjonen brukeren er ansatt ved, står først. Lista er sortert etter kode. Erstatter regelen
+  # «Regelverkssamlingene ved organisasjonen brukeren er ansatt ved, vises først», som ikke var levert.
+  Regel: Regelverkssamlingene kan filtreres på organisasjonen som eier dem
 
-    Scenario: Regelverkssamlingene ved organisasjonen jeg er ansatt ved, står øverst
-      Gitt at det finnes regelverkssamlinger ved organisasjonen jeg er ansatt ved og ved andre organisasjoner
+    Scenario: Filtrere på organisasjon
+      Gitt at det finnes regelverkssamlinger ved flere organisasjoner
+      Når jeg velger én eller flere organisasjoner som filter
+      Så vises kun regelverkssamlingene som eies av de valgte organisasjonene
+
+    Scenario: Regelverkssamlingene er sortert etter kode
       Når jeg åpner regelverksoversikten
-      Så står regelverkssamlingene ved organisasjonen jeg er ansatt ved, først
+      Så er regelverkssamlingene sortert etter kode
 
   # Justert etter koden 2026-10-14 (retrofitting): fs-admin har navn bare på bokmål, og ved sletting av en
   # samling som er i bruk vises en generell feilmelding.
@@ -71,7 +76,6 @@ Egenskap: Regelverkssamling
       Og den eies av organisasjonen jeg er opptaksforvalter ved
 
     # Avklart av produkteier 2026-11-09.
-    @draft
     Scenario: Kan ikke opprette regelverkssamling for en annen organisasjon
       Når jeg oppretter en ny regelverkssamling
       Så ser jeg ikke muligheten til å velge en annen organisasjon som eier enn organisasjonen jeg er opptaksforvalter ved
@@ -92,7 +96,6 @@ Egenskap: Regelverkssamling
       Og endringer i originalen påvirker ikke kopien
 
     # Avklart av produkteier 2026-11-09.
-    @draft
     Scenario: Kan ikke kopiere regelverkssamling til en annen organisasjon
       Gitt at regelverkssamlingen "UHG2027" eies av HK-dir
       Når jeg kopierer regelverkssamlingen
