@@ -1,0 +1,516 @@
+<title>Verifisering · Automatisk ferdigbehandling</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: verdict first, then the requirements as a scenario × repo matrix, then work split per repo, then decisions for the team. */
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --sunk: #eaeef2;
+  --ink: #141c25;
+  --muted: #5a6776;
+  --line: #d8dee6;
+  --accent: #1f4fb8;
+  --accent-soft: #e3ebfa;
+  --ok: #17784a;      --ok-soft: #dff2e8;
+  --miss: #b42318;    --miss-soft: #fbe4e1;
+  --part: #a8620a;    --part-soft: #fbefd9;
+  --na: #8a96a3;      --na-soft: #eef1f4;
+  --font: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f141a; --surface: #161d25; --sunk: #1d2630; --ink: #e6ebf0; --muted: #98a5b3; --line: #2a3542;
+    --accent: #7fa6ff; --accent-soft: #1c2a47;
+    --ok: #4cc38a; --ok-soft: #12301f; --miss: #ff7b6b; --miss-soft: #3a1714; --part: #f0b25a; --part-soft: #36270f; --na: #6f7b88; --na-soft: #1d2630;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f141a; --surface: #161d25; --sunk: #1d2630; --ink: #e6ebf0; --muted: #98a5b3; --line: #2a3542;
+  --accent: #7fa6ff; --accent-soft: #1c2a47;
+  --ok: #4cc38a; --ok-soft: #12301f; --miss: #ff7b6b; --miss-soft: #3a1714; --part: #f0b25a; --part-soft: #36270f; --na: #6f7b88; --na-soft: #1d2630;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+code, .mono { font-family: var(--mono); font-size: 0.86em; }
+code { background: var(--sunk); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Header */
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { padding-block: 28px 24px; display: grid; gap: 18px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.metaline { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 13.5px; }
+.metaline b { color: var(--ink); font-weight: 600; }
+.verdict { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: var(--r); background: var(--miss-soft); border: 1px solid color-mix(in srgb, var(--miss) 30%, transparent); }
+.verdict.good { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+.verdict .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--miss); margin-top: 6px; }
+.verdict.good .dot { background: var(--ok); }
+.verdict h2 { font-size: 19px; font-weight: 700; }
+.verdict p { margin: 4px 0 0; max-width: 72ch; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); display: grid; gap: 2px; }
+.stat .n { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.stat .n small { font-size: 15px; color: var(--muted); font-weight: 600; }
+.stat .l { font-size: 13px; color: var(--muted); }
+.stat.bad .n { color: var(--miss); }
+.stat.warn .n { color: var(--part); }
+
+/* Sticky nav + filters */
+nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+nav.bar .wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding-block: 10px; }
+.links { display: flex; flex-wrap: wrap; gap: 4px; }
+.links a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: 13.5px; padding: 5px 10px; border-radius: 999px; }
+.links a:hover { color: var(--ink); background: var(--sunk); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; background: var(--sunk); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: transparent; color: var(--muted); padding: 4px 11px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
+
+/* Sections */
+main .wrap { display: grid; gap: 44px; padding-block: 32px 64px; }
+section { display: grid; gap: 14px; scroll-margin-top: 70px; min-width: 0; }
+.sechead { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.sechead h2 { font-size: 22px; font-weight: 750; letter-spacing: -0.01em; }
+.sechead .count { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+.lede { margin: 0; color: var(--muted); max-width: 75ch; }
+
+/* Status glyphs */
+.g { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; font-weight: 700; font-size: 14px; font-family: var(--mono); }
+.g.ok { background: var(--ok-soft); color: var(--ok); }
+.g.miss { background: var(--miss-soft); color: var(--miss); }
+.g.part { background: var(--part-soft); color: var(--part); }
+.g.na { background: var(--na-soft); color: var(--na); }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.miss { background: var(--miss-soft); color: var(--miss); }
+.chip.part { background: var(--part-soft); color: var(--part); }
+.chip.info { background: var(--accent-soft); color: var(--accent); }
+.chip.na { background: var(--na-soft); color: var(--muted); }
+
+/* Krav cards */
+.krav { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.kravhead { padding: 16px 18px; display: grid; gap: 10px; border-bottom: 1px solid var(--line); }
+.kravhead .row1 { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between; }
+.kravhead h3 { font-size: 18px; font-weight: 700; }
+.kid { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.progress { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 13.5px; }
+.bar { width: 160px; height: 8px; border-radius: 99px; background: var(--miss-soft); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ok); }
+.repomiss { display: inline-flex; gap: 6px; align-items: center; }
+.repomiss b { font-variant-numeric: tabular-nums; }
+.gjen { margin: 0; color: var(--muted); font-size: 14px; }
+.matrix { width: 100%; border-collapse: collapse; }
+.matrix th { text-align: left; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 10px; background: var(--sunk); }
+.matrix th.c, .matrix td.c { text-align: center; width: 64px; }
+.matrix td { padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: middle; }
+.matrix tr.rule td { background: var(--bg); font-size: 13px; color: var(--muted); font-weight: 600; padding-block: 6px; }
+.matrix tr.sc { cursor: pointer; }
+.matrix tr.sc:hover td { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.sctitle { font-weight: 500; }
+.scline { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: 6px; }
+.mrtag { margin-left: 6px; }
+.matrix tr.detail td { background: var(--bg); border-top: 0; padding: 4px 10px 14px 34px; font-size: 13.5px; color: var(--ink); }
+.caret { display: inline-block; width: 14px; color: var(--muted); transition: transform .15s; }
+tr.sc[aria-expanded="true"] .caret { transform: rotate(90deg); }
+.scroll { overflow-x: auto; }
+
+/* Per repo */
+.repos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.repo { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.repo h3 { font-size: 17px; font-weight: 700; display: flex; gap: 10px; align-items: center; }
+.letter { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; background: var(--ink); color: var(--surface); font-family: var(--mono); font-weight: 600; font-size: 14px; }
+.repo .sub { color: var(--muted); font-size: 13.5px; margin: -6px 0 0; }
+.repo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.repo li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; font-size: 14px; }
+.repo li .g { width: 22px; height: 22px; font-size: 12px; }
+.repo .grp { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-top: 6px; }
+.empty { color: var(--muted); font-size: 14px; }
+
+/* Lists of findings */
+.cards { display: grid; gap: 10px; }
+.find { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 16px; display: grid; gap: 6px; min-width: 0; }
+.find .h { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.find .h strong { font-weight: 600; }
+.find .b { font-size: 13.5px; color: var(--muted); }
+.find .b code { color: var(--ink); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: start; }
+.col { display: grid; gap: 10px; min-width: 0; }
+.colhead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; border-bottom: 2px solid var(--line); padding-bottom: 6px; }
+.colhead h3 { font-size: 15px; font-weight: 700; }
+.colhead.decide { border-color: var(--part); }
+.colhead.krav { border-color: var(--accent); }
+.colhead.test { border-color: var(--ok); }
+details.more { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+details.more summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; gap: 8px; align-items: center; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary::before { content: "▸"; color: var(--muted); transition: transform .15s; }
+details.more[open] summary::before { transform: rotate(90deg); }
+details.more .in { padding: 0 16px 14px; display: grid; gap: 8px; }
+.okrow { display: grid; grid-template-columns: auto 1fr; gap: 10px; font-size: 14px; align-items: start; }
+.okrow .g { width: 22px; height: 22px; font-size: 12px; }
+
+/* Regler uten scenario: stacked groups, one per decision */
+#regler-cols, #funn-cols { display: grid; gap: 14px; grid-template-columns: none; }
+.rgroup.info { --tone: var(--muted); --tone-soft: var(--sunk); }
+.rgroup.bad { --tone: var(--miss); --tone-soft: var(--miss-soft); }
+.rtext { font-size: 14px; color: var(--ink); max-width: 85ch; overflow-wrap: anywhere; }
+.rgroup { --tone: var(--muted); --tone-soft: var(--sunk); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.rgroup.decide { --tone: var(--part); --tone-soft: var(--part-soft); }
+.rgroup.krav { --tone: var(--accent); --tone-soft: var(--accent-soft); }
+.rgroup.test { --tone: var(--ok); --tone-soft: var(--ok-soft); }
+.rghead { padding: 12px 18px; background: var(--tone-soft); display: grid; gap: 2px; }
+.rghead h3 { font-size: 16px; font-weight: 700; color: var(--tone); display: flex; align-items: center; gap: 8px; }
+.rgn { font-family: var(--mono); font-size: 12.5px; background: var(--surface); color: var(--tone); border-radius: 999px; padding: 1px 8px; }
+.rghead p { margin: 0; font-size: 13.5px; color: var(--ink); max-width: 80ch; }
+.rlist { list-style: none; margin: 0; padding: 0; }
+.rlist li { padding: 12px 18px; border-top: 1px solid var(--line); display: grid; gap: 6px; min-width: 0; }
+.rlist li:first-child { border-top: 0; }
+.rmain { font-weight: 500; max-width: 85ch; }
+.rmeta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; font-size: 13px; color: var(--muted); }
+.rbev { min-width: 0; overflow-wrap: anywhere; }
+
+footer { border-top: 1px solid var(--line); background: var(--surface); }
+footer .wrap { padding-block: 22px 32px; display: grid; gap: 10px; font-size: 13px; color: var(--muted); }
+footer dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+footer dt { font-weight: 600; color: var(--ink); }
+footer dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.warnbox { color: var(--part); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .matrix th.c, .matrix td.c { width: 44px; padding-inline: 4px; }
+  .scline { display: block; margin-left: 0; }
+  .bar { width: 110px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow" id="eyebrow">Verifisering mot koden · fase 1</div>
+    <h1 id="title"></h1>
+    <div class="metaline" id="metaline"></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Seksjoner og filter">
+  <div class="wrap">
+    <div class="links">
+      <a href="#krav" data-sec="krav">Krav</a>
+      <a href="#repo" data-sec="repo">Per repo</a>
+      <a href="#tilgang" data-sec="tilgang">Tilgang</a>
+      <a href="#regler" data-sec="regler">Regler uten scenario</a>
+      <a href="#funn" data-sec="funn">Andre funn</a>
+      <a href="#mr" data-sec="mr">MR-er</a>
+    </div>
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Repo" id="f-repo"></div>
+      <div class="seg" role="group" aria-label="Vis" id="f-vis">
+        <button id="vis-alt" data-v="alt" aria-pressed="true">Alle scenarioer</button>
+        <button id="vis-mangler" data-v="mangler" aria-pressed="false">Bare det som mangler</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <section id="krav">
+      <div class="sechead"><h2>Kravene</h2><span class="count" id="krav-count"></span></div>
+      <p class="lede">Hvert scenario i kravene, med resultatet i hvert repo. Klikk på et scenario for å se beviset i koden.</p>
+      <div class="cards" id="krav-list"></div>
+    </section>
+
+    <section id="repo">
+      <div class="sechead"><h2>Det som mangler, per repo</h2></div>
+      <p class="lede">Scenarioene som må bygges eller endres i hvert repo. Et scenario som mangler i begge, står i begge listene.</p>
+      <div class="repos" id="repo-list"></div>
+    </section>
+
+    <section id="tilgang">
+      <div class="sechead"><h2>Tilgang og datakonsistens</h2><span class="count" id="tilgang-count"></span></div>
+      <p class="lede">Om koden gir rollene tilgang slik kravet sier, holder data fra andre organisasjoner utenfor, og ikke gir foreldreløse eller motstridende data. Sjekket i koden, ikke testet.</p>
+      <div class="cards" id="tilgang-avvik"></div>
+      <details class="more" id="tilgang-ok"></details>
+    </section>
+
+    <section id="regler">
+      <div class="sechead"><h2>Regler i koden uten scenario</h2><span class="count" id="regler-count"></span></div>
+      <p class="lede">Regler koden har, som ingen scenarioer i kravene dekker, gruppert etter hva teamet bør gjøre med dem. Det som må avklares, står først.</p>
+      <div class="cols" id="regler-cols"></div>
+    </section>
+
+    <section id="funn">
+      <div class="sechead"><h2>Andre funn</h2><span class="count" id="funn-count"></span></div>
+      <p class="lede">Det som må følges opp, og som ikke står over, gruppert etter type. Det teamet må avgjøre, står først.</p>
+      <div class="cols" id="funn-cols"></div>
+    </section>
+
+    <section id="mr">
+      <div class="sechead"><h2>Åpne MR-er og brancher</h2></div>
+      <p class="lede">Koden i disse er ikke merget, og regnes ikke som levert.</p>
+      <div class="cards" id="mr-list"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <dl id="meta"></dl>
+  </div>
+</footer>
+
+<script id="data" type="application/json">{"title":"Automatisk ferdigbehandling","meta":{"Dato":"2026-11-09 12:39","Krav":"`@scope-automatisk-ferdigbehandling` (3 feature-filer)","Kode":"`fs-plattform` (main, 47304c92f8, oppdatert), `fs-admin` (main, 8ec4543d2, oppdatert)","Repoer":"P = fs-plattform, A = fs-admin · ✓ funnet, ✗ mangler, ~ delvis eller usikker, – ikke relevant","Åpne MR-er":"4 MR-er sett gjennom (fs-plattform !6643, !6648, !6549 og fs-admin !3372), 2 med kode for kravene","Omfang":"`@in-progress` (valgt, som i forrige kjøring; flytene kjøres etter retaggingen)","Avhengigheter":"1 nivå, bare status","Kontroll":"`fs-verify-kontroll`","Menneskelig kontroll":"[Fylles ut: navn og dato for personen som har kontrollert rapporten]","Skjermbilder":"nei (som i forrige kjøring)"},"abbr":{},"repos":[{"k":"P","name":"fs-plattform","what":"API, tjenestene og databasen"},{"k":"A","name":"fs-admin","what":"Det saksbehandlere og forvaltere ser og gjør"}],"krav":[{"id":"OPT-BEH-BEH-025","title":"Ferdigbehandle en sak","file":"ferdigbehandle_sak.feature","gjenstar":"Publisering av mangler ved automatisk ferdigbehandling, sporbarhet for grunnlag og tidspunkt, varsel til forvalter, kravelementfeil gir «ikke kvalifisert»","found":11,"total":17},{"id":"OPT-BEH-BEH-029","title":"Behandlingsstatus","file":"behandlingsstatus.feature","gjenstar":"Sperre mot Behandlet, flipp til Under behandling og «lest» (alle i !6643/!3372), sakslogg","found":7,"total":11},{"id":"OPT-BEH-BEH-036","title":"Automatiske mangler","file":"automatiske_mangler.feature","gjenstar":"Mangeltekster vises ikke i fs-admin og publiseres ikke ved ferdigbehandling, varsel til forvalter, sakslogg","found":15,"total":28}],"scenarioer":[{"id":"OPT-BEH-BEH-025","title":"Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet","result":"ikke funnet","marks":{"P":"✗","A":"–"},"bevis":"P ✗ · A – · M ikke sjekket — `FerdigbehandlingService.java:58-73` setter bare status og sjekker ut GSK-vår-mangelen. Den setter ikke `status_kan_publiseres` og kaller ikke `MangelMeldingService`. Publisering og melding finnes bare i den manuelle `saksbehandling/SakMangelService.java:283-331` (`publiserMangler`). `KvalifiseringOppdateringService.java:206-209` setter `status_kan_publiseres=false` ved ny tekst. Søkeren ser derfor ingenting (viewet viser bare `status_kan_publiseres`-rader, `opptak/docs/soknadsmangel.md`). Søkt etter «publiser», «MangelMelding», «STATUS_KAN_PUBLISERES» i autosak/ og i MR-ene: ingen treff.","line":95,"rule":"Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort"},{"id":"OPT-BEH-BEH-025","title":"Saksbehandleren ser hva den automatiske behandlingen har avgjort","result":"ikke funnet","marks":{"P":"~","A":"~"},"bevis":"kravelement, poeng og kvote har `merknadAutomatisk`/`statusAutomatiskUtregnet` i API-et (`opptak-subgraph/.../saksbehandling/sak.graphqls:245-254`, `poeng.graphqls:94-100`, `kvoteplassering.graphqls:52-81`). fs-admin viser dem i `KravlisteStudierCard/components/AutomatiskVurdering.tsx:19-32`, `PoengberegningCardRow.tsx:198-228` og `KvoteplasseringCard.tsx:32`. Grunnlaget mangler: `AdmissioKvalifikasjonsgrunnlag` (`regelverk/kvalifisering.graphqls:140-150`) eksponerer ikke `merknad_automatisk`/`status_automatisk_utregnet`, og `GrunnlagCard` har ingen «automatisk». Søkt i P, A og MR !6643/!3372.","line":123,"rule":"Saksbehandleren ser hva den automatiske behandlingen har gjort i saken"},{"id":"OPT-BEH-BEH-025","title":"Saksbehandleren ser når den automatiske behandlingen avgjorde hvert steg","result":"ikke funnet","marks":{"P":"~","A":"✗"},"bevis":"fs-admin viser tidspunkt bare for GSK («Satt automatisk {endretTidspunkt}», `GSKCard.tsx:352`). Kravelementet har `tidOppdatert` (`sak.graphqls:247`), men det vises ikke som tidspunktet for den automatiske avgjørelsen. Endringsloggen får ikke nye rader (`V483__endringslogg_uten_bruker.sql:4-5`). Søkt etter «sattAutomatisk», «tidspunkt», «endretTidspunkt».","line":127,"rule":"Saksbehandleren ser hva den automatiske behandlingen har gjort i saken"},{"id":"OPT-BEH-BEH-025","title":"Det som kan avgjøres, blir avgjort når \u003csteg> ikke kan avgjøres","result":"ikke funnet","marks":{"P":"~","A":"–"},"bevis":"**poengene ✓** og **kvoten ✓** stemmer med finneren. **Kravelementene ✗:** `vurderKravelementerIsolert` (`AutomatiskSaksbehandlingService.java:242-250`) fanger feilen, og savepointet (`AutomatiskKravelementVurderingService.java:67`) rulles tilbake. Radene står da med `kravet_er_oppfylt = null`. Så kjører steg 3 (`:175-176`, `PropageringService.java:72-79`) uansett: `KvalifiseringOppdateringService.oppdater` gir et uvurdert kravelement verdien «ikke oppfylt» (`KvalifiseringEvaluator.java:207-208,215`) og skriver `er_kvalifisert = false` med en mangeltekst om kravet (`KvalifiseringOppdateringService.java:104-117,204`). Kvotesynken tar bare med kvoter der `er_kvalifisert` er true (`SoknadKvoteOppretterService.java:90-94,264-278`), og deaktiverer resten (`:125-133`). Kvalifiseringen og kvoten blir altså avgjort som «ikke kvalifisert / ingen kvote». De står ikke uavgjort. Bare ferdigbehandlingen stopper (`FerdigbehandlingService.java:103,149-209`). Ingen test dekker kvoten etter en kravelementfeil (`AutomatiskKravelementVurderingServiceIT.java:270` tester bare at unntaket kastes). (kontrollen: usikker → ikke funnet)","line":145,"rule":"Steg som bygger på et steg som ikke kan avgjøres, hoppes over"},{"id":"OPT-BEH-BEH-025","title":"Opptaksforvalteren får varsel første gang en feil i regelverket stopper et steg","result":"ikke funnet","marks":{"P":"✗","A":"✗"},"bevis":"feilene logges bare (`PoengberegningService.java:162-175`) eller blir merknad på saken. Søkt etter «varsel», «varsle», «regelverksfeil», «feil i regelverk», «forvalter», «notifikasjon» i P, A og MR-ene: ingen treff.","line":166,"rule":"Steg som bygger på et steg som ikke kan avgjøres, hoppes over"},{"id":"OPT-BEH-BEH-025","title":"Opptaksforvalteren får varselet om feilen bare første gang","result":"ikke funnet","marks":{"P":"✗","A":"✗"},"bevis":"det finnes ingen varsling, se over. De samme søkene.","line":172,"rule":"Steg som bygger på et steg som ikke kan avgjøres, hoppes over"},{"id":"OPT-BEH-BEH-029","title":"Saken kan ikke bli Behandlet uten mangel eller grunnlag","result":"ikke funnet","marks":{"P":"✗","A":"✗"},"bevis":"ikke funnet på main — `EndreStatusService.java:22-40` har ingen sjekk. Finnes i MR !6643 (åpen, fs-plattform, mahj/grunnlag-og-behandlingsstatus): `EndreStatusService.java:33` kaster `SakKanIkkeBliBehandletException` (`sak.graphqls:1122-1129`). Finnes i MR !3372 (åpen, fs-admin, mahj/grunnlag-og-behandlingsstatus): `useEndreBehandlingsstatus.ts:57-58`, `soknadsbehandling.json:226`.","line":73,"rule":"Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag"},{"id":"OPT-BEH-BEH-029","title":"Saken blir Under behandling når saksbehandleren \u003chandling>","result":"ikke funnet","marks":{"P":"✗","A":"~"},"bevis":"på main flipper alle stiene bare fra UBEHANDLET. Behandlet + kvalifisering (`KvalifiserKravelementV4Service.java:76-80`) og Behandlet + poeng (`SettPoengService.java:198-205`) gir derfor ingen endring. Kvotesvar (`KvotesporsmalSvarService.java:48-221`) og grunnlag (`LeggTilGrunnlagService.java:34-114`) flipper ikke i det hele tatt. Bare «registrerer en mangel» virker (`SakMangelService.java:115,392-397`). Finnes i MR !6643: `KvalifiserKravelementV4Service.java:77`, `SettPoengService.java:200`, `KvotesporsmalSvarService.java:228`, `LeggTilGrunnlagService.java:164`. A: statusen hentes ikke på nytt etter disse mutasjonene på main. Det gjør den i A !3372 (`useLagreKvotesporsmalSvarMutation.ts` refetch `PersonaliaSak`/`MerkSomBehandletSak`).","line":89,"rule":"Saken blir Under behandling når saksbehandleren endrer vurderingen"},{"id":"OPT-BEH-BEH-029","title":"Å markere et dokument som lest endrer ikke statusen på en sak som ikke er behandlet","result":"ikke funnet","marks":{"P":"✗","A":"–"},"bevis":"main gjør det motsatte: `SettSaksdokumentErLestService.java:63-67` setter UBEHANDLET → UNDER_BEHANDLING. Flippen er fjernet i MR !6643 (åpen, fs-plattform, mahj/grunnlag-og-behandlingsstatus): `SettSaksdokumentErLestService.java`, diff −`tx.update(SAK)…`.","line":120,"rule":"Saken blir Under behandling når saksbehandleren endrer vurderingen"},{"id":"OPT-BEH-BEH-029","title":"Saksloggen viser endring av behandlingsstatus når \u003cårsak>","result":"ikke funnet","marks":{"P":"✗","A":"~"},"bevis":"endringsloggen får ikke nye rader: triggerne er borte (`V483__endringslogg_uten_bruker.sql:4-5`, `sak.graphqls:197`). Ingen kode logger statusendringer, med eller uten årsak. A har `AuditLogCard.tsx:23` (endringsloggV2), men den får ingen data. Søkt etter «sakslogg», «hendelseslogg», «statusEndret», «endringslogg» i P, A og MR-ene.","line":145,"rule":"Saksloggen viser endringene i behandlingsstatusen"},{"id":"OPT-BEH-BEH-036","title":"Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene","result":"usikker","marks":{"P":"~","A":"–"},"bevis":"P: `ManglendeKravBeregner.java:94-101` beholder OG/ELLER-strukturen, men slår en kravliste med bare ett manglende element sammen med elementet. `ManglendeKravTekstService.java:26-27,42-48` skriver bare «Ett av følgende:» og «Alle av følgende:». Kravlistenavnet står ikke i teksten. Eksempelet gir derfor «Ett av følgende: – Matematikk R2 – Fysikk 2», uten kravlistene som overskrift. Kravet sier at designet avgjør utseendet. Én tekst per regelverk: ✓ (`KvalifiseringOppdateringService.java:102-113`)","line":70,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene","result":"ikke funnet","marks":{"P":"✓","A":"✗"},"bevis":"P: tekstene finnes i grafen via `Soknad.mangler` og `Soknadsalternativ.mangler` (`soknad.graphqls:337`, `sak.graphqls:928`, typen `Soknadsmangel` med kilde `AUTOMATIKK`, `soknadsmangel.graphqls:24-64`). View-tilgangen gir saksbehandler lesetilgang (`V514:20-23`). A: `ManglerCard/queries.ts:3-23` henter bare `Sak.mangler` (`SakMangel` = `sak_mangel`). Søkt etter «Soknadsmangel», «standardTekst», «manglende», «mangeltekst», «AUTOMATIKK» i fs-admin `src` (utenom `__generated__`): ingen treff. Ikke i MR !3372 heller","line":91,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet","result":"ikke funnet","marks":{"P":"✗","A":"–"},"bevis":"P: ingenting setter `status_kan_publiseres` på `sak_kvalifikasjonsgrunnlag` når saken blir behandlet. `FerdigbehandlingService.java:58-73` setter bare status. `status_kan_publiseres = true` settes bare i `SakMangelService.java:311-324` (`publiserMangler`). View V514:176 krever flagget. V424:180 hadde «FERDIG_BEHANDLET OR kan_publiseres», men V457 fjernet det. Søkt etter «KAN_PUBLISERES» og «publiser» i opptak-service main og i migrasjonene V4xx/V5xx. Ingen MR rører dette. M: ikke sjekket","line":97,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling","result":"usikker","marks":{"P":"✓","A":"–"},"bevis":"P: `KvalifiseringOppdateringService.java:207-212` nullstiller `status_kan_publiseres` når teksten er ny. `V514:20,176`: viewet viser bare publiserte rader. M ikke sjekket","line":105,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Søkeren ser mangeltekstene per søknadsalternativ","result":"usikker","marks":{"P":"✓","A":"–"},"bevis":"P: `V514:144-151,163-169`. Den beregnede raden brettes ut per levende søknadsalternativ som bruker regelverket (`utdanningstilbudsnr`). M ikke sjekket","line":112,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet","result":"usikker","marks":{"P":"✓","A":"–"},"bevis":"P: `V514:51` (`sa.slettet IS NULL`) skjuler raden. Teksten blir stående fordi `KvalifikasjonsgrunnlagOppdateringService.java:165-178` (`utdanningstilbudPar`) ikke filtrerer på `slettet`, så grunnlagsradene slettes ikke. M ikke sjekket","line":119,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Saksbehandleren kan ikke endre en automatisk mangeltekst","result":"usikker","marks":{"P":"✓","A":"~"},"bevis":"P: ingen mutation skriver `manglende_krav_*`. Bare `publiserMangler` rører flagget (`SakMangelService.java:311-324`). A: den automatiske teksten vises ikke i fs-admin i det hele tatt (se raden «ser de automatiske mangeltekstene …»). Det finnes derfor ingen knapper, men scenarioet er bare oppfylt fordi teksten mangler","line":128,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår","result":"usikker","marks":{"P":"~","A":"–"},"bevis":"P: `GskFullforesIVarMangelSync.java:62-91` setter inn mangelen for alle `SAK`-radene til søker og opptak (`er_registrert_automatisk = true`). Saksloggen: `sak_mangel` har audit-trigger (`V291__saksbehandling_skjema.sql:1496`), men loggen henter grunnen fra `saksbehandling.intensjon` (`V291:1325`), og jobben setter den ikke. Søkt etter «intensjon» og «set_config» i opptak Java: bare `Claims` og `UregStudieprogramService`. Logglinja har altså ingen grunn («fordi søkeren oppga …»)","line":226,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Saken får ikke mangel når ingen mangelkode er merket","result":"ikke funnet","marks":{"P":"~","A":"✗"},"bevis":"P: ingen mangel, `GskFullforesIVarMangelSync.java:38-40` ✓. Varselet til opptaksforvalteren mangler. Søkt etter «ingen mangelkode», «varsel», «varsling», «IKKE_MERKET», «FullforesIVar» i P (main og de tre MR-branchene) og A. Bare advarselsteksten på mangelkodesiden finnes (`regelverk.json:236`), ikke et varsel til opptaksforvalteren","line":233,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Opptaksforvalteren får varselet bare første gang","result":"ikke funnet","marks":{"P":"✗","A":"✗"},"bevis":"Søkt etter de samme ordene som raden over. Det finnes ingen varselmekanisme","line":239,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Søkeren ser den automatiske mangelen i Min kompetanse","result":"usikker","marks":{"P":"~","A":"–"},"bevis":"P: `GskFullforesIVarMangelSync.java:82` setter `status_kan_publiseres = true`. Viewet viser bare saker med status `UNDER_BEHANDLING` eller `BEHANDLET` (`V514:20`), og synken flytter ikke en `UBEHANDLET` sak. På en ny sak ser søkeren derfor trolig ikke mangelen før saken er under behandling. M ikke sjekket","line":245,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Mangelen slettes når søkeren endrer søknaden","result":"usikker","marks":{"P":"~","A":"–"},"bevis":"P: `GskFullforesIVarMangelSync.java:92-101` sletter en automatisk mangel som ikke er sjekket ut. Saksloggen har ingen grunn, som i raden «Alle sakene …»","line":256,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Mangelen sjekkes ut når saken er behandlet helautomatisk","result":"usikker","marks":{"P":"~","A":"–"},"bevis":"P: `.../autosak/FerdigbehandlingService.java:64,211-224` sjekker ut mangelen før status settes til `BEHANDLET` (`:65-68`). Saksloggen får en audit-rad uten saksbehandlerident (vises som maskinbruker), men uten tekst om at den automatiske behandlingen sjekket ut mangelen","line":278,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-025","title":"Saken behandles helautomatisk når søkeren har ett vitnemål, og vitnemålet gir GSK","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"`P/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/autosak/SetteGrunnlagService.java:112-131` velger grunnlag bare ved ett VM-dokument med `gsk_ok`. `autosak/FerdigbehandlingService.java:82-99` (`erHelautomatisk`) krever det samme, og `:58-73` setter saken til BEHANDLET. Det er ren backend.","line":46,"rule":"Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk"},{"id":"OPT-BEH-BEH-025","title":"Saken behandles ikke helautomatisk når ingen vitnemål gir GSK","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"`SetteGrunnlagService.java:129-131` returnerer uten grunnlag når `gsk_ok` ikke er true. `FerdigbehandlingService.java:96-98` krever `GSK_OK = true`, så saken blir ikke ferdig behandlet.","line":52,"rule":"Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk"},{"id":"OPT-BEH-BEH-025","title":"Saken behandles ikke helautomatisk før saksbehandleren har valgt vitnemål","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"`autosak/AutomatiskBehandlingEtterImportService.java:120-128` gir FLERE_VITNEMAAL og starter ikke. `SetteGrunnlagService.java:112-116` kaster `FlereVitnemaalException`, og hele transaksjonen rulles tilbake.","line":57,"rule":"Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk"},{"id":"OPT-BEH-BEH-025","title":"Saken behandles ikke helautomatisk når søkeren har flere vitnemål, og bare ett gir GSK","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"den samme sjekken på antall gjeldende dokumenter (`SetteGrunnlagService.java:112`, `AutomatiskBehandlingEtterImportService.java:124`), uansett GSK. GSK-konklusjonen settes først i egen transaksjon (`AutomatiskSaksbehandlingService.java:117-131`).","line":62,"rule":"Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk"},{"id":"OPT-BEH-BEH-025","title":"Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"`AutomatiskSaksbehandlingService.java:178-180` er steg 4 og kaller `FerdigbehandlingService.ferdigbehandleHvisAvgjort`. Den sjekker kvalifisering, poengsum og kvotespørsmål med automatisk merknad (`:101-113`) og setter BEHANDLET (`:65-68`).","line":78,"rule":"Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort"},{"id":"OPT-BEH-BEH-025","title":"Saken er ferdig behandlet selv om kravelementene ga mangeltekst","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"`regelverk/kvalifisering/KvalifiseringOppdateringService.java:203-217` skriver `manglende_krav_*` sammen med `er_kvalifisert`. `FerdigbehandlingService.java:119-133` regner en rad med `er_kvalifisert=false` som avgjort, så saken blir ferdig behandlet. Test: `opptak-subgraph/src/test/java/no/sikt/fs/opptak/autosak/FerdigbehandlingServiceIT.java:127`.","line":86,"rule":"Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort"},{"id":"OPT-BEH-BEH-025","title":"Varselet om uenighet om GSK krever ikke at saksbehandleren gjør noe","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"`vgs-dokument.graphqls:55` (`uenigMedSkolen`). `VitnemalsbehandlingSection.tsx:86-112` viser varselet. `FerdigbehandlingService` ser ikke på uenigheten, og ingen spørring endrer status når saken åpnes. Alle som skriver `SAK.STATUSTYPE_KODE` er mutasjoner, se behandlingsstatus.","line":134,"rule":"Saksbehandleren ser hva den automatiske behandlingen har gjort i saken"},{"id":"OPT-BEH-BEH-025","title":"Saken blir stående som ikke behandlet når et steg ikke kan avgjøres","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"mangler poengsum, setter `FerdigbehandlingService.java:104` ikke BEHANDLET. Ingen automatisk sti skriver UNDER_BEHANDLING. Default er `UBEHANDLET` (`V291__saksbehandling_skjema.sql:75`). A viser statusen i `PersonaliaCard.tsx:136-140,235-236`. Merk: `status_automatisk_behandlet` settes allerede ved start (`AutomatiskSaksbehandlingService.java:139-145`).","line":158,"rule":"Steg som bygger på et steg som ikke kan avgjøres, hoppes over"},{"id":"OPT-BEH-BEH-025","title":"\u003cfeil i regelverket> stopper \u003csteg>","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"formel mangler: `PoengberegningEvaluator.java:82`. Viser til seg selv: `:95`. Ugyldig: `:102`. Alle tre fanges per kombinasjon og gir ingen poengsum, så `FerdigbehandlingService.java:104` stopper. Kvotespørsmål med ukjent algoritme: `KvotesporsmalAlgoritmeService.java:221` gir merknad, og `FerdigbehandlingService.java:105-112` stopper. Poengtype med ukjent algoritme: `AlgoritmepoengService.java:89-91` gir merknad, og `PoengberegningEvaluator.java:193-194` gir `ManglerPoeng`. Mangler dato for aldersberegning: `SetteGrunnlagService.java:168` → `AldersberegningsdatoUtleder.java:20` kaster, og hele autosak-transaksjonen rulles tilbake, så status blir UBEHANDLET.","line":178,"rule":"Steg som bygger på et steg som ikke kan avgjøres, hoppes over"},{"id":"OPT-BEH-BEH-025","title":"Saksbehandleren ferdigbehandler saken etter å ha gjort resten","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"`saksbehandling/EndreStatusService.java:22-40` via `endreSaksbehandlingsstatusV3` (`sak.graphqls:34`). A: `MerkSomBehandletButton.tsx:37-44` og `PersonaliaCard.tsx:219-226`.","line":199,"rule":"Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført"},{"id":"OPT-BEH-BEH-025","title":"Saken blir ikke ferdig behandlet av seg selv når saksbehandleren har gjort resten","result":"funnet","marks":{"P":"✓","A":"~"},"bevis":"`regelverk/poeng/SettPoengService.java:198-205` flipper UBEHANDLET → UNDER_BEHANDLING. Ingen sti setter BEHANDLET etter manuell endring. A: statusen i `PersonaliaCard` hentes ikke på nytt etter `settPoeng` på main. Det kommer først i A !3372 (`PoengberegningCardRow.tsx`).","line":205,"rule":"Saksbehandleren setter saken til ferdig behandlet når den automatiske behandlingen ikke har fullført"},{"id":"OPT-BEH-BEH-029","title":"Ny sak er Ikke behandlet","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"`V291__saksbehandling_skjema.sql:75` (`DEFAULT 'UBEHANDLET'`); A `PersonaliaCard.tsx:136-140`","line":39,"rule":"En ny sak er Ikke behandlet"},{"id":"OPT-BEH-BEH-029","title":"Endre behandlingsstatus fra \u003cfra> til \u003ctil>","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"`EndreStatusService.java:22-40` setter enhver status uten overgangsregler (`sak.graphqls:34`). A: `PersonaliaCard.tsx:219-226` (Select med alle tre statuser)","line":46,"rule":"Saksbehandleren kan sette behandlingsstatusen"},{"id":"OPT-BEH-BEH-029","title":"Sette saken til Behandlet fra \u003cfra> når saken har \u003cinnhold>","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"`EndreStatusService.java:31-34` tillater BEHANDLET. A: `MerkSomBehandletButton.tsx:41-44`","line":62,"rule":"Saken kan bare bli Behandlet når den har minst én mangel eller ett grunnlag"},{"id":"OPT-BEH-BEH-029","title":"Behandlingsstatusen endres ikke når saksbehandleren \u003chandling>","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"merknad: `MerknadService.java:63-67` flipper bare fra UBEHANDLET, så Behandlet blir stående. Tilordne: ingen tildelingstjeneste skriver `SAK.STATUSTYPE_KODE`. Alle som skriver den, er FerdigbehandlingService, KvalifiserKravelementUnntak/V4, EndreKvoteplassering, SettPoeng, AnnullertVitnemaal, EndreStatus, LagreVitnemalUtregning, Merknad, SakMangel, SettSaksdokumentErLest og GskVedtakService. A viser statusen i `PersonaliaCard.tsx:235-236`.","line":104,"rule":"Saken blir Under behandling når saksbehandleren endrer vurderingen"},{"id":"OPT-BEH-BEH-029","title":"Å markere et dokument som lest endrer ikke statusen på en sak som er Behandlet","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"`SettSaksdokumentErLestService.java:63-67` flipper bare fra UBEHANDLET. A: `useDownloadFileFromGqlId.tsx:87`","line":115,"rule":"Saken blir Under behandling når saksbehandleren endrer vurderingen"},{"id":"OPT-BEH-BEH-029","title":"Behandlingsstatusen \u003cstatus> endres ikke når saksbehandleren åpner saken","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"det er bare mutasjoner som skriver statusen (listen over). fs-admin kaller `settSaksdokumentErLest` bare når et dokument lastes ned (`useDownloadFileFromGqlId.tsx:87`), ikke når saken åpnes.","line":126,"rule":"Saken blir Under behandling når saksbehandleren endrer vurderingen"},{"id":"OPT-BEH-BEH-029","title":"Ny dokumentasjon endrer ikke behandlingsstatusen","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"ingen import eller opplasting skriver `SAK.STATUSTYPE_KODE`: `vgs/` og `soknad/` har ingen treff, bare `GskVedtakService` fra UBEHANDLET. Unntak: et annullert vitnemål setter Behandlet → Under behandling (`AnnullertVitnemaalService.java:104-110`, OPT-BEH-BEH-034).","line":137,"rule":"Saken blir Under behandling når saksbehandleren endrer vurderingen"},{"id":"OPT-BEH-BEH-036","title":"Saken får en automatisk mangeltekst når \u003cvurdert av> vurderer at et kravelement ikke er oppfylt","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"P: autosak `opptak/opptak-service/.../autosak/AutomatiskSaksbehandlingService.java:175-176` og saksbehandler `.../regelverk/kvalifisering/KvalifiserKravelementV4Service.java:62-63` kaller `PropageringService.propagerFraKravelement` (`.../saksbehandling/PropageringService.java:72-75`), som kjører `KvalifiseringOppdateringService.java:104-117`. Den lager én mangeltekst per kompetanseregelverk når ingen grunnlag kvalifiserer. A: `src/domains/soknadsbehandling/features/KravlisteStudierCard/hooks/useKvalifiserKravelementMutation.ts:72-74`, saksbehandlerens vurdering (`kvalifiserKravelementV4`)","line":43,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Saken får ikke mangeltekst når søkeren er kvalifisert på en annen kravliste","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `KvalifiseringOppdateringService.java:97-113`. Ett kvalifisert grunnlag gir `INGEN_MANGLER` (null-tekst) på alle radene. `ManglendeKravBeregner.java:104-108`: en ELLER-node er oppfylt når ett barn er oppfylt","line":55,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Saken får mangeltekster i alle kravlistene når søkeren ikke er kvalifisert på noen","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `.../kvalifisering/ManglendeKravBeregner.java:77-91`. En node som ikke er oppfylt, tar med alle barna som ikke er oppfylt (R2 fra liste 1, Fysikk 2 fra liste 2). Et oppfylt element (R1) er ikke med (`:87`)","line":63,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"De automatiske mangeltekstene slettes når \u003cvurdert av> vurderer at søkeren er kvalifisert","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"P: samme propagering for begge radene. `KvalifiseringOppdateringService.java:104-113,213-216` setter teksten til null når et grunnlag kvalifiserer. View `V514__behandlingsstatus_fjern_ferdig_behandlet.sql:174-185` utelater regelverk med `er_kvalifisert`. A: `useKvalifiserKravelementMutation.ts:72-74`","line":80,"rule":"Saken får automatiske mangeltekster når søkeren ikke er kvalifisert"},{"id":"OPT-BEH-BEH-036","title":"Opptaksforvalteren merker mangelkoden for generell studiekompetanse som fullføres i vår","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"P: `.../regelverk/MangeltypeService.java:52,95-98` og `mangel.graphqls:115,134,189`, kolonnen `V503__soknadsmangeltype_gsk_fullfores_i_var.sql:9-10`. A: `src/domains/regelverk/features/Mangelkoder/MangelkodeDetails/MangelkodeDetails.tsx:402-413,204,218` (bryter, sendes i opprett og oppdater)","line":154,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Bare én mangelkode i regelverkssamlingen kan være merket for generell studiekompetanse som fullføres i vår","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"P: `MangeltypeService.java:127-142` avviser med «Mangelkoden \u003ckode> er allerede merket for generell studiekompetanse som fullføres i vår». Den unike indeksen står i `V503:14-16`. A: `MangelkodeDetails.tsx:224-228` viser feilen i en snackbar","line":159,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Mangelkoden kan ikke merkes når den \u003cavvik>","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"P: `MangeltypeService.java:122-126`. Kategorien må være `GENERELLE_KRAV` og `sperrerOpptak` må være sann. Begge radene i Eksempler er dekket. A: `MangelkodeDetails.tsx:224-228`","line":165,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Opptaksforvalteren ser en advarsel på mangelkodene når ingen mangelkode er merket","result":"funnet","marks":{"P":"✓","A":"✓"},"bevis":"A: `src/domains/regelverk/features/Mangelkoder/MangelkoderOverview.tsx:30-38,54-58` (`ingenGskFullforesIVarVarsel`, `regelverk.json:236`). P: feltet `gjelderGskFullforesIVar` (`mangel.graphqls:189`)","line":175,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Sakene i søknadene som finnes fra før, får ikke mangelen når mangelkoden merkes","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `MangeltypeService.java:69-115` oppdaterer bare mangeltypen. Synken kjøres bare fra `opptak-subgraph/.../app/SoknadshendelseJobb.java:272,319`, på søknadshendelser (`SOKNAD`)","line":180,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Saken får mangelen når søkeren endrer søknaden etter at mangelkoden er merket","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `SoknadshendelseJobb.java:272,319` kaller `GskFullforesIVarMangelSync.synkroniser` for hver søknadshendelse. `.../saksbehandling/GskFullforesIVarMangelSync.java:45-91` setter inn mangelen når `fullforer_videregaende` er sann","line":187,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Manglene som finnes fra før, blir stående når merkingen fjernes","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `GskFullforesIVarMangelSync.java:25-40` returnerer uten å slette når ingen mangelkode er merket. `MangeltypeService.java:95-98` sletter ingenting","line":194,"rule":"Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår"},{"id":"OPT-BEH-BEH-036","title":"Søkeren får ikke egen melding om den automatiske mangelen","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `GskFullforesIVarMangelSync.java:24-103` sender ingen melding. `MangelMeldingService` kalles bare fra `SakMangelService.java:167` (publisering)","line":251,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Mangel som er sjekket ut slettes ikke når søkeren endrer søknaden","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `GskFullforesIVarMangelSync.java:100` sletter bare når `status_utsjekket` er null eller usann","line":264,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Saksbehandleren kan ikke slette den automatiske mangelen","result":"funnet","marks":{"P":"–","A":"✓"},"bevis":"A: `.../SakDrawer/components/ManglerCard/Mangel/Mangel.tsx:146`. Slettknappen vises bare når `!erRegistrertAutomatisk`. (API-et sperrer ikke, se Tilgang)","line":271,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"},{"id":"OPT-BEH-BEH-036","title":"Mangelen sjekkes ikke ut når saken ikke er behandlet helautomatisk","result":"funnet","marks":{"P":"✓","A":"–"},"bevis":"P: `FerdigbehandlingService.java:58-63` returnerer før `sjekkUtGskFullforesIVarMangel` når saken ikke er helautomatisk eller ikke er avgjort","line":285,"rule":"Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk"}],"tilgang":[{"id":"OPT-BEH-BEH-025","sjekk":"tilgang","rolle":"systemet ferdigbehandler automatisk","resultat":"ikke beskrevet","bevis":"kravet sier ikke beskrevet, koden gjør: importjobben kjører på jobbrollen. Mutationen `behandleSakAutomatisk` går gjennom den samme RLS-en. — `AutomatiskBehandlingEtterImportService.java:104-107`; `automatisk-saksbehandling.graphqls:53-58`"},{"id":"OPT-BEH-BEH-025","sjekk":"konsistens","rolle":"automatikken setter `status_automatisk_behandlet`","resultat":"avviker","bevis":"kravet sier flagget skal bety at saken er ferdig behandlet automatisk (en annen agent endrer dette nå), koden gjør: flagget settes ved start, før stegene, også når saken ikke blir ferdig behandlet — `AutomatiskSaksbehandlingService.java:139-145`"},{"id":"OPT-BEH-BEH-036","sjekk":"tilgang","rolle":"saksbehandler sletter den automatiske GSK-mangelen","resultat":"avviker","bevis":"kravet sier kan ikke slette, bare sjekke ut. Bare automatikken sletter, koden gjør: UI-et skjuler knappen, men `fjernMangelFraSak` sletter enhver `sak_mangel`, også en med `er_registrert_automatisk = true` — `P opptak-service/.../saksbehandling/SakMangelService.java:351-366`: ingen sjekk på `er_registrert_automatisk`. `A Mangel.tsx:146` skjuler bare knappen"},{"id":"OPT-BEH-BEH-025","sjekk":"tilgang","rolle":"saksbehandler endrer status til Behandlet","resultat":"stemmer","bevis":"`opptak-migrations/.../V291__saksbehandling_skjema.sql:1550-1558`; `EndreStatusService.java:35-37`"},{"id":"OPT-BEH-BEH-029","sjekk":"tilgang","rolle":"saksbehandler endrer behandlingsstatus","resultat":"stemmer","bevis":"`V291__saksbehandling_skjema.sql:1550-1558`; `EndreStatusService.java:35-37`"},{"id":"OPT-BEH-BEH-029","sjekk":"organisasjon","rolle":"saksbehandler endrer en sak i en annen org","resultat":"stemmer","bevis":"`V291__saksbehandling_skjema.sql:1556-1558`"},{"id":"OPT-BEH-BEH-029","sjekk":"tilgang","rolle":"fs-admin viser statusvelgeren","resultat":"stemmer","bevis":"`PersonaliaCard.tsx:120,219-236`"},{"id":"OPT-BEH-BEH-036","sjekk":"tilgang","rolle":"opptaksforvalter merker mangelkode","resultat":"stemmer","bevis":"`P MangeltypeService.java:99-104`"},{"id":"OPT-BEH-BEH-036","sjekk":"organisasjon","rolle":"saksbehandler og søker leser mangeltekster","resultat":"stemmer","bevis":"`P V514__behandlingsstatus_fjern_ferdig_behandlet.sql:17-23`"},{"id":"OPT-BEH-BEH-036","sjekk":"konsistens","rolle":"søkeren fjerner et søknadsalternativ","resultat":"stemmer","bevis":"`P KvalifikasjonsgrunnlagOppdateringService.java:165-178` og `V514:51`"},{"id":"OPT-BEH-BEH-036","sjekk":"konsistens","rolle":"merkingen av mangelkoden fjernes eller endres","resultat":"stemmer (med merknad)","bevis":"kravet sier manglene som finnes, blir stående, koden gjør: Synken gjør ingenting uten en merket kode. Men flyttes merkingen til en annen kode, sletter synken (når søkeren tar bort krysset) bare mangler med den nye koden. Gamle automatiske mangler med den forrige koden blir liggende igjen — `P GskFullforesIVarMangelSync.java:25-43,93-101`"},{"id":"OPT-BEH-BEH-036","sjekk":"tilgang","rolle":"saksbehandler publiserer automatiske mangeltekster","resultat":"stemmer","bevis":"lagt til av kontrollen — `P SakMangelService.java:283-285,340-350`: `publiserMangler` krever `MODIFISERE_SØKNADSBEHANDLING` i sakens organisasjon og publiserer de beregnede tekstene (`:318-325`). Kravet forutsetter at saksbehandleren kan publisere («hvis saksbehandleren ikke har publisert dem før»)"}],"regler":[{"id":"OPT-BEH-BEH-025","regel":"Et kompetansebevis (ikke VM) behandles ikke helautomatisk. Kravet sier det bare i en kommentar (:44).","type":"validering","bevis":"`SetteGrunnlagService.java:121-128`; `AutomatiskBehandlingEtterImportService.java:127`","forslag":"legg til scenario med fs-krav"},{"id":"OPT-BEH-BEH-025","regel":"Låst grunnlag (`status_automatisk_utregnet=false`) gjør at saken aldri blir ferdigbehandlet automatisk","type":"tilstandsovergang","bevis":"`FerdigbehandlingService.java:83-91`; `SetteGrunnlagService.java:101-107`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-025","regel":"Et ubesvart kvotespørsmål uten automatisk merknad hindrer ikke ferdigbehandling","type":"annet","bevis":"`FerdigbehandlingService.java:105-112`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-025","regel":"Et uvurdert kravelement hindrer bare når søkeren ikke er kvalifisert i regelverket","type":"annet","bevis":"`FerdigbehandlingService.java:149-209`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-025","regel":"Ferdigbehandlingen sjekker ut GSK-fullføres-i-vår-mangelen","type":"tilstandsovergang","bevis":"`FerdigbehandlingService.java:211-225`","forslag":"dekkes av OPT-BEH-BEH-036"},{"id":"OPT-BEH-BEH-025","regel":"Mangler dato for aldersberegning, ruller hele den automatiske kjøringen tilbake, ikke bare grunnlaget. Ingenting blir da avgjort.","type":"annet","bevis":"`SetteGrunnlagService.java:168`; `AutomatiskSaksbehandlingService.java:133-187`","forslag":"uklart om ønsket"},{"id":"OPT-BEH-BEH-025","regel":"Feiler ferdigbehandlingen (DataAccessException), logges det, og saken blir stående","type":"annet","bevis":"`AutomatiskSaksbehandlingService.java:252-257`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-025","regel":"En kravelementfeil gir `er_kvalifisert=false`, en mangeltekst som ikke er publisert, og deaktiverte kvoter","type":"annet","bevis":"`KvalifiseringOppdateringService.java:104-117`, `KvalifiseringEvaluator.java:207-215`, `SoknadKvoteOppretterService.java:90-94,125-133`. Dette er i strid med scenariomalen (:145).","forslag":"uklart om ønsket (lagt til av kontrollen)"},{"id":"OPT-BEH-BEH-029","regel":"Et annullert vitnemål setter Behandlet → Under behandling når søkeren ikke er i en publisert runde","type":"tilstandsovergang","bevis":"`AnnullertVitnemaalService.java:104-110`","forslag":"legg til scenario med fs-krav (står i OPT-BEH-BEH-034)"},{"id":"OPT-BEH-BEH-029","regel":"GSK-vedtak som saksbehandleren oppretter eller endrer, flipper UBEHANDLET → UNDER_BEHANDLING","type":"tilstandsovergang","bevis":"`soknad/gskvedtak/GskVedtakService.java:176-180,212-216`","forslag":"legg til scenario med fs-krav"},{"id":"OPT-BEH-BEH-029","regel":"Lagret vitnemålsutregning flipper UBEHANDLET → UNDER_BEHANDLING","type":"tilstandsovergang","bevis":"`LagreVitnemalUtregningService.java:406-413`","forslag":"legg til scenario med fs-krav"},{"id":"OPT-BEH-BEH-029","regel":"`endreKvoteplassering` og kravelement-unntak flipper UBEHANDLET → UNDER_BEHANDLING","type":"tilstandsovergang","bevis":"`EndreKvoteplasseringService.java:121-127`; `KvalifiserKravelementUnntakService.java:206-212`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-029","regel":"`publiserMangler` flipper UBEHANDLET → UNDER_BEHANDLING","type":"tilstandsovergang","bevis":"`SakMangelService.java:327`","forslag":"legg til scenario med fs-krav"},{"id":"OPT-BEH-BEH-029","regel":"Statusvelgeren tillater alle overganger (Ikke behandlet → Behandlet direkte og så videre). Kravet lister bare noen.","type":"tilstandsovergang","bevis":"`EndreStatusService.java:31-34`","forslag":"uklart om ønsket"},{"id":"OPT-BEH-BEH-036","regel":"Ny mangeltekst nullstiller `status_kan_publiseres` og `status_lest_av_soker`, så saksbehandleren må publisere teksten på nytt","type":"tilstandsovergang","bevis":"`P KvalifiseringOppdateringService.java:199-212`","forslag":"legg til scenario med fs-krav (henger sammen med «Søkeren ser … når saken er ferdig behandlet»)"},{"id":"OPT-BEH-BEH-036","regel":"En merket mangelkode som ikke er aktiv (`er_aktiv = false`), gir ingen mangel","type":"validering","bevis":"`P GskFullforesIVarMangelSync.java:51-53`","forslag":"legg til scenario med fs-krav"},{"id":"OPT-BEH-BEH-036","regel":"Mangelen settes ikke inn på nytt når saken har en mangel med samme kode fra før, også en som er sjekket ut","type":"annet","bevis":"`P GskFullforesIVarMangelSync.java:54-61,89`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-036","regel":"Manglende GSK står først i mangelteksten","type":"annet","bevis":"`P ManglendeKravBeregner.java:43-45`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-036","regel":"Mangler oversettelse for noe av innholdet, er hele teksten null på det språket (nordsamisk alltid null når ledetekster brukes)","type":"standardverdi","bevis":"`P ManglendeKravTekstService.java:79` og `opptak/docs/soknadsmangel.md:90-94`","forslag":"uklart om ønsket"},{"id":"OPT-BEH-BEH-036","regel":"Den automatiske utsjekkingen gjelder bare mangler med en mangelkode som er merket nå. Er merkingen flyttet, sjekkes ikke den gamle mangelen ut","type":"annet","bevis":"`P FerdigbehandlingService.java:211-224`","forslag":"uklart om ønsket"},{"id":"OPT-BEH-BEH-036","regel":"Publisering av nye automatiske mangeltekster sender mangelmelding til søkeren","type":"annet","bevis":"`P SakMangelService.java:305-330`: `nyeBeregnedeMangler` utløser `sendMangelMelding`","forslag":"uklart om ønsket (lagt til av kontrollen)"},{"id":"OPT-BEH-BEH-036","regel":"Den automatiske utsjekkingen sjekker også ut en mangel saksbehandleren har registrert med den merkede koden","type":"annet","bevis":"`P FerdigbehandlingService.java:211-224` filtrerer ikke på `er_registrert_automatisk`","forslag":"uklart om ønsket (lagt til av kontrollen)"},{"id":"OPT-BEH-BEH-036","regel":"GSK-mangelen settes også inn på inaktive saker i søknaden","type":"annet","bevis":"`P GskFullforesIVarMangelSync.java:86-89` filtrerer ikke på `SAK.ER_AKTIV`","forslag":"uklart om ønsket (lagt til av kontrollen)"}],"andre":[{"type":"Levert, men ikke funnet i koden","id":"`@OPT-BEH-BEH-036`","gjelder":"«Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling» (:105), «Søkeren ser mangeltekstene per søknadsalternativ» (:112), «Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet» (:119), «Saksbehandleren kan ikke endre en automatisk mangeltekst» (:128)","hva":"`usikker`: backend stemmer (`V514__behandlingsstatus_fjern_ferdig_behandlet.sql`), men søkerens visning er ikke sjekket, og fs-admin viser ikke teksten i det hele tatt"},{"type":"Kontrollen endret","id":"`@OPT-BEH-BEH-025`","gjelder":"«Det som kan avgjøres, blir avgjort når \u003csteg> ikke kan avgjøres»","hva":"usikker → ikke funnet: når kravelementene feiler, regnes et uvurdert kravelement som ikke oppfylt, så kvalifisering og kvote blir avgjort som «ikke kvalifisert» (`KvalifiseringEvaluator.java:207-215`, `SoknadKvoteOppretterService.java:90-94,125-133`)"},{"type":"Kontrollen endret","id":"`@OPT-BEH-BEH-029`","gjelder":"Tilgang: fs-admin viser statusvelgeren","hva":"usikker → stemmer (`useKanSaksbehandle.ts:33-40`)"},{"type":"Kontrollen endret","id":"`@OPT-BEH-BEH-036`","gjelder":"Tilgang: opptaksforvalter merker mangelkode","hva":"usikker → stemmer (`V264__soknadsmangel_kodeverk.sql:56-95`, `MODIFISERE_REGELVERK` hos eieren av regelverket)"},{"type":"Merknad","id":"`@OPT-BEH-BEH-025`","gjelder":"`status_automatisk_behandlet`","hva":"Settes i dag ved start, også når saken ikke blir ferdig behandlet (`AutomatiskSaksbehandlingService.java:139-145`). Endres i en egen MR til å bety ferdig behandlet automatisk"},{"type":"Ikke sjekket","id":"–","gjelder":"min-kompetanse","hva":"Klonen var ikke med. Scenarioene der søkeren ser noe, er `usikker`"},{"type":"Ikke valgt i denne kjøringen","id":"–","gjelder":"flytene","hva":"`@FLY-OPT-AUT-001` kjøres på nytt etter retaggingen"}],"mr":[{"repo":"`fs-plattform`","mr":"[!6643 Aldersgrense ved valg av grunnlag og behandlingsstatus etter kravet](https://gitlab.sikt.no/fs/fs-plattform/-/merge_requests/6643) (`mahj/grunnlag-og-behandlingsstatus`)","status":"åpen","krav":"`@OPT-BEH-BEH-029`","funnet":"3 scenarioer (sperre mot Behandlet, Under behandling ved endring, «lest» endrer ikke)","merknad":"bak main"},{"repo":"`fs-admin`","mr":"[!3372 Meldinger for grunnlag og behandlingsstatus, og status oppdateres etter endringer](https://gitlab.sikt.no/studieadm/fs-admin/-/merge_requests/3372) (`mahj/grunnlag-og-behandlingsstatus`)","status":"åpen","krav":"`@OPT-BEH-BEH-029`","funnet":"feilmelding ved sperren og ny henting av status","merknad":""}],"rapport":"akseptansetest/automatisk-ferdigbehandling/verify-2026-11-09-1239.md","laget":"2026-11-09 12:09"}</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('data').textContent);
+  var REPOS = D.repos || [];
+  var state = { repo: 'alle', vis: 'alt' };
+  try { var saved = JSON.parse(localStorage.getItem('verify-view') || '{}'); if (saved.repo) state.repo = saved.repo; if (saved.vis) state.vis = saved.vis; } catch (e) {}
+  if (state.repo !== 'alle' && !REPOS.some(function (r) { return r.k === state.repo; })) state.repo = 'alle';
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var ABBR = Object.keys(D.abbr || {}).sort(function (a, b) { return b.length - a.length; });
+  function full(code) {
+    for (var i = 0; i < ABBR.length; i++) if (code.indexOf(ABBR[i]) === 0) return D.abbr[ABBR[i]] + code.slice(ABBR[i].length);
+    return null;
+  }
+  function md(s) {
+    return esc(s || '').replace(/`([^`]+)`/g, function (_, c) { var f = full(c); return '<code' + (f ? ' title="' + esc(f) + '"' : '') + '>' + c + '</code>'; })
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  var G = { '✓': ['ok', '✓', 'funnet'], '✗': ['miss', '✗', 'mangler'], '~': ['part', '~', 'delvis eller usikker'], '–': ['na', '–', 'ikke relevant'] };
+  function glyph(m, repo) { var g = G[m] || G['–']; return '<span class="g ' + g[0] + '" title="' + esc(repo + ': ' + g[2]) + '" aria-label="' + esc(repo + ': ' + g[2]) + '">' + g[1] + '</span>'; }
+  var RES = { 'funnet': 'ok', 'ikke funnet': 'miss', 'usikker': 'part' };
+  function missing(s, k) { return s.marks && (s.marks[k] === '✗' || s.marks[k] === '~'); }
+  function notFound(s) { return s.result !== 'funnet'; }
+  function inMR(s) { var m = s.bevis.match(/finnes i MR !(\d+)/); return m ? m[1] : null; }
+  function shownRepos() { return state.repo === 'alle' ? REPOS : REPOS.filter(function (r) { return r.k === state.repo; }); }
+  function visible(s) {
+    if (state.vis === 'alt') return true;
+    if (!REPOS.length) return notFound(s);
+    return shownRepos().some(function (r) { return missing(s, r.k); });
+  }
+  function hideSection(id) {
+    var sec = document.getElementById(id); if (sec) sec.hidden = true;
+    var a = document.querySelector('.links a[data-sec="' + id + '"]'); if (a) a.hidden = true;
+  }
+  var kravTitle = {}; D.krav.forEach(function (k) { kravTitle[k.id] = k.title; });
+
+  // Header
+  var sc = D.scenarioer, total = sc.length;
+  var found = sc.filter(function (s) { return s.result === 'funnet'; }).length;
+  var missBy = {}; REPOS.forEach(function (r) { missBy[r.k] = sc.filter(function (s) { return missing(s, r.k); }).length; });
+  var avvik = D.tilgang.filter(function (t) { return t.resultat !== 'stemmer'; });
+  document.title = D.title;
+  document.getElementById('eyebrow').textContent = 'Verifisering mot koden · ' + (D.meta['Dato'] || '');
+  document.getElementById('title').textContent = D.title;
+  document.getElementById('metaline').innerHTML = [['Krav', 'Krav'], ['Kode', 'Kode'], ['Kontroll', 'Kontroll']]
+    .filter(function (x) { return D.meta[x[0]]; })
+    .map(function (x) { return '<span><b>' + x[1] + '</b> ' + md(D.meta[x[0]]) + '</span>'; }).join('');
+  var leveres = D.krav.filter(function (k) { return k.total > 0 && k.found === k.total; }).length;
+  var v = document.getElementById('verdict');
+  if (total > 0 && leveres === D.krav.length) {
+    v.className = 'verdict good';
+    v.innerHTML = '<span class="dot"></span><div><h2>Alle kravene er funnet i koden</h2><p>Alle ' + total + ' scenarioene er funnet' + (REPOS.length > 1 ? ' i alle repoene de gjelder' : '') + '. Se forslaget i rapporten for hva som kan bli <code>@implemented</code>.</p></div>';
+  } else {
+    var text = found + ' av ' + total + ' scenarioer er funnet' + (REPOS.length > 1 ? ' i alle repoene de gjelder' : '') + '.';
+    var ranked = REPOS.filter(function (r) { return missBy[r.k]; }).sort(function (a, b) { return missBy[b.k] - missBy[a.k]; });
+    if (ranked.length) text += ' Mest gjenstår i ' + ranked[0].name + ' (' + missBy[ranked[0].k] + ' scenarioer)' +
+      (ranked.slice(1).length ? ', og ' + ranked.slice(1).map(function (r) { return missBy[r.k] + ' mangler i ' + r.name; }).join(', ') : '') + '.';
+    v.innerHTML = '<span class="dot"></span><div><h2>' + (leveres === 0 ? 'Ingen av kravene er funnet i sin helhet' : leveres + ' av ' + D.krav.length + ' krav er funnet i sin helhet') + '</h2><p>' + text + '</p></div>';
+  }
+  var stats = [['Scenarioer funnet', found + ' <small>/ ' + total + '</small>', found === total ? '' : 'bad']];
+  REPOS.forEach(function (r) { stats.push(['Mangler i ' + r.name, missBy[r.k], missBy[r.k] ? 'bad' : '']); });
+  if (D.tilgang.length) stats.push(['Tilgang og data med avvik', avvik.length + ' <small>/ ' + D.tilgang.length + '</small>', avvik.length ? 'warn' : '']);
+  stats.push(['Regler uten scenario', D.regler.length, D.regler.length ? 'warn' : '']);
+  if (D.mr.length) stats.push(['Åpne MR-er', D.mr.length, '']);
+  document.getElementById('stats').innerHTML = stats.map(function (x) { return '<div class="stat ' + x[2] + '"><span class="n">' + x[1] + '</span><span class="l">' + x[0] + '</span></div>'; }).join('');
+
+  // Filters
+  var fr = document.getElementById('f-repo');
+  if (REPOS.length > 1) {
+    fr.innerHTML = [['alle', REPOS.length === 2 ? 'Begge repoene' : 'Alle repoene']].concat(REPOS.map(function (r) { return [r.k, r.name]; }))
+      .map(function (x) { return '<button id="repo-' + x[0] + '" data-v="' + x[0] + '" aria-pressed="false">' + x[1] + '</button>'; }).join('');
+  } else fr.hidden = true;
+  function bindSeg(id, key) {
+    document.getElementById(id).addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      state[key] = b.dataset.v;
+      try { localStorage.setItem('verify-view', JSON.stringify(state)); } catch (e2) {}
+      render();
+    });
+  }
+  bindSeg('f-repo', 'repo'); bindSeg('f-vis', 'vis');
+
+  var open = {};
+  function renderKrav() {
+    var reps = shownRepos();
+    document.getElementById('krav-count').textContent = D.krav.length + ' krav · ' + total + ' scenarioer';
+    document.getElementById('krav-list').innerHTML = D.krav.map(function (k) {
+      var list = sc.filter(function (s) { return s.id === k.id; });
+      var pct = k.total ? Math.round(100 * k.found / k.total) : 0;
+      var head = '<div class="kravhead"><div class="row1"><h3>' + esc(k.title) + '</h3><span class="kid">@' + esc(k.id) + (k.file ? ' · ' + esc(k.file) : '') + '</span></div>' +
+        '<div class="progress"><span><b>' + k.found + '/' + k.total + '</b> funnet</span><span class="bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span>' +
+        REPOS.map(function (r) {
+          var rel = list.filter(function (s) { return s.marks && s.marks[r.k] && s.marks[r.k] !== '–'; }).length;
+          if (!rel) return '';
+          var n = list.filter(function (s) { return missing(s, r.k); }).length;
+          return '<span class="repomiss"><span class="chip ' + (n ? 'miss' : 'ok') + '">' + r.name + ' mangler <b>' + n + '</b></span></span>';
+        }).join('') +
+        '</div>' + (k.gjenstar ? '<p class="gjen">' + md(k.gjenstar) + '</p>' : '') + '</div>';
+      var rows = '', lastRule = null, shown = 0, cols = 2 + reps.length;
+      list.forEach(function (s) {
+        if (!visible(s)) return;
+        shown++;
+        if (s.rule && s.rule !== lastRule) { rows += '<tr class="rule"><td colspan="' + cols + '">Regel: ' + esc(s.rule) + '</td></tr>'; lastRule = s.rule; }
+        var key = k.id + ':' + (s.line || s.title), mr = inMR(s), isOpen = !!open[key];
+        rows += '<tr class="sc" tabindex="0" data-key="' + esc(key) + '" aria-expanded="' + isOpen + '"><td><span class="caret">▸</span><span class="sctitle">' + esc(s.title) + '</span>' + (s.line ? '<span class="scline">:' + s.line + '</span>' : '') +
+          (mr ? '<span class="chip info mrtag">i MR !' + mr + '</span>' : '') + '</td>' +
+          reps.map(function (r) { return '<td class="c">' + glyph(s.marks ? s.marks[r.k] : '–', r.name) + '</td>'; }).join('') +
+          '<td class="c"><span class="chip ' + (RES[s.result] || 'na') + '">' + esc(s.result) + '</span></td></tr>';
+        if (isOpen) rows += '<tr class="detail"><td colspan="' + cols + '">' + md(s.bevis) + '</td></tr>';
+      });
+      var table = shown ? '<div class="scroll"><table class="matrix"><thead><tr><th>Scenario</th>' + reps.map(function (r) { return '<th class="c" title="' + r.name + '">' + r.k + '</th>'; }).join('') + '<th class="c">Resultat</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+        : '<p class="empty" style="padding:14px 18px;margin:0">Ingenting mangler i dette kravet' + (REPOS.length > 1 ? ' for repoet som er valgt' : '') + '.</p>';
+      return '<article class="krav">' + head + table + '</article>';
+    }).join('');
+  }
+  document.getElementById('krav-list').addEventListener('click', function (e) {
+    var tr = e.target.closest('tr.sc'); if (!tr) return;
+    open[tr.dataset.key] = !open[tr.dataset.key]; renderKrav();
+  });
+  document.getElementById('krav-list').addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr.sc')) {
+      e.preventDefault(); var key = e.target.dataset.key; open[key] = !open[key]; renderKrav();
+      var el = document.querySelector('tr.sc[data-key="' + key.replace(/"/g, '\\"') + '"]'); if (el) el.focus();
+    }
+  });
+
+  function renderRepos() {
+    if (!REPOS.length) return;
+    document.getElementById('repo-list').innerHTML = shownRepos().map(function (r) {
+      var list = sc.filter(function (s) { return missing(s, r.k); });
+      var body = list.length ? D.krav.map(function (k) {
+        var items = list.filter(function (s) { return s.id === k.id; });
+        if (!items.length) return '';
+        return '<div class="grp">' + esc(k.title) + '</div><ul>' + items.map(function (s) {
+          return '<li>' + glyph(s.marks[r.k], r.name) + '<span>' + esc(s.title) + (s.marks[r.k] === '~' ? ' <span class="chip part">delvis</span>' : '') + '</span></li>';
+        }).join('') + '</ul>';
+      }).join('') : '<p class="empty">Ingenting mangler.</p>';
+      return '<div class="repo"><h3><span class="letter">' + r.k + '</span>' + r.name + ' <span class="chip ' + (list.length ? 'miss' : 'ok') + '">' + list.length + ' scenarioer</span></h3><p class="sub">' + esc(r.what) + '</p>' + body + '</div>';
+    }).join('');
+  }
+
+  function renderTilgang() {
+    if (!D.tilgang.length) return hideSection('tilgang');
+    var ok = D.tilgang.filter(function (t) { return t.resultat === 'stemmer'; });
+    document.getElementById('tilgang-count').textContent = avvik.length + ' avvik · ' + ok.length + ' stemmer';
+    var cls = { 'avviker': 'miss', 'ikke funnet': 'miss', 'usikker': 'part', 'ikke beskrevet': 'part' };
+    document.getElementById('tilgang-avvik').innerHTML = avvik.map(function (t) {
+      return '<div class="find"><div class="h"><span class="chip ' + (cls[t.resultat] || 'part') + '">' + esc(t.resultat) + '</span><strong>' + esc(cap(t.rolle)) + '</strong><span class="kid">' + esc(t.sjekk) + ' · ' + esc(kravTitle[t.id] || t.id) + '</span></div><div class="b">' + md(t.bevis) + '</div></div>';
+    }).join('');
+    var det = document.getElementById('tilgang-ok');
+    if (!ok.length) { det.hidden = true; return; }
+    det.innerHTML = '<summary>' + ok.length + ' sjekker stemmer</summary><div class="in">' + ok.map(function (t) {
+      return '<div class="okrow">' + glyph('✓', 'stemmer') + '<span>' + esc(cap(t.rolle)) + ' <span class="kid">' + esc(t.sjekk) + ' · ' + esc(kravTitle[t.id] || t.id) + '</span></span></div>';
+    }).join('') + '</div>';
+  }
+
+  function group(cls, title, text, items, row) {
+    if (!items.length) return '';
+    return '<div class="rgroup ' + cls + '"><div class="rghead"><h3>' + esc(title) + ' <span class="rgn">' + items.length + '</span></h3>' + (text ? '<p>' + text + '</p>' : '') + '</div><ol class="rlist">' + items.map(row).join('') + '</ol></div>';
+  }
+
+  function renderRegler() {
+    if (!D.regler.length) return hideSection('regler');
+    document.getElementById('regler-count').textContent = D.regler.length + ' regler';
+    var groups = [
+      ['decide', 'Må avklares i teamet', 'Er dette ønsket atferd, eller bare slik koden er? Svaret avgjør om kravet eller koden skal endres.', function (f) { return /uklart/.test(f); }],
+      ['krav', 'Bør bli et scenario i kravet', 'Regelen er ønsket, men står ikke i kravet. Legg den til med fs-krav.', function (f) { return /fs-krav/.test(f); }],
+      ['test', 'Testes i fase 2', 'Regelen er grei som den er. Den agentiske testen tar den med.', function (f) { return /fase 2/.test(f); }],
+      ['info', 'Dekkes av et utkast', 'Et scenario som er utkast (@draft), dekker regelen.', function (f) { return /draft/.test(f); }]
+    ];
+    var used = {};
+    var html = groups.map(function (g) {
+      var items = D.regler.filter(function (r, i) { if (!used[i] && g[3](r.forslag)) { used[i] = 1; return true; } return false; });
+      return group(g[0], g[1], g[2], items, reglerRow);
+    }).join('');
+    var rest = D.regler.filter(function (r, i) { return !used[i]; });
+    html += group('info', 'Annet forslag', '', rest, reglerRow);
+    document.getElementById('regler-cols').innerHTML = html;
+  }
+  function reglerRow(r) {
+    return '<li><div class="rmain">' + md(r.regel) + '</div><div class="rmeta"><span class="chip na">' + esc(r.type) + '</span><span title="@' + esc(r.id) + '">' + esc(kravTitle[r.id] || r.id) + '</span><span class="rbev">' + md(r.bevis) + '</span></div></li>';
+  }
+
+  var FUNN = {
+    'Kravet er bak koden': ['decide', 'Koden gjør noe kravet ikke sier. Avgjør om kravet skal si det, eller om koden skal endres.'],
+    'Åpent spørsmål': ['decide', 'Spørsmål i kravene som ikke er besvart. De stopper ikke leveransen.'],
+    'Bygger på krav som ikke er levert': ['decide', 'Kravet kan ikke leveres før kravet det bygger på.'],
+    'Levert, men ikke funnet i koden': ['bad', 'Kravet er levert, men koden ble ikke funnet. Sjekk om noe er fjernet.'],
+    'Ikke sjekket': ['bad', 'Det som ikke kunne sjekkes i denne kjøringen.'],
+    'Kontrollen endret': ['info', 'Det kontrollen rettet i resultatet fra den første letingen. Se over at rettelsene stemmer.'],
+    'Ikke valgt i denne kjøringen': ['info', 'Krav som ikke var med i omfanget.'],
+    'Krav utenfor scope': ['info', 'Krav som ble funnet, men som ikke hører til scopet.'],
+    'Merknad': ['info', 'Andre merknader fra verifiseringen.']
+  };
+  function renderFunn() {
+    if (!D.andre.length) return hideSection('funn');
+    document.getElementById('funn-count').textContent = D.andre.length + ' funn';
+    var order = Object.keys(FUNN);
+    var types = [];
+    D.andre.forEach(function (a) { if (types.indexOf(a.type) < 0) types.push(a.type); });
+    types.sort(function (a, b) { var x = order.indexOf(a), y = order.indexOf(b); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y); });
+    document.getElementById('funn-cols').innerHTML = types.map(function (t) {
+      var ty = FUNN[t] || ['info', ''];
+      return group(ty[0], t, ty[1], D.andre.filter(function (a) { return a.type === t; }), function (a) {
+        var ids = (a.id.match(/@[A-ZÆØÅ0-9-]+/g) || []).map(function (i) { var id = i.slice(1); return '<span title="' + esc(i) + '">' + esc(kravTitle[id] || id) + '</span>'; }).join('<span aria-hidden="true">·</span>');
+        return '<li><div class="rmain">' + md(cap(a.gjelder)) + '</div><div class="rtext">' + md(a.hva) + '</div>' + (ids ? '<div class="rmeta">' + ids + '</div>' : '') + '</li>';
+      });
+    }).join('');
+  }
+
+  function renderMR() {
+    if (!D.mr.length) return hideSection('mr');
+    document.getElementById('mr-list').innerHTML = D.mr.map(function (m) {
+      return '<div class="find"><div class="h"><span class="chip info">' + esc(m.status) + '</span><strong>' + md(m.mr) + '</strong><span class="kid">' + md(m.repo) + '</span></div>' +
+        '<div class="b">Ser ut til å levere ' + md(m.krav) + ' · funnet der: ' + md(m.funnet) + '</div>' + (m.merknad ? '<div class="b">' + md(m.merknad) + '</div>' : '') + '</div>';
+    }).join('');
+  }
+
+  function renderMeta() {
+    var keys = ['Dato', 'Krav', 'Spec', 'Kode', 'Repoer', 'Åpne MR-er', 'Omfang', 'Avhengigheter', 'Kontroll', 'Team', 'Skjermbilder', 'Confluence', 'Menneskelig kontroll'];
+    document.getElementById('meta').innerHTML = keys.filter(function (k) { return D.meta[k]; }).map(function (k) {
+      var val = D.meta[k];
+      if (k === 'Menneskelig kontroll' && /Fylles ut/.test(val)) val = '<span class="warnbox">Ikke fylt ut ennå.</span> En annen person enn den som kjørte verifiseringen, skal lese rapporten og bevisene, og skrive navn og dato i rapportfila.';
+      else val = md(val);
+      return '<dt>' + esc(k) + '</dt><dd>' + val + '</dd>';
+    }).join('') + '<dt>Rapport</dt><dd><code>' + esc(D.rapport) + '</code></dd><dt>Laget</dt><dd>' + esc(D.laget) + '</dd>';
+  }
+
+  function render() {
+    [['f-repo', 'repo'], ['f-vis', 'vis']].forEach(function (x) {
+      document.querySelectorAll('#' + x[0] + ' button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === state[x[1]])); });
+    });
+    renderKrav(); renderRepos();
+  }
+  if (!REPOS.length) hideSection('repo');
+  render(); renderTilgang(); renderRegler(); renderFunn(); renderMR(); renderMeta();
+})();
+</script>

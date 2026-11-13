@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-BEH-BEH-025 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
@@ -84,10 +85,10 @@ Egenskap: Ferdigbehandle en sak
     # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet»
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
-      Gitt at søknadsalternativet har kravelementet "Matematikk R2"
-      Og at vitnemålet ikke har "Matematikk R2"
+      Gitt at søknadsalternativet har et kravelement
+      Og at vitnemålet ikke oppfyller kravelementet
       Når søknaden behandles automatisk
-      Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
+      Så har saken en automatisk mangeltekst som viser at kravelementet ikke er oppfylt
       Og saken er ferdig behandlet
 
     @depends-on-OPT-BEH-BEH-008
@@ -95,11 +96,11 @@ Egenskap: Ferdigbehandle en sak
     Scenario: Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet
       # Avklart 2026-10-26 i review av PR #818: saksbehandleren gjør ingenting i saken, så
       # automatikken publiserer manglene når den setter saken til ferdig behandlet.
-      Gitt at søknadsalternativet har kravelementene "Matematikk R2" og "Fysikk 2"
-      Og at vitnemålet verken har "Matematikk R2" eller "Fysikk 2"
+      Gitt at søknadsalternativet har to kravelementer
+      Og at vitnemålet ikke oppfyller noen av kravelementene
       Når søknaden behandles automatisk
       Så er saken ferdig behandlet
-      Og søkeren ser de automatiske manglene for "Matematikk R2" og "Fysikk 2" i Min kompetanse
+      Og søkeren ser de automatiske manglene for begge kravelementene i Min kompetanse
       Og søkeren har mottatt én melding om mangler
 
   @ref-OPT-BEH-BEH-016
@@ -174,6 +175,7 @@ Egenskap: Ferdigbehandle en sak
       Når en annen søknad stoppes av den samme feilen i regelverket
       Så får ikke opptaksforvalteren et nytt varsel om feilen
 
+    @implemented
     Scenariomal: <feil i regelverket> stopper <steg>
       Gitt at <feil i regelverket> for søknadsalternativet
       Når søknaden behandles automatisk

@@ -381,3 +381,19 @@ Egenskap: Listevisning og søk i utdanningstilbud
       Og søkeren har søkt med fritekst på "jus"
       Når søkeren går tilbake i nettleseren
       Så viser listen treffene for søketeksten "sykepleie"
+
+  # Avklart 2026-11-10 (R15 og svar 18): brukere og integrasjoner uten roller ser bare det som er publisert.
+  # Ingen særtilgang for utdanning.no før publisering. I dag ser alle innloggede alle opptak og tilbud.
+  Regel: Bare publiserte opptak og utdanningstilbud vises for brukere og integrasjoner uten roller
+
+    Scenariomal: Opptak før og etter publisering
+      Gitt at opptaket "Samordna opptak 2027" er <status>
+      Når <hvem> søker etter utdanningstilbud
+      Så <vises> utdanningstilbudene i "Samordna opptak 2027"
+
+      Eksempler:
+        | status         | hvem                                    | vises      |
+        | ikke publisert | søkeren                                 | vises ikke |
+        | ikke publisert | en integrasjon uten roller              | vises ikke |
+        | publisert      | søkeren                                 | vises      |
+        | publisert      | en integrasjon uten roller              | vises      |

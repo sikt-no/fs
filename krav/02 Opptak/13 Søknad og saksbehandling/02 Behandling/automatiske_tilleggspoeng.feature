@@ -12,10 +12,10 @@ Egenskap: Automatiske tilleggspoeng
   poengtypen, og algoritmen regner ut poengene ut fra opplysninger om søkeren, for eksempel alder og kjønn.
   Poengene regnes ut på samme måte når saksbehandleren velger grunnlaget selv som når automatikken gjør det.
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Alderspoeng regnes ut fra søkerens alder
 
-    @depends-on-OPT-BEH-BEH-012 @implemented
+    @depends-on-OPT-BEH-BEH-012
     # Regelen «Søkerens alder beregnes på opptakets dato for aldersberegning».
     Scenariomal: Alderspoeng for søkerens alder
       Gitt at poengtypen for alderspoeng er knyttet til algoritmen "<algoritme>"
@@ -40,7 +40,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så viser alderspoengene at de er regnet ut for alderen 22 år på datoen for aldersberegning
 
-    @depends-on-OPT-OVO-FRI-001 @implemented
+    @depends-on-OPT-OVO-FRI-001
     # Regelen «Opptaksforvalter setter dato for aldersberegning».
     Scenario: Standarddatoen brukes når datoen for aldersberegning ikke er satt
       Gitt at opptaket ikke har dato for aldersberegning
@@ -50,10 +50,9 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren velger et grunnlag for saken
       Så har saken 4 alderspoeng
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kjønnspoeng regnes ut fra søkerens kjønn
 
-    @implemented
     Scenariomal: Kjønnspoeng for søkerens kjønn
       Gitt at poengtypen for kjønnspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <kjønn>
@@ -87,6 +86,7 @@ Egenskap: Automatiske tilleggspoeng
     # Avklart 04.11.2026: resultatene merker et innpasset emne som innpasset, med lærestedet det kommer fra,
     # så emnet telles bare én gang, med studiepoengene fra lærestedet der det ble tatt.
 
+    @implemented
     Scenariomal: Poeng for høyere utdanning
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at tjenesten for resultater fra høyere utdanning gir søkeren <studiepoeng> studiepoeng
@@ -102,12 +102,14 @@ Egenskap: Automatiske tilleggspoeng
         | 60          | 2     |
         | 120         | 2     |
 
+    @implemented
     Scenario: Poengene for høyere utdanning viser hvor mange studiepoeng de er regnet ut for
       Gitt at søkeren har bestått emner på 45 studiepoeng
       Og at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Når saken får et grunnlag
       Så viser poengene for høyere utdanning at de er regnet ut for 45 studiepoeng
 
+    @implemented
     Scenario: Søker uten resultater fra høyere utdanning får 0 poeng
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren ikke har resultater fra høyere utdanning
@@ -121,6 +123,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Fagskolepoeng teller ikke
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng i høyere utdanning
@@ -128,6 +131,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Innpassede emner telles bare én gang
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 40 studiepoeng ved lærestedet der emnene ble tatt
@@ -136,6 +140,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Innpassede emner telles med studiepoengene fra lærestedet der de ble tatt
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng ved lærestedet der emnene ble tatt
@@ -143,6 +148,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
+    @implemented
     Scenario: Studiepoengene telles når poengene regnes ut
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren hadde bestått emner på 50 studiepoeng da søknaden ble sendt inn
@@ -242,6 +248,12 @@ Egenskap: Automatiske tilleggspoeng
     # endres (OPT-BEH-BEH-022, avklart 04.11.2026), så de står ikke tomme til
     # saksbehandleren beregner dem. At tilleggspoengene ikke avhenger av poengene fra
     # vitnemålet, er dekket av «Søker uten elektronisk vitnemål får tilleggspoeng».
+    #
+    # Endret 11.11.2026: avklaringen 04.11.2026 er erstattet. Saksbehandleren beregner
+    # poengene fra vitnemålet med en egen handling (OPT-BEH-BEH-004, «Poengene beregnes og
+    # lagres når saksbehandleren bruker dem»). Poengene står ikke tomme før saksbehandleren
+    # har beregnet: de sist lagrede poengene vises uendret (OPT-BEH-BEH-004, «De lagrede
+    # poengene vises til jeg beregner på nytt»), så scenarioet trengs fortsatt ikke.
 
   @implemented
   Regel: Saksbehandleren kan overstyre poeng automatikken har satt

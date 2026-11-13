@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @FLY-OPT-OPT-001 @must @draft @e2e
 Egenskap: Opptaksløpet
   Hele opptaksløpet, fra opptaket klargjøres før søknadsåpning, til søkeren har fått studieplass

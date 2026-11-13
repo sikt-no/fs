@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #413
 # Reglene er skilt ut fra OPT-BEH-BEH-008 (søknadsmangler.feature) 2026-11-02, så de kan leveres
 # med den automatiske saksbehandlingen uten resten av søknadsmangler.
@@ -41,10 +42,10 @@ Egenskap: Automatiske mangler
 
     @implemented
     Scenariomal: Saken får en automatisk mangeltekst når <vurdert av> vurderer at et kravelement ikke er oppfylt
-      Gitt at søknadsalternativene i saken har kravelementet "Matematikk R2"
-      Når <vurdert av> vurderer at "Matematikk R2" ikke er oppfylt
+      Gitt at søknadsalternativene i saken har et kravelement
+      Når <vurdert av> vurderer at kravelementet ikke er oppfylt
       Så er søkeren ikke kvalifisert
-      Og har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
+      Og har saken en automatisk mangeltekst som viser at kravelementet ikke er oppfylt
 
       Eksempler:
         | vurdert av                   |
@@ -78,10 +79,10 @@ Egenskap: Automatiske mangler
 
     @implemented
     Scenariomal: De automatiske mangeltekstene slettes når <vurdert av> vurderer at søkeren er kvalifisert
-      Gitt at saken har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
-      Når <vurdert av> vurderer at "Matematikk R2" er oppfylt
+      Gitt at saken har en automatisk mangeltekst som viser at et kravelement ikke er oppfylt
+      Når <vurdert av> vurderer at kravelementet er oppfylt
       Så er søkeren kvalifisert
-      Og saken har ikke en automatisk mangeltekst for "Matematikk R2"
+      Og saken har ikke en automatisk mangeltekst for kravelementet
 
       Eksempler:
         | vurdert av                   |
@@ -89,44 +90,44 @@ Egenskap: Automatiske mangler
         | saksbehandleren              |
 
     Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene
-      Gitt at saken har en automatisk mangeltekst for "Matematikk R2"
+      Gitt at saken har en automatisk mangeltekst
       Og at saksbehandleren har registrert en mangel
       Når saksbehandleren åpner manglene i saken
-      Så ser saksbehandleren den automatiske mangelteksten for "Matematikk R2" og mangelen saksbehandleren har registrert
+      Så ser saksbehandleren den automatiske mangelteksten og mangelen saksbehandleren har registrert
 
     Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
       # Avklart 2026-11-02: tekstene publiseres når saken blir ferdig behandlet, hvis
       # saksbehandleren ikke har publisert dem før.
-      Gitt at saken har en automatisk mangeltekst for "Matematikk R2"
+      Gitt at saken har en automatisk mangeltekst
       Når saken blir ferdig behandlet
-      Så ser søkeren den automatiske mangelteksten for "Matematikk R2" i Min kompetanse
+      Så ser søkeren den automatiske mangelteksten i Min kompetanse
 
     @implemented
     Scenario: Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling
       Gitt at saken er under behandling
-      Og at saken har en automatisk mangeltekst for "Matematikk R2"
+      Og at saken har en automatisk mangeltekst
       Når søkeren åpner dokumentasjonssiden i Min kompetanse
-      Så ser ikke søkeren den automatiske mangelteksten for "Matematikk R2"
+      Så ser ikke søkeren den automatiske mangelteksten
 
     @implemented
     Scenario: Søkeren ser mangeltekstene per søknadsalternativ
       Gitt at saken er ferdig behandlet
-      Og at saken har en automatisk mangeltekst for "Matematikk R2" for søknadsalternativet
+      Og at saken har en automatisk mangeltekst for søknadsalternativet
       Når søkeren åpner dokumentasjonssiden i Min kompetanse
-      Så ser søkeren mangelteksten for "Matematikk R2" under søknadsalternativet
+      Så ser søkeren mangelteksten under søknadsalternativet
 
     @implemented
     Scenario: Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet
       # Avklart 30.10.2026: mangelteksten slettes ikke, men vises ikke lenger.
-      Gitt at saken har en automatisk mangeltekst for "Matematikk R2" for søknadsalternativet
-      Og at ingen andre søknadsalternativer i saken har kravelementet "Matematikk R2"
+      Gitt at saken har en automatisk mangeltekst for et kravelement for søknadsalternativet
+      Og at ingen andre søknadsalternativer i saken har kravelementet
       Når søkeren fjerner søknadsalternativet fra søknaden
-      Så ser ikke søkeren mangelteksten for "Matematikk R2" i Min kompetanse
-      Og saken har fortsatt den automatiske mangelteksten for "Matematikk R2"
+      Så ser ikke søkeren mangelteksten i Min kompetanse
+      Og saken har fortsatt den automatiske mangelteksten
 
     @implemented
     Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst
-      Gitt at saken har en automatisk mangeltekst for "Matematikk R2"
+      Gitt at saken har en automatisk mangeltekst
       Når saksbehandleren åpner manglene i saken
       Så ser ikke saksbehandleren muligheten til å kommentere, sjekke ut eller slette den automatiske mangelteksten
 

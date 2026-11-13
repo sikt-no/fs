@@ -1,14 +1,17 @@
 # language: no
 @OPT-SØK-SØK-002 @opptak @skip @nih
-Egenskap: Opprette søknad for person
-  Som saksbehandler i opptak trenger jeg av og til å kunne opprette søknader for personer som ikke klarer å opprette dette selv om de
+Egenskap: Opprette, endre og trekke søknad på søkerens vegne
+  Som opptaksforvalter ved forvalteren av opptaket trenger jeg av og til å kunne opprette søknader for personer som ikke klarer å opprette dette selv om de
   er i en gruppe som skal kunne søke på aktuelle utdanningstilbud. Grunner til å ikke kunne opprette egen søknad kan være at søker ikke har
   norsk eID eller får , eller har fått innvilget å søke opptak etter at søknadsfrist har utløpt.
 
+  # Avklart 2026-11-10 (svar 1, 2 og 6): bare opptaksforvalter hos forvalteren oppretter, endrer og trekker en søknad på
+  # søkerens vegne, og søker opp personer uten søknad. Tittelen, brukerhistorien og bakgrunnen er rettet,
+  # og «Gitt at saksbehandler er på søknadsbehandlingssiden» er fjernet fra bakgrunnen. Stegene under som sier
+  # «administrator» og «saksbehandler», må skrives om til opptaksforvalter når kravet tas opp igjen.
+
   Bakgrunn:
-    Gitt at administrator er saksbehandler i opptak (eller opptaksleder) for utdanningstilbud/opptaksinstans
     Gitt at administrator har vurdert at søknad MÅ opprettes for person
-    Gitt at saksbehandler er på søknadsbehandlingssiden
 
     Scenario: Administrator oppretter søknad for person som allerede har søkt på utdanningstilbud
       Når administrator oppretter søknad for person og denne personen allerede har registrert søknad til utdanningstilbud
@@ -75,3 +78,86 @@ Scenariomal: Både saksbehandler og søker kan se at en søknad er opprettet man
     Gitt at personen har en aktiv søknad
     Når saksbehandler legger til ett nytt utdanningstilbud i søknad
     Så får personen opprettet ett nytt søknadsalterativ i søknaden
+
+  @draft
+  Regel: Bare opptaksforvalter hos forvalteren kan opprette og endre en søknad på søkerens vegne
+
+    Scenariomal: Opprette en søknad på søkerens vegne
+      Gitt personen skal søke i et samordna opptak
+      Og jeg er <rolle> ved <organisasjon>
+      Når jeg vil opprette en søknad for personen
+      Så <utfall>
+
+      Eksempler:
+        | rolle             | organisasjon                       | utfall                                             |
+        | opptaksforvalter  | forvalteren av opptaket            | kan jeg opprette søknaden                          |
+        | opptaksforvalter  | tilbyderen av utdanningstilbudet   | ser jeg ikke muligheten til å opprette søknaden    |
+        | saksbehandler     | behandleren av søknadsalternativet | ser jeg ikke muligheten til å opprette søknaden    |
+        | saksbehandler     | forvalteren av opptaket            | ser jeg ikke muligheten til å opprette søknaden    |
+        | opptaksinformatør | forvalteren av opptaket            | ser jeg ikke muligheten til å opprette søknaden    |
+
+    Scenariomal: Legge til et søknadsalternativ på søkerens vegne
+      Gitt søkeren har en levert søknad i et samordna opptak
+      Og jeg er <rolle> ved <organisasjon>
+      Når jeg vil legge til et søknadsalternativ i søknaden
+      Så <utfall>
+
+      Eksempler:
+        | rolle            | organisasjon                       | utfall                                                   |
+        | opptaksforvalter | forvalteren av opptaket            | kan jeg legge til søknadsalternativet                    |
+        | saksbehandler    | behandleren av søknadsalternativet | ser jeg ikke muligheten til å legge til søknadsalternativ |
+
+    Scenario: Endringen avvises også i API-et
+      Gitt en integrasjon har rollen saksbehandler ved behandleren av søknadsalternativet
+      Når integrasjonen forsøker å opprette en søknad for personen gjennom API-et
+      Så avvises det
+
+  @draft
+  Regel: Bare opptaksforvalter hos forvalteren kan søke opp personer som ikke har søknad
+
+    Scenario: Opptaksforvalteren finner en person uten søknad
+      Gitt personen finnes i Folkeregisteret og har ingen søknad
+      Og jeg er opptaksforvalter ved forvalteren av opptaket
+      Når jeg søker etter personen
+      Så ser jeg navnet, fødselsnummeret, adressen og kontaktinformasjonen til personen
+
+    Scenario: Fortrolig adresse vises ikke i personsøket
+      Gitt personen har fortrolig adresse og har ingen søknad
+      Og jeg er opptaksforvalter ved forvalteren av opptaket
+      Når jeg søker etter personen
+      Så ser jeg ikke adressen til personen
+
+    Scenariomal: Andre finner ikke personer uten søknad
+      Gitt personen finnes i Folkeregisteret og har ingen søknad
+      Og jeg er <rolle> ved <organisasjon>
+      Når jeg søker etter personen
+      Så finner jeg ikke personen
+
+      Eksempler:
+        | rolle             | organisasjon                       |
+        | opptaksforvalter  | tilbyderen av utdanningstilbudet   |
+        | saksbehandler     | behandleren av søknadsalternativet |
+        | saksbehandler     | forvalteren av opptaket            |
+        | opptaksinformatør | forvalteren av opptaket            |
+
+  @draft
+  Regel: Bare opptaksforvalter hos forvalteren kan trekke en søknad på søkerens vegne
+
+    Scenariomal: Trekke søknaden på søkerens vegne
+      Gitt søkeren har en levert søknad i et samordna opptak der tilbyderen og behandleren er ulike organisasjoner
+      Og jeg er <rolle> ved <organisasjon>
+      Når jeg vil trekke søknaden på søkerens vegne
+      Så <utfall>
+
+      Eksempler:
+        | rolle             | organisasjon                       | utfall                                        |
+        | opptaksforvalter  | forvalteren av opptaket            | kan jeg trekke søknaden                       |
+        | opptaksforvalter  | tilbyderen av søknadsalternativet  | ser jeg ikke muligheten til å trekke søknaden |
+        | saksbehandler     | behandleren av søknadsalternativet | ser jeg ikke muligheten til å trekke søknaden |
+        | saksbehandler     | forvalteren av opptaket            | ser jeg ikke muligheten til å trekke søknaden |
+        | opptaksinformatør | forvalteren av opptaket            | ser jeg ikke muligheten til å trekke søknaden |
+
+    Scenario: Trekkingen avvises også i API-et
+      Gitt en integrasjon har rollen saksbehandler ved behandleren av søknadsalternativet
+      Når integrasjonen forsøker å trekke søknaden gjennom API-et
+      Så avvises det

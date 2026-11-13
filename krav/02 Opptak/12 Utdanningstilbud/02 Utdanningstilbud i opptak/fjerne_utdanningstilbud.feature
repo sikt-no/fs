@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # Jira: SHI-710
 @OPT-OPT-UTD-026 @must @in-progress @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fjerne utdanningstilbud fra opptak

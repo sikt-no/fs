@@ -142,17 +142,38 @@ Egenskap: Kvotetype
     # ÅPNE SPØRSMÅL:
     # - Kvoterangeringen lagres, men brukes ikke i rangeringen (verifisert 2026-10-14). Skal den brukes?
     # - IH betyr «Sivilingeniør, ingeniørhøgskole» i kodeverket, ikke «individuell helhetsvurdering». Hva er riktig?
+    # - Koden for «individuell vurdering (uten poengberegning)» er ikke bestemt (IV i eksempelet). Erstatter den
+    #   SPEV («Spesiell vurdering/ikke poengberegning») i kodeverket, eller er den en ny kode?
+    # AVKLART 2026-11-06 (produkteier): SPEV erstattes av rangeringsmetoden «individuell vurdering (uten
+    # poengberegning)», for søkere som ikke har vanlige konkurransepoeng. Funksjonen SPEV-kvoten har hatt, er en
+    # kvotetype uten plasser med skjulte poeng, se opprette_ventekvote.feature.
 
     Scenariomal: Kvoterangering
       Når opptaksforvalteren oppretter en kvotetype med kvoterangering "<metode>"
       Så rangeres søkere i kvoten etter <beskrivelse>
 
       Eksempler:
-        | metode | beskrivelse                  |
-        | KP     | konkurransepoeng             |
-        | SP     | skolepoeng                   |
-        | SPEV   | spesiell vurdering           |
-        | IH     | individuell helhetsvurdering |
+        | metode | beskrivelse                                 |
+        | KP     | konkurransepoeng                            |
+        | SP     | skolepoeng                                  |
+        | IV     | individuell vurdering (uten poengberegning) |
+        | IH     | individuell helhetsvurdering                |
+
+  @planned @scope-spesialvurdering-2027
+  Regel: En kvotetype kan skjule poengene for søkeren
+    # AVKLART 2026-11-11 (produkteier): Om søkeren ser poengene, kan avhenge av kvoten, ikke bare grunnlaget.
+    # Søkeren kan bli vurdert på samme grunnlag i en kvote som skjuler poengene (ventekvoten) og i en kvote
+    # som viser dem (opptaksprøvepoeng). Innstillingen på grunnlaget finnes fortsatt, se grunnlag.feature.
+    # Søkeren ser poengene i svaret når resultatet av plasstildelingen er publisert, se
+    # 14 Plasstildeling/04 Resultat/publisere_resultat.feature.
+
+    Scenario: Kvotetypen viser poengene for søkeren som standard
+      Når opptaksforvalteren oppretter kvotetypen "Førstegangsvitnemål (ORDF)"
+      Så vises poengene i kvotetypen "Førstegangsvitnemål (ORDF)" for søkeren
+
+    Scenario: Skjule poengene i kvotetypen for søkeren
+      Når opptaksforvalteren angir at poengene i kvotetypen "Ventekvote (VENT)" skal skjules for søkeren
+      Så er kvotetypen "Ventekvote (VENT)" lagret med skjulte poeng
 
   Regel: En kvotetype kan slettes når den ikke er i bruk
 

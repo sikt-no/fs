@@ -214,6 +214,37 @@ Ved ny feature: sjekk eksisterende features i samme mappe for å finne neste led
 
 En feature har høyst én prioritet. *(sjekkes automatisk)*
 
+### Roller
+
+Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav, ikke bare krav om tilgang.
+
+- Kravet sier hvilken rolle som gjør handlingen, med begrepet for rollen: «Bare opptaksforvalter kan trekke en søknad på søkerens vegne». Rollekoden (OPPTAK_FORVALTER) står ikke i stegene, men i tabellen over brukerroller i domenets begrepsliste (se *Gode scenarioer*). Står rollen i `Som …`-linja eller i regeltittelen, gjelder den for alt under.
+- Har organisasjonen betydning, skrives organisasjonens rolle med ord: **forvalter**, **tilbyder** eller **behandler**, ikke F, T og B. «Bare opptaksforvalter hos forvalteren …», «saksbehandler hos behandleren …».
+- Den som ikke er nevnt i en regel, får ikke gjøre det ([`@FEL-TIL-GRU-001`](10%20Felleskrav/12%20Tilgang/01%20Grunnregler/ingen_tilgang_uten_regel.feature)). Kravet trenger derfor ikke liste opp alle som ikke får lov. Ta med den som ikke får lov, i samme regel bare når grensen er uventet: samme brukerrolle hos en annen organisasjonsrolle, en annen brukerrolle hos den samme organisasjonen, eller en rolle som ser, men ikke endrer. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
+- Skriv relasjonen, ikke organisasjonsnavnet, når det er relasjonen som avgjør utfallet (se *Gode scenarioer*): «forvalteren», «tilbyderen», «behandleren», «en organisasjon uten rolle i opptaket». Ett steg, «Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket», dekker alle rollene.
+- Regelen gjelder i API-et også, ikke bare i skjermbildene. Det står i felleskravet, og trenger ikke gjentas i hvert krav.
+- Hvem som har tilgang til hva i opptak, ut fra kravene, står i [`krav/02 Opptak/tilgangsmatrise.md`](02%20Opptak/tilgangsmatrise.md). Tilgangsreglene er ikke et eget scope. De tas inn når et team jobber med funksjonaliteten som bruker dem.
+
+Eksempel:
+
+```gherkin
+  Regel: Bare opptaksforvalter hos forvalteren kan trekke en søknad på søkerens vegne
+
+    Scenariomal: Trekke søknaden på søkerens vegne
+      Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket
+      Når jeg trekker søknaden på søkerens vegne
+      Så <utfall>
+
+      Eksempler:
+        | rolle            | organisasjonens rolle      | utfall              |
+        | opptaksforvalter | forvalteren                | er søknaden trukket |
+        | opptaksforvalter | tilbyderen                 | avvises det         |
+        | opptaksforvalter | behandleren                | avvises det         |
+        | saksbehandler    | forvalteren                | avvises det         |
+```
+
+**Ikke avklart: taggen `@rolle-<slug>`.** Skal rollebruken kunne leses maskinelt, for eksempel for å finne alle krav en rolle trengs i, eller hvilken rolle en test må logge inn med? I så fall får kravene `@rolle-<slug>`, for eksempel `@rolle-opptak-forvalter`. Tagger arves, så taggen settes på det høyeste nivået der den gjelder for alt under (`Egenskap:`, `Regel:`, `Scenario:` eller `Eksempler:`). Trengs det ikke, holder det at rollen står i teksten.
+
 ### Kravstatus
 
 Sier noe om selve **kravteksten** – er den ferdig skrevet, avklart og klar til bruk?
@@ -595,7 +626,11 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 
 ## Aktører
 
-- administrator, søker, student, saksbehandler
+- søker, student, administrator
+- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, opptaksinformatør (rollekodene står i `krav/02 Opptak/begreper.md`)
+- Organisasjonens rolle i et opptak: forvalter, tilbyder, behandler
+
+Se `krav/02 Opptak/begreper.md`.
 
 ## Terminologi
 

@@ -59,7 +59,7 @@ Egenskap: Behandle automatisk på vitnemålet saksbehandleren velger
       Når saksbehandleren ved Universitetet i Oslo starter den automatiske behandlingen på det sammensatte vitnemålet
       Så behandles saken hos "Universitetet i Oslo" automatisk på det sammensatte vitnemålet
 
-  @depends-on-OPT-BEH-BEH-019 @depends-on-OPT-BEH-BEH-020 @depends-on-OPT-BEH-BEH-018
+  @depends-on-OPT-BEH-BEH-019 @depends-on-OPT-BEH-BEH-020 @depends-on-OPT-BEH-BEH-018 @ref-FLY-OPT-VAL-001
   # OPT-BEH-BEH-019: «Grunnlaget velges ut fra egenskapene regelverket har gitt det»
   # OPT-BEH-BEH-020: «Kravelementene vurderes bare mot ett entydig vitnemål»
   # OPT-BEH-BEH-018: «Ingen automatisk beregning uten ett entydig vitnemål»

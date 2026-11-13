@@ -31,9 +31,11 @@ mac:
     - dmg
     - zip
   category: public.app-category.developer-tools
-# Windows og Linux er tatt ut av bygget foreløpig (se docs/release.md). Ta dem inn igjen her og i release-workflowen
-# win:
-#   target: nsis
+# NSIS-installasjonsprogrammet (.exe) er både for første installasjon og det electron-updater laster ned ved oppdatering.
+# Ikke signert ennå (se docs/release.md)
+win:
+  target: nsis
+# Linux er tatt ut av bygget foreløpig (se docs/release.md). Ta den inn igjen her og i release-workflowen
 # linux:
 #   target: AppImage
 # Appen oppdaterer seg selv fra GitHub-releasene (electron/updater.ts). Med denne blokken skriver electron-builder

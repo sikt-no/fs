@@ -651,6 +651,27 @@ Egenskap: Registrere og beregne praksis for søker
       # som ikke har rollen søknadsbehandler — også den registrerte
       # praksisen og summen, ikke bare muligheten til å registrere.
 
+  # Avklart 2026-11-10 (svar 7b, 8 og 9): alle som ser saken, ser også praksisen og summen, men bare
+  # saksbehandleren hos behandleren registrerer. Det gjelder saksbehandleren hos tilbyderen, opptaksforvalteren
+  # og opptaksinformatøren (OPPTAK_INNSYN). Når regelen er validert, får scenarioet «Bruker uten
+  # søknadsbehandler-rollen ser ikke registrert praksis» @deprecated. «søknadsbehandler» heter «saksbehandler»
+  # i begreper.md (tabellen «Brukerroller i opptak»).
+  @draft
+  Regel: Alle som ser saken, ser praksisen, men bare saksbehandleren hos behandleren registrerer den
+
+    Scenariomal: Se praksisen uten å kunne registrere
+      Gitt saken har registrerte praksisperioder
+      Og jeg er <rolle> ved <organisasjon>
+      Når jeg åpner saken
+      Så ser jeg praksisperiodene og summen
+      Men jeg ser ikke muligheten til å registrere, oppdatere eller slette praksisperioder
+
+      Eksempler:
+        | rolle             | organisasjon                       |
+        | saksbehandler     | tilbyderen av søknadsalternativet  |
+        | opptaksforvalter  | forvalteren av opptaket            |
+        | opptaksinformatør | behandleren av søknadsalternativet |
+
 # OPPFØLGING UTENFOR DENNE FEATUREN
 # Rollenavnet «søknadsbehandler» er avklart 07.10.2026. Andre krav bruker
 # andre navn på det som skal være samme rolle, og bør rettes i en egen

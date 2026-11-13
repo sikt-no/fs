@@ -56,7 +56,8 @@ export interface Chat {
 export interface TerminalSession {
   /** ID-en til økten i backenden (`ptyStart`) */
   id: string;
-  mode: 'execute' | 'verify';
+  /** `login`: `claude auth login` fra «Logg inn» */
+  mode: 'execute' | 'verify' | 'login';
   /** `execute`: repoet det kjører i */
   repo?: string;
   /** Økten er avsluttet; `code` er exit-koden (`null` når backenden ikke kjenner økten lenger) */
@@ -237,6 +238,21 @@ export function needsAuth(chat: Chat): string[] {
   return chat.mcp.filter(m => m.status === 'needs-auth').map(m => m.name);
 }
 
+/** Det Claude Code svarer når brukeren ikke er logget inn, eller når `/login` sendes til `claude -p` */
+const LOGIN_TEXT = /not logged in|please run \/login|\/login isn't available|invalid api key|oauth token (has )?expired/i;
+
+/**
+ * Svarte Claude Code på siste melding at brukeren må logge inn? Da viser panelet «Logg inn». Bare korte svar teller,
+ * så et langt svar som nevner innlogging, ikke gir knappen.
+ */
+export function needsLogin(chat: Chat): boolean {
+  const last = chat.items.map(i => i.kind).lastIndexOf('user');
+  return chat.items.slice(last + 1).some(i => (i.kind === 'done' || (i.kind === 'assistant' && i.text.length < 300)) && LOGIN_TEXT.test(i.text));
+}
+
+/** Er meldingen `/login`? Den kan ikke sendes til `claude -p`, så panelet logger inn i terminalen i stedet */
+export const isLoginCommand = (text: string) => /^\/login\s*$/i.test(text.trim());
+
 /** Visningsnavn for verktøyene */
 export const TOOL_LABEL: Record<string, string> = {
   Read: 'Leser',
@@ -294,7 +310,8 @@ export function currentChat(cs: Conversations): Conversation | null {
  * `continuesFrom`: samtalen den nye fortsetter fra (vises i den tomme samtalen).
  */
 export function createConversation(cs: Conversations, id: string, now: number, skill: string | null = null, continuesFrom: string | null = null): Conversations {
-  const empty = cs.list.find(c => !c.chat.items.length && !c.chat.runId);
+  // En terminaløkt (f.eks. «Logg inn») eller en utførekjøring har ingen meldinger, men er ikke en tom samtale
+  const empty = cs.list.find(c => !c.chat.items.length && !c.chat.runId && !c.chat.terminal && !c.chat.target);
   if (empty) {
     if (!continuesFrom) return { ...cs, current: empty.id };
     const chat = { ...empty.chat, skill, continuesFrom };

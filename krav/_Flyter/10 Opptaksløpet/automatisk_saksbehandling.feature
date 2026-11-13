@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @FLY-OPT-AUT-001 @must @planned @e2e @depends-on-FLY-OPT-SAK-001
 Egenskap: Automatisk saksbehandling
   Fra søknaden er blitt en sak hos den saksbehandlende organisasjonen, til saken er ferdig
@@ -153,7 +154,7 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Kravelementet er vurdert mot vitnemålet
       Gitt at saken har grunnlag
-      Og at søknadsalternativet har kravelementet "Matematikk R1"
+      Og at søknadsalternativet har et kravelement
       Når søknaden behandles automatisk
       Så er kravelementet vurdert mot vitnemålet
 
@@ -175,8 +176,8 @@ Egenskap: Automatisk saksbehandling
 
     Scenario: Søkeren er kvalifisert når vitnemålet oppfyller kravelementene
       Gitt at saken har grunnlag
-      Og at søknadsalternativet har kravelementet "Matematikk R1"
-      Og at vitnemålet saken behandles helautomatisk på, har "Matematikk R1"
+      Og at søknadsalternativet har et kravelement
+      Og at vitnemålet saken behandles helautomatisk på, oppfyller kravelementet
       Når søknaden behandles automatisk
       Så er søkeren kvalifisert for søknadsalternativet
 
@@ -216,10 +217,10 @@ Egenskap: Automatisk saksbehandling
   Regel: Saken får mangeltekster når kravelementene er vurdert
 
     Scenario: Saken får mangeltekst for kravelementet vitnemålet ikke oppfyller
-      Gitt at søknadsalternativet har kravelementet "Matematikk R2"
-      Og at vitnemålet saken behandles helautomatisk på, ikke har "Matematikk R2"
+      Gitt at søknadsalternativet har et kravelement
+      Og at vitnemålet saken behandles helautomatisk på, ikke oppfyller kravelementet
       Når søknaden behandles automatisk
-      Så har saken en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
+      Så har saken en automatisk mangeltekst som viser at kravelementet ikke er oppfylt
 
   @depends-on-OPT-BEH-BEH-036 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-036: «Opptaksforvalteren merker én mangelkode for generell studiekompetanse som fullføres i vår», «Mangelen for generell studiekompetanse som fullføres i vår settes og sjekkes ut automatisk»
@@ -246,10 +247,10 @@ Egenskap: Automatisk saksbehandling
       Så er saken ferdig behandlet
 
     Scenario: Søkeren ser mangelteksten fra kravelementene når saken er ferdig behandlet
-      Gitt at saken har en automatisk mangeltekst som viser at "Matematikk R2" ikke er oppfylt
+      Gitt at saken har en automatisk mangeltekst som viser at et kravelement ikke er oppfylt
       Når den automatiske behandlingen er ferdig
       Så er saken ferdig behandlet
-      Og søkeren ser mangelteksten for "Matematikk R2" i Min kompetanse
+      Og søkeren ser mangelteksten i Min kompetanse
 
   @depends-on-OPT-BEH-BEH-026 @ref-FLY-OPT-VAL-001 @ref-FLY-OPT-SAM-001
   # OPT-BEH-BEH-026: «I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt», «Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket», «Bare saker som er ferdig behandlet, beregnes på nytt»

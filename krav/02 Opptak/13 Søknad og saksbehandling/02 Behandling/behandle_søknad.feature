@@ -26,10 +26,8 @@ Egenskap: Saksbehandler behandler søknader
     # Så skal administrator kunne åpne dokumentasjonen på søknaden
     # Vi er usikre på om dokumentasjon er/bør være knyttet til søknad eller person
 
-  Scenario: Saksbehandler kan se laste opp dokumentasjon på vegne av søker
-  Gitt adminstratoren er inne på en søknad
-  Når administratoren laster opp et nytt dokument knyttet til søknaden
-  Så skal personenen se dette hvis de går inn på Mine Søknader
+  # Fjernet 2026-11-10 (svar 21): «Saksbehandler kan se laste opp dokumentasjon på vegne av søker». Bare dokumentforvalter
+  # hos forvalteren laster opp på søkerens vegne. Det står i @OPT-BEH-DOK-001 (skjerme_dokumentasjon.feature).
 
   Scenario: Saksbehandler kan se søkers resultater og kvalifikasjoner
     Og administratoren velger et opptak

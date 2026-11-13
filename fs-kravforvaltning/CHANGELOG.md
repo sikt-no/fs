@@ -1,5 +1,23 @@
 # krav-viewer
 
+## 1.14.0
+
+### Minor Changes
+
+- e5460db: Desktop-appen finnes igjen for Windows (`.exe`), og oppdaterer seg selv som på macOS. Har du en Windows-versjon fra 1.1.0 eller eldre, må du installere den nye versjonen for hånd én gang. Appen er ikke signert, så velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
+
+## 1.13.1
+
+### Patch Changes
+
+- 18f5f9c: «Ny samtale» etter innlogging i Claude-panelet åpner en ny samtale. Før ble innloggingsterminalen valgt på nytt, så ingenting skjedde.
+
+## 1.13.0
+
+### Minor Changes
+
+- ddcdb56: Claude-panelet kan logge inn Claude Code. Er Claude Code ikke logget inn, viser panelet «Logg inn», som kjører `claude auth login` i terminalen i panelet. `/login` sendt som melding gjør det samme.
+
 ## 1.12.0
 
 ### Minor Changes

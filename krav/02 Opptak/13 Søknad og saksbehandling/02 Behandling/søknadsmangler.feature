@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @in-progress
+@OPT-BEH-BEH-008 @must @in-progress @scope-meldinger-varslinger-og-oppgaver
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
@@ -194,7 +194,7 @@ Egenskap: Søknadsmangler
 
     Når saksbehandleren har vurdert ny dokumentasjon og mener at mangelen er løst, sjekker
     saksbehandleren ut mangelen. En mangel som er sjekket ut, står fortsatt i saken, så det
-    går an å se hva som har manglet, men den hindrer ikke lenger noe og vises ikke for søkeren.
+    går an å se hva som har manglet, men den hindrer ikke lenger noe, og søkeren ser den som utført.
 
     @implemented
     Scenario: Saksbehandleren ser at søkeren har lastet opp ny dokumentasjon
@@ -323,6 +323,19 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
+  @draft @openquestion
+  Regel: Søkeren ser at en mangel er sjekket ut
+    # ÅPNE SPØRSMÅL:
+    # - Løsningen er trolig allerede tenkt ut (grønn hake i søknadsflyten). Hvor er den beskrevet?
+    # Kilde: workshop om meldinger 2026-11-09 (Miro), K5-2.
+    # Hvordan det vises (grønn hake), hører hjemme i søknadsmangler.design.md.
+
+    Scenario: Søkeren ser at mangelen er utført
+      Gitt at søkeren har lastet opp dokumentasjon for den publiserte mangelen "KAR"
+      Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "KAR"
+      Så ser søkeren at mangelen "KAR" er utført i søknaden
+      Men søkeren mottar ikke en melding om at mangelen er sjekket ut
+
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
     Scenariomal: Fristen for en mangel publisert <publisert> når <situasjon>
@@ -413,10 +426,15 @@ Egenskap: Søknadsmangler
         | Poeng    |
         | Kvote    |
 
-    Scenario: Mangel som er sjekket ut vises ikke for søkeren
+    @draft @openquestion
+    Scenario: Mangel som er sjekket ut vises som utført for søkeren
+      # ÅPNE SPØRSMÅL:
+      # - Endret fra «vises ikke for søkeren» etter workshopen om meldinger 2026-11-09 (K5-2).
+      #   Ikke gått gjennom med teamet. I dag holder API-et mangler som er sjekket ut, unna
+      #   søkeren (verify-søknadsmangler-2026-10-08.md).
       Gitt at den publiserte mangelen "KAR" er sjekket ut
       Når søkeren åpner dokumentasjonssiden
-      Så ser ikke søkeren mangelen "KAR"
+      Så ser søkeren at mangelen "KAR" er utført
 
   @draft @openquestion
   Regel: Søkeren laster opp dokumentasjon for manglene
@@ -435,6 +453,17 @@ Egenskap: Søknadsmangler
       Og at saksbehandleren ikke har sjekket ut mangelen "KAR"
       Når søkeren åpner dokumentasjonssiden
       Så ser søkeren fortsatt mangelen "KAR"
+
+    @openquestion
+    Scenario: Søkeren får ny melding når dokumentasjonen ikke dekker mangelen
+      # ÅPNE SPØRSMÅL:
+      # - Lagt til fra workshopen om meldinger 2026-11-09 (K5-4). Ikke gått gjennom med teamet.
+      Gitt at søkeren har lastet opp dokumentasjon for den publiserte mangelen "KAR"
+      Når saksbehandleren ved Universitetet i Oslo lagrer en ny kommentar på mangelen "KAR"
+      Og saksbehandleren publiserer manglene i saken
+      Så ser søkeren fortsatt mangelen "KAR"
+      Og søkeren ser den nye kommentaren
+      Og søkeren mottar en ny melding om mangler
 
   # ── 5. Innsyn ────────────────────────────────────────────────
 

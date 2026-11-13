@@ -247,23 +247,25 @@ Egenskap: Gjennomføre plasstildeling
       Når plasstildelingen gjennomføres
       Så får søkeren tilbud på "Sykepleie, høst 2027"
 
-    # AVKLART 2026-10-21 (produkteier): En SPEV-kvote (kvotetype med rangeringsmetoden SPEV) er et venterom for
-    # søkere som får tilbudsgaranti. Den har ingen egne plasser, og tilbudene i den tas fra hovedkvoten. I
-    # plassflyten kan den bare ha hovedkvoten som mottaker, se 10 Regelverk/04 Kvoter/sette_plassflyt.feature.
-    Scenario: Tilbud i SPEV-kvoten tas fra hovedkvoten
-      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Spesiell vurdering (SPEV)" og "Ordinær kvote (ORD)"
+    # AVKLART 2026-10-21 (produkteier): En kvotetype uten plasser, som ventekvoten i
+    # 10 Regelverk/04 Kvoter/opprette_ventekvote.feature, er et venterom for søkere som får tilbudsgaranti.
+    # Den har ingen egne plasser, og tilbudene i den tas fra hovedkvoten. Skrevet om fra SPEV-kvoten 2026-11-11.
+    # AVKLART 2026-11-11 (produkteier): Søkeren blir i ventekvoten, og er kvalifisert og rangert der. Bare plassen
+    # tas fra hovedkvoten, i plasstildelingen. Kvotetypen er ikke med i plassflyten (sette_plassflyt.feature).
+    Scenario: Tilbud i en kvotetype uten plasser tas fra hovedkvoten
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvotene "Ventekvote (VENT)" og "Ordinær kvote (ORD)"
       Og at "Ordinær kvote (ORD)" er hovedkvoten, og det skal gis 100 tilbud i den
       Og at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som gir tilbud
-      Og at søknaden venter i "Spesiell vurdering (SPEV)"
+      Og at søknaden venter i "Ventekvote (VENT)"
       Når plasstildelingen gjennomføres
-      Så får søkeren tilbud i "Spesiell vurdering (SPEV)"
+      Så får søkeren tilbud i "Ventekvote (VENT)"
       Og tilbudet teller som ett av de 100 tilbudene i "Ordinær kvote (ORD)"
 
-    Scenario: SPEV-kvoten har ingen egne plasser
-      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Spesiell vurdering (SPEV)"
-      Og at ingen søkere med tilbudsgaranti venter i "Spesiell vurdering (SPEV)"
+    Scenario: En kvotetype uten plasser har ingen egne plasser
+      Gitt at utdanningstilbudet "Sykepleie, høst 2027" har utdanningskvoten "Ventekvote (VENT)"
+      Og at ingen søkere med tilbudsgaranti venter i "Ventekvote (VENT)"
       Når plasstildelingen gjennomføres
-      Så gis det ingen tilbud i "Spesiell vurdering (SPEV)"
+      Så gis det ingen tilbud i "Ventekvote (VENT)"
 
     Scenario: Tilbudsgaranti som ikke gir tilbud
       Gitt at søknaden til "Ola Nordmann" på "Sykepleie, høst 2027" har en tilbudsgaranti som ikke gir tilbud
