@@ -187,8 +187,9 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren ved den andre organisasjonen ser på GSK-konklusjonen
       Så ser saksbehandleren hvilken organisasjon som endret konklusjonen, og datoen for endringen
 
-    Scenario: Saksbehandleren med tilgang til å se personen ser konklusjonen
-      Gitt at saksbehandleren har tilgang til å se personen, men ikke til å endre personen
+    Scenario: Saksbehandleren som kan se saken, ser konklusjonen
+      # Avklart 13.11.2026: tilgangen følger saken, ikke personen.
+      Gitt at saksbehandleren har tilgang til å se saken, men ikke til å endre saken
       Når saksbehandleren ser på GSK-konklusjonen
       Så ser saksbehandleren GSK-konklusjonen og de tidligere konklusjonene
       Men saksbehandleren ser ikke muligheten til å endre GSK-konklusjonen
