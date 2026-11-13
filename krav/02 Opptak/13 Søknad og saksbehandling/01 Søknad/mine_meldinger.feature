@@ -263,3 +263,14 @@ Egenskap: Se meldinger om egne søknader
       Gitt at søkeren har en søknad i et opptak
       Når søkeren er med i en runde eller plasstildeling i opptaket
       Så mottar søkeren en melding om at svaret på søknaden er klart
+
+  # Avklart 2026-11-10 (R5 i spec-en «Krav til RLS»): i dag kan søkeren endre alle kolonnene i meldingene sine
+  # gjennom API-et. Søkeren skal bare kunne markere en melding som lest.
+  @draft
+  Regel: Søkeren kan ikke endre meldingene
+
+    Scenario: Endring av en melding avvises i API-et
+      Gitt at søkeren har en melding fra behandleren
+      Når søkeren forsøker å endre innholdet i meldingen gjennom API-et
+      Så avvises det
+      Og meldingen er uendret

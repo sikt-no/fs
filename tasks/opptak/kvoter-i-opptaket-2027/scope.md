@@ -14,7 +14,7 @@ Opptaksforvalter ved forvaltende organisasjon setter standard plassflyt og kvote
 ## Mål
 
 - Regelverksforvalter ved organisasjonen som eier regelverkssamlingen kan sette standard plassflyt i regelverkssamlingen: hvilken kvote ledige plasser går videre til, med nøyaktig én hovedkvote og uten sirkulær plassflyt.
-- Regelverksforvalter ved organisasjonen som eier regelverkssamlingen kan sette kvoteprioriteten i regelverkssamlingen: en rangering av alle kvotetypene i regelverkssamlingen, fra 1 til antall kvotetyper.
+- Regelverksforvalter ved organisasjonen som eier regelverkssamlingen kan sette kvoteprioriteten i regelverkssamlingen: en rangering av alle kvotetypene i regelverkssamlingen, der hver kvotetype har sin egen kvoteprioritet.
 - Plassflyten og kvoteprioriteten er en del av regelverket, og settes i regelverkssamlingen, ikke på opptaket (avklart 2026-10-21). Kravene ligger i `10 Regelverk/04 Kvoter`.
 - Kravene beskriver at plassflyten og kvoteprioriteten settes og finnes i regelverkssamlingen (avklart 2026-10-19, samme prinsipp som de andre innstillingene i [scope-opprette-opptak-2027](../opprette-opptak-2027/scope.md)). Det er det som skal lages og testes nå.
 - Leveres før plasstildelingen ([scope-plasstildeling-2027](../plasstildeling-2027/scope.md)), som bruker innstillingene.

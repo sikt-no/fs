@@ -1,6 +1,6 @@
 # Versjoner og release av FS Kravforvaltning
 
-Desktop-appen bygges for macOS av GitHub Actions, og legges ved en GitHub-release sammen med endringsloggen. Appen oppdaterer seg selv fra releasene (se *Automatisk oppdatering*). Windows og Linux er tatt ut av bygget foreløpig (se *Windows og Linux*). Versjonen og endringsloggen styres med [Changesets](https://changesets.dev).
+Desktop-appen bygges for macOS og Windows av GitHub Actions, og legges ved en GitHub-release sammen med endringsloggen. Appen oppdaterer seg selv fra releasene (se *Automatisk oppdatering*). Linux er tatt ut av bygget foreløpig (se *Linux*). Versjonen og endringsloggen styres med [Changesets](https://changesets.dev).
 
 ## Når du endrer appen
 
@@ -28,9 +28,10 @@ En merge til `main` starter ingenting. En release er to kjøringer: den første 
 1. **Finnes det changesets**, lager workflowen versjons-commiten på branchen `changeset-release/main`. Den bumper `version` i `package.json` og `package-lock.json`, skriver endringene inn i `CHANGELOG.md` og sletter changeset-filene. Finnes PR-en *«fs-kravforvaltning: ny versjon»* fra branchen, oppdateres den hver gang workflowen kjøres, med changesetene som er på `main` da. Finnes den ikke, må den lages for hånd (se *Versjons-PR-en*).
 2. **Når den PR-en er merget, kjøres workflowen en gang til.** Da finnes det ingen changesets, og versjonen i `package.json` har ingen release, så
    - lages en draft-release `fs-kravforvaltning-v<versjon>` med endringene for versjonen fra `CHANGELOG.md`
-   - bygges appen for macOS, og filene lastes opp til releasen:
-     - `fs-kravforvaltning-<versjon>-mac-arm64.dmg`, for første installasjon
-     - `fs-kravforvaltning-<versjon>-mac-arm64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra
+   - bygges appen for macOS og Windows, og filene lastes opp til releasen:
+     - `fs-kravforvaltning-<versjon>-mac-arm64.dmg`, for første installasjon på macOS
+     - `fs-kravforvaltning-<versjon>-mac-arm64.zip`, med `.blockmap`, og `latest-mac.yml`, som appen oppdaterer seg fra på macOS
+     - `fs-kravforvaltning-<versjon>-win-x64.exe`, med `.blockmap`, og `latest.yml`. `.exe`-en er både for første installasjon og det appen oppdaterer seg fra på Windows
    - publiseres releasen når filene er lastet opp. Feiler bygget, blir releasen stående som draft, og neste kjøring (eller *Re-run failed jobs*) bygger den ferdig.
 3. En kjøring når versjonen allerede har en publisert release (og ingen changesets), gjør ingenting.
 
@@ -41,10 +42,10 @@ Taggen har prefikset `fs-kravforvaltning-`, fordi repoet først og fremst er kra
 Appen oppdaterer seg selv med [electron-updater](https://www.electron.build/auto-update) (`electron/updater.ts`):
 
 1. Ved oppstart og hver fjerde time henter den releasene i `sikt-no/fs` fra GitHub-API-et, og finner den nyeste publiserte releasen med taggen `fs-kravforvaltning-v<versjon>` (ikke draft og ikke prerelease, `latestReleaseTag` i `shared/appUpdate.ts`). Repoet kan få andre releaser, så «Latest» brukes ikke.
-2. Den leser `latest-mac.yml` i den releasen. Er versjonen nyere enn appen, lastes zip-fila for arkitekturen ned i bakgrunnen (bare endringene, med `.blockmap`, når det går).
+2. Den leser `latest-mac.yml` (macOS) eller `latest.yml` (Windows) i den releasen. Er versjonen nyere enn appen, lastes zip-fila (macOS) eller `.exe`-en (Windows) ned i bakgrunnen (bare endringene, med `.blockmap`, når det går).
 3. Når den er lastet ned, viser appen kortet «FS Kravforvaltning <versjon> er lastet ned» nede til høyre, med «Senere» og «Start på nytt». «Senere» bytter kortet mot knappen «<versjon> Start på nytt» i toppfeltet. Den nye versjonen installeres ved omstart, og ellers når appen avsluttes.
 
-`electron-builder.yml` har en `publish:`-blokk, så electron-builder skriver `latest-mac.yml` og `.blockmap`-filene til `release/`, og `app-update.yml` inn i appen, også med `--publish never`. Workflowen laster dem opp selv med `gh`, men ikke `.dmg.blockmap`, som electron-updater ikke bruker på macOS. GitHub legger selv til *Source code* (zip og tar.gz) på alle releaser, og de kan ikke fjernes. Oppdateringen virker bare når appen er signert, og den nye versjonen må være signert med det samme sertifikatet (Squirrel.Mac sjekker det).
+`electron-builder.yml` har en `publish:`-blokk, så electron-builder skriver `latest-mac.yml`, `latest.yml` og `.blockmap`-filene til `release/`, og `app-update.yml` inn i appen, også med `--publish never`. Workflowen laster dem opp selv med `gh`, men ikke `.dmg.blockmap`, som electron-updater ikke bruker på macOS. GitHub legger selv til *Source code* (zip og tar.gz) på alle releaser, og de kan ikke fjernes. På macOS virker oppdateringen bare når appen er signert, og den nye versjonen må være signert med det samme sertifikatet (Squirrel.Mac sjekker det). På Windows virker den også usignert, men SmartScreen kan advare (se *Signering*).
 
 Releaser fra før 1.2.0 har ikke `latest-mac.yml`, og versjoner fra før 1.2.0 sjekker ikke etter oppdateringer. Brukere med en av dem må installere første versjon med automatisk oppdatering for hånd, fra `.dmg`-en.
 
@@ -58,17 +59,17 @@ npx electron-builder --mac zip --arm64 --publish never -c.directories.output=/tm
 KRAV_UPDATE_URL=http://127.0.0.1:8765 "/tmp/upd/a/mac-arm64/FS Kravforvaltning.app/Contents/MacOS/FS Kravforvaltning" --user-data-dir=/tmp/upd/data
 ```
 
-## Windows og Linux
+## Linux
 
-Windows og Linux er tatt ut av bygget foreløpig. De står kommentert ut, ikke slettet, så de kan tas inn igjen:
+Linux er tatt ut av bygget foreløpig. Den står kommentert ut, ikke slettet, så den kan tas inn igjen:
 
-- `win:` og `linux:` i `electron-builder.yml`
-- radene for `windows-latest` og `ubuntu-latest` i matrisen i `.github/workflows/kravforvaltning-release.yml`, med filene appen oppdaterer seg fra: `*.exe`, `*.blockmap` og `latest.yml` for Windows, og `*.AppImage` og `latest-linux.yml` for Linux
-- linjene om Windows og Linux under *Installasjon* i release-notatet (i samme workflow)
+- `linux:` i `electron-builder.yml`
+- raden for `ubuntu-latest` i matrisen i `.github/workflows/kravforvaltning-release.yml`, med filene appen oppdaterer seg fra: `*.AppImage` og `latest-linux.yml`
+- linja om Linux under *Installasjon* i release-notatet (i samme workflow)
 
-Stegene i workflowen som bare gjelder Linux (`Bygg node-pty`) og ikke-macOS (`Pakk`), står igjen, og trenger ingen endring. `electron/updater.ts` er ikke macOS-spesifikk, så oppdateringen virker på Windows (NSIS) og Linux (AppImage) når byggene kommer tilbake. Windows-appen er ikke signert, så SmartScreen kan advare både ved installasjon og oppdatering (se *Signering*).
+Steget i workflowen som bare gjelder Linux (`Bygg node-pty`), står igjen, og trenger ingen endring. `electron/updater.ts` er ikke macOS-spesifikk, så oppdateringen virker på Linux (AppImage) når bygget kommer tilbake.
 
-Brukere som har installert Windows- eller Linux-versjonen av 1.1.0 eller eldre, får ingen nye versjoner før byggene er tatt inn igjen.
+Windows var også tatt ut fra 1.2.0, og er tatt inn igjen. Brukere som har installert Windows-versjonen av 1.1.0 eller eldre, må installere den nye versjonen for hånd én gang: de gamle versjonene kan ikke oppdatere seg selv. Det samme gjelder Linux-versjonen når den kommer tilbake.
 
 ## Oppsett i GitHub (én gang)
 
@@ -148,7 +149,7 @@ Slett `.p12`-fila etterpå, eller legg den i en passordhvelv. Sertifikatet gjeld
 
 ### Windows
 
-Windows er tatt ut av bygget foreløpig (se *Windows og Linux*). Windows-appen er ikke signert, og SmartScreen advarer mot `.exe`-en (**Mer informasjon → Kjør likevel**). Dette står i release-notatene. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing.
+Windows-appen er ikke signert, og SmartScreen kan advare mot `.exe`-en, både ved installasjon og ved oppdatering (**Mer informasjon → Kjør likevel**). Dette står i release-notatene. Steget `Pakk` i workflowen setter `CSC_IDENTITY_AUTO_DISCOVERY=false`, så electron-builder ikke prøver å signere. Signering krever et kodesigneringssertifikat, for eksempel Azure Trusted Signing (`win.azureSignOptions` i `electron-builder.yml`, og secrets til Azure i workflowen).
 
 ## Bygge lokalt
 

@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptakseier» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-OVO-TEK-002 @wont @draft @scope-opprette-opptak-2027
   ## Denne blir liggende til etter T3 2027, innholdet skal verifiseres og veivalg for den funksjonelle arkitekturen må besluttes
 Egenskap: Svarmeldingsmal for opptak

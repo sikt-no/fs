@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-BEH-BEH-025 @must @in-progress @scope-automatisk-ferdigbehandling @ref-OPT-BEH-BEH-004 @ref-OPT-BEH-BEH-018 @ref-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-020 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035
 Egenskap: Ferdigbehandle en sak
   Som saksbehandler
@@ -174,6 +175,7 @@ Egenskap: Ferdigbehandle en sak
       Når en annen søknad stoppes av den samme feilen i regelverket
       Så får ikke opptaksforvalteren et nytt varsel om feilen
 
+    @implemented
     Scenariomal: <feil i regelverket> stopper <steg>
       Gitt at <feil i regelverket> for søknadsalternativet
       Når søknaden behandles automatisk

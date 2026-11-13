@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-SØK-SØK-009 @must @implemented
 Egenskap: Se detaljer om egen søknad
   Som en søker

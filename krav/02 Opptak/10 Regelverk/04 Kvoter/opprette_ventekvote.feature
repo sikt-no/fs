@@ -13,6 +13,9 @@ Egenskap: Opprette ventekvote for søkere uten poeng
   # og søkere på grunnlagene for realkompetanse og helt uten poeng skal ikke få vist poengene. De interne poengene
   # (intern stipulering) settes opp i rangeringsregelverket med egne poengklasser og poengtyper, og brukes bare
   # internt i saksbehandlingen, for å avgjøre om søkeren når opp i konkurransen uten vanlige konkurransepoeng.
+  # AVKLART 2026-11-11 (produkteier): Poengene skjules på kvotetypen, ikke per grunnlag. Søkeren kan bli vurdert
+  # på samme grunnlag i ventekvoten og i en kvote som viser poengene (opptaksprøvepoeng). Erstatter at poengene
+  # skjules per grunnlag. Innstillingen på grunnlaget finnes fortsatt (grunnlag.feature).
   # AVKLART 2026-11-06 (produkteier): Opptaksforvalter setter opp ventekvoten og innstillingene på kvotetypen.
 
   # Navnene og kodene i scenarioene er bare eksempler.
@@ -21,8 +24,11 @@ Egenskap: Opprette ventekvote for søkere uten poeng
     Gitt at opptaksforvalteren er innlogget
     Og at regelverkssamlingen "UHG2027" er opprettet
 
-  @implemented
+  @deprecated
   Regel: Grunnlagene for søkere uten vanlige konkurransepoeng har skjulte poeng
+    # Avvikles 2026-11-11: ventekvoten skjuler poengene på kvotetypen. Innstillingen på grunnlaget finnes
+    # fortsatt i @OPT-REG-GRU-001, og koden for den skal ikke fjernes. Det er bare oppsettet av ventekvoten
+    # som ikke bruker den lenger.
 
     Scenariomal: Opprette grunnlag med skjulte poeng
       Når opptaksforvalteren oppretter grunnlaget "<grunnlag>"
@@ -34,6 +40,14 @@ Egenskap: Opprette ventekvote for søkere uten poeng
         | grunnlag              |
         | Realkompetanse (REAL) |
         | Uten poeng (HUP)      |
+
+  Regel: Ventekvoten skjuler poengene for søkeren
+    # Søkeren ser poengene i svaret når resultatet av plasstildelingen er publisert, se
+    # 14 Plasstildeling/04 Resultat/publisere_resultat.feature.
+
+    Scenario: Ventekvoten opprettes med skjulte poeng
+      Når opptaksforvalteren angir at poengene i kvotetypen "Ventekvote (VENT)" skal skjules for søkeren
+      Så er kvotetypen "Ventekvote (VENT)" lagret med skjulte poeng
 
   @implemented
   Regel: Interne poeng settes opp i rangeringsregelverket med egne poengklasser og poengtyper
@@ -59,28 +73,28 @@ Egenskap: Opprette ventekvote for søkere uten poeng
     # At søkerne plasseres automatisk i ventekvoten ut fra grunnlaget, står i automatisk_kvoteplassering.feature.
 
     Scenario: Opprette ventekvoten
-      Gitt at grunnlagene "Realkompetanse (REAL)" og "Uten poeng (HUP)" har skjulte poeng
-      Og at poengformelen "Interne poeng (INTERN)" finnes
+      Gitt at poengformelen "Interne poeng (INTERN)" finnes
       Når opptaksforvalteren oppretter kvotetypen "Ventekvote (VENT)" med
         | innstilling         | verdi                                   |
         | Default poengformel | Interne poeng (INTERN)                  |
         | Grunnlag            | Realkompetanse (REAL), Uten poeng (HUP) |
         | Kvotespørsmål       | ingen                                   |
         | Plasser             | uten plasser                            |
+        | Poeng for søkeren   | skjult                                  |
       Så er kvotetypen "Ventekvote (VENT)" opprettet uten plasser
       Og søkere med grunnlaget "Realkompetanse (REAL)" eller "Uten poeng (HUP)" kan plasseres i "Ventekvote (VENT)"
 
   @depends-on-OPT-REG-KVO-003 @depends-on-OPT-REG-KVO-004
-  Regel: Ventekvoten får kvoteprioritet og kobles til hovedkvoten i plassflyten
-    # AVKLART 2026-11-06 (produkteier): Ventekvoten har ingen plasser, så kvoteprioriteten og koblingen til
-    # hovedkvoten i plassflyten har ingen annen virkning enn at kvotetypen følger standardoppsettet for
-    # kvotetyper. En kvotetype kan ikke legges på utdanningstilbud før den har begge.
+  Regel: Ventekvoten får kvoteprioritet, men er ikke med i plassflyten
+    # AVKLART 2026-11-06 (produkteier): Ventekvoten har ingen plasser, så kvoteprioriteten har ingen annen
+    # virkning enn at kvotetypen følger standardoppsettet for kvotetyper. En kvotetype kan ikke legges på
+    # utdanningstilbud før den har kvoteprioritet.
+    # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten, se
+    # sette_plassflyt.feature. Erstatter at ventekvoten kobles til hovedkvoten.
 
-    Scenario: Gi ventekvoten kvoteprioritet og koble den til hovedkvoten
-      Gitt at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Og at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
+    Scenario: Gi ventekvoten kvoteprioritet
+      Gitt at kvotetypen "Ventekvote (VENT)" er opprettet uten plasser
       Når opptaksforvalteren gir "Ventekvote (VENT)" kvoteprioritet 4 i regelverkssamlingen
-      Og opptaksforvalteren kobler "Ventekvote (VENT)" til "Ordinær kvote (ORD)" i standard plassflyt
       Så følger "Ventekvote (VENT)" standardoppsettet for kvotetyper
       Og kan "Ventekvote (VENT)" legges på utdanningstilbudene i opptaket
 

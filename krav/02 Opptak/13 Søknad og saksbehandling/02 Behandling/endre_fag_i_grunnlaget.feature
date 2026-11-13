@@ -11,11 +11,12 @@
 # (legge_inn_vitnemål_manuelt.feature, @OPT-BEH-BEH-037). Ingen av dem kan
 # kuttes.
 #
-# Bygger på L2 og L3. Reglene for beregning og lagring fra L3 («Poengene beregnes fortløpende og lagres når grunnlaget er klart»,
-# flyttet fra L2 30.10.2026) gjelder også her (avklart 03.11.2026, endret
-# 04.11.2026): poengene beregnes på nytt hver gang grunnlaget endres, en
-# endring lagres når saksbehandleren velger å lagre grunnlaget, og endringer
-# hører til vitnemålet de er gjort for. Regelen for leserettighet står i
+# Bygger på L2 og L3. Reglene for beregning og lagring i L2 («Poengene
+# beregnes og lagres når saksbehandleren bruker dem») gjelder også her
+# (avklart 03.11.2026, endret 11.11.2026): saksbehandleren beregner poengene
+# uten å lagre, og grunnlaget kontrolleres, poengene beregnes og alt lagres
+# når saksbehandleren velger å bruke poengene. Endringer hører til
+# vitnemålet de er gjort for. Regelen for leserettighet står i
 # vitnemålsbehandling.md.
 #
 # Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-023, fordi
@@ -145,8 +146,8 @@ Egenskap: Endre fag i grunnlaget
       # Forslaget kom fra FS-klienten, som gir advarselen «Søker har ikke
       # grunnlag som tillater forbedringer» (teknisk beskrivelse av
       # vitnemålsbehandling, G. M. Vangen). Henger sammen med kvoteregelen i
-      # L3 («Tilleggsfag kan ikke velges i poengvarianten for
-      # førstegangsvitnemål»). Teksten hører i
+      # L3 («Varsel om forbedringer i poengvarianten for førstegangsvitnemål
+      # når jeg <handling>»). Teksten hører i
       # endre_fag_i_grunnlaget.design.md.
 
     Scenario: Privatisteksamen erstatter både standpunkt- og eksamenskarakter
@@ -193,7 +194,7 @@ Egenskap: Endre fag i grunnlaget
       Gitt jeg legger til eller endrer en karakter i grunnlaget
       Når jeg legger inn <karakter> som karakter
       Så ser jeg at karakteren må være et heltall fra 1 til 6
-      Og jeg kan ikke lagre grunnlaget før karakteren er rettet
+      Og jeg kan ikke bruke poengene før karakteren er rettet
 
       Eksempler:
         | karakter |
@@ -223,7 +224,7 @@ Egenskap: Endre fag i grunnlaget
     # Fra før kan saksbehandleren overstyre vurderingen av et kravelement
     # (automatisk_kvalifisering.feature, @OPT-BEH-BEH-020) og poengene på
     # saken (automatisk_poengberegning.feature, @OPT-BEH-BEH-018) og på en
-    # poengvariant (L2, «Legge inn <poengtype> selv på en poengvariant»).
+    # poengvariant (L3, «Legge inn <poengtype> selv på en poengvariant»).
 
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
@@ -259,3 +260,23 @@ Egenskap: Endre fag i grunnlaget
       # automatisk_kvalifisering.feature («Saksbehandlerens vurdering av et
       # kravelement endres ikke av automatikken»). Regelen er validert, og
       # hører til L4a på linje med resten av kravet.
+
+  @draft @openquestion @ref-OPT-BEH-BEH-027
+  Regel: Saksbehandleren kan ta et fag ut av kontrollene
+    # Flyttet fra beregne_gsk_fra_vitnemål.feature (@OPT-BEH-BEH-027) 10.11.2026. Regelen hører
+    # til vitnemålsbehandlingen, ikke til den automatiske beregningen: en sak som behandles
+    # helautomatisk, har ingen saksbehandler som kan ta et fag ut av kontrollene (avklart
+    # 06.11.2026). Kontrollmotoren teller bare fag som er med i kontrollene, så
+    # GSK-vitnemålsberegningen (OPT-BEH-BEH-027) følger markeringen.
+    # Kode i dag: kontrollmotoren teller bare aktive fag, men alle fag fra KREG er alltid aktive,
+    # og saksbehandleren kan ikke ta et fag ut.
+    # ÅPNE SPØRSMÅL:
+    # - Skal saksbehandleren kunne ta et fag ut av kontrollene, og hvordan skiller det seg fra
+    #   fagstatusen som kommer fra KREG og NVB (fagstatuskode, for eksempel P for privatist)?
+    #   Spørsmålet stod i OPT-BEH-BEH-027 fra 30.10.2026.
+
+    Scenario: Fag som er tatt ut av kontrollene, oppfyller ikke et delkrav
+      Gitt vitnemålet har samfunnsfag (SAF1001)
+      Og jeg har tatt faget ut av kontrollene
+      Når GSK-vitnemålsberegningen kjører for vitnemålet
+      Så er delkravet for samfunnsfag ikke oppfylt

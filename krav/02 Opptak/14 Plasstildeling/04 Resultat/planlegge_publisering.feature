@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakets forvalter» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-PLA-RES-005 @could @draft @scope-plasstildeling-2027 @depends-on-OPT-PLA-RES-002
 Egenskap: Planlegge publiseringen av resultatet
   Som opptaksforvalter

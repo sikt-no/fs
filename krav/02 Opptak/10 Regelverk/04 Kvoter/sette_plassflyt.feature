@@ -2,7 +2,7 @@
 # GitHub: #216, #598
 @OPT-REG-KVO-003 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette standard plassflyt i regelverkssamlingen
-  Som regelverksforvalter ved organisasjonen som eier regelverkssamlingen
+  Som opptaksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å sette én standard plassflyt i regelverkssamlingen
   slik at ledige plasser i opptak som bruker regelverkssamlingen går videre til riktig utdanningskvote på alle utdanningstilbud i opptakene som bruker regelverkssamlingen.
 
@@ -34,31 +34,40 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
   # Eldre skisse: https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=22410-106608
 
   Bakgrunn:
-    Gitt at regelverksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
+    Gitt at opptaksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
     Og at regelverkssamlingen "UHG 2027" er opprettet
 
   Regel: Standard plassflyt settes i regelverkssamlingen
 
     Scenario: Sette standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
-      Og regelverksforvalter lagrer plassflyten
+      Når opptaksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
+      Og opptaksforvalter lagrer plassflyten
       Så har regelverkssamlingen "UHG 2027" standard plassflyt
 
-  # AVKLART 2026-10-19 (gjeldende skisse): Hovedkvoten velges for seg, og er kvoten ledige plasser til slutt
-  # havner i. Kvotene som er koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten.
+  # AVKLART 2026-11-11 (produkteier): Hovedkvoten er kvoten ledige plasser til slutt havner i. Kvotene som er
+  # koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten. Om hovedkvoten velges for seg eller
+  # regnes ut fra kjedene, er en implementasjonsdetalj, se sette_plassflyt.design.md. Erstatter avklaringen
+  # 2026-10-19 om at hovedkvoten velges for seg.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Er minst én kvote koblet, og plassflyten
+  # ikke går i ring, finnes det alltid en kvote kjedene ender i. Plassflyten er bare uten hovedkvote når ingen
+  # kvoter er koblet, og den kan da lagres. Kvotetypene får varselet om at plassflyten mangler, og kan ikke brukes
+  # før de er koblet. Det gjelder også en regelverkssamling med bare én kvotetype. Scenarioet «Plassflyten kan ikke
+  # lagres uten hovedkvote» er fjernet.
   Regel: Regelverkssamlingen har én hovedkvote
 
-    Scenario: Velge hovedkvote i regelverkssamlingen
-      Når regelverksforvalter velger "Ordinær kvote (ORD)" som hovedkvote i standard plassflyt i regelverkssamlingen
-      Og regelverksforvalter lagrer plassflyten
+    Scenario: Hovedkvoten er kvoten kjedene ender i
+      Gitt at "Førstegangsvitnemål (ORDF)" sender ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt i regelverkssamlingen
+      Og at "Ordinær kvote (ORD)" ikke sender ledige plasser videre
+      Når opptaksforvalter lagrer plassflyten
       Så er "Ordinær kvote (ORD)" hovedkvote i standard plassflyt i regelverkssamlingen
-      Og "Ordinær kvote (ORD)" sender ikke ledige plasser videre
 
-    Scenario: Plassflyten kan ikke lagres uten hovedkvote
-      Gitt at hovedkvoten ikke er valgt i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter lagrer plassflyten
+    Scenario: Plassflyten kan ikke lagres med flere hovedkvoter
+      Gitt at "Førstegangsvitnemål (ORDF)" sender ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt i regelverkssamlingen
+      Og at "Samisk språkkompetanse (SAM)" sender ledige plasser til "Nordnorsk kvote (NN)" i standard plassflyt i regelverkssamlingen
+      Og at verken "Ordinær kvote (ORD)" eller "Nordnorsk kvote (NN)" sender ledige plasser videre
+      Når opptaksforvalter lagrer plassflyten
       Så blir plassflyten ikke lagret
-      Og regelverksforvalter får beskjed om at regelverkssamlingen må ha en hovedkvote
+      Og opptaksforvalter får beskjed om at plassflyten bare kan ha én hovedkvote
 
   # AVKLART 2026-10-19 (produkteier): Utdanningstilbudene bruker bare noen av kvotene, og flyten skal kunne
   # gjenbrukes, så alle kvotetypene må være knyttet inn i flyten før de kan brukes. Teksten i den gjeldende skissen
@@ -71,43 +80,35 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
     Scenario: Varsel om kvotetyper som ikke er koblet til plassflyten
       Gitt at regelverkssamlingen "UHG 2027" har kvotetypen "Idrett (IDRETT)"
       Og at kvotetypen "Idrett (IDRETT)" ikke er koblet til plassflyten
-      Når regelverksforvalter lagrer plassflyten
+      Når opptaksforvalter lagrer plassflyten
       Så er plassflyten lagret
-      Og regelverksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at plassflyten mangler
+      Og opptaksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at plassflyten mangler
 
-  # AVKLART 2026-11-06 (produkteier): Kravet bruker ikke SPEV som eksempel. Reglene gjelder en kvotetype uten
-  # plasser, som ventekvoten i opprette_ventekvote.feature. Den har ingen egne plasser, og tilbudene i den tas fra
-  # hovedkvoten. Hva plasstildelingen gjør, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  # Erstatter avklaringene 2026-10-21 og 2026-10-26 om SPEV-kvoten (kvotetype med rangeringsmetoden SPEV).
-  Regel: En kvotetype uten plasser kan bare ha hovedkvoten som mottaker
+  # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten. Den har ingen plasser
+  # å avgi, og tilbudene i den tas fra hovedkvoten. Den sender ikke ledige plasser videre, kan ikke være
+  # hovedkvote, og kan ikke ta imot ledige plasser. Erstatter avklaringen 2026-11-06 om at kvotetypen kobles
+  # til hovedkvoten. Kravet bruker ikke SPEV som eksempel, se opprette_ventekvote.feature.
+  # Hva plasstildelingen gjør, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Scenarioet om at kvotetypen ikke sender
+  # ledige plasser videre er fjernet. Kvotetypen har ingen plasser å sende, så en mottaker ville ikke hatt noen
+  # virkning. At den ikke har mottaker i skjermbildet, står i sette_plassflyt.design.md.
+  Regel: En kvotetype uten plasser er ikke med i plassflyten
 
-    Scenario: Koble en kvotetype uten plasser til hovedkvoten
+    Scenario: En kvotetype uten plasser kan ikke være hovedkvote
       Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
-      Og at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter kobler "Ventekvote (VENT)" til "Ordinær kvote (ORD)"
-      Og regelverksforvalter lagrer plassflyten
-      Så sender "Ventekvote (VENT)" ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt
-
-    Scenario: En kvotetype uten plasser kan ikke kobles til en annen kvote enn hovedkvoten
-      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
-      Og at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter vil koble "Ventekvote (VENT)" til "Førstegangsvitnemål (ORDF)"
-      Så kan regelverksforvalter ikke koble "Ventekvote (VENT)" til "Førstegangsvitnemål (ORDF)"
-      Og regelverksforvalter ser at en kvotetype uten plasser bare kan kobles til hovedkvoten
-
-  # AVKLART 2026-11-06 (produkteier): En kvotetype uten plasser har ingen egne plasser, og tilbudene i den tas fra
-  # hovedkvoten. Den kan derfor ikke være hovedkvote, og ingen kvote kan sende ledige plasser til den.
-  Regel: En kvotetype uten plasser kan ikke være hovedkvote eller mottaker for andre kvoter
-
-    Scenario: En kvotetype uten plasser kan ikke velges som hovedkvote
-      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
-      Når regelverksforvalter velger hovedkvote i standard plassflyt i regelverkssamlingen
-      Så kan regelverksforvalter ikke velge "Ventekvote (VENT)" som hovedkvote
+      Når opptaksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
+      Så kan "Ventekvote (VENT)" ikke bli hovedkvote
 
     Scenario: En kvote kan ikke sende ledige plasser til en kvotetype uten plasser
       Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
-      Når regelverksforvalter velger mottaker for "Førstegangsvitnemål (ORDF)" i standard plassflyt
-      Så kan regelverksforvalter ikke velge "Ventekvote (VENT)" som mottaker
+      Når opptaksforvalter velger mottaker for "Førstegangsvitnemål (ORDF)" i standard plassflyt
+      Så kan opptaksforvalter ikke velge "Ventekvote (VENT)" som mottaker
+
+    Scenario: Ingen varsel om plassflyt for en kvotetype uten plasser
+      Gitt at regelverkssamlingen "UHG 2027" har kvotetypen "Ventekvote (VENT)" uten plasser
+      Når opptaksforvalter lagrer plassflyten
+      Så er plassflyten lagret
+      Og opptaksforvalter ser ikke et varsel på kvotetypen "Ventekvote (VENT)" om at plassflyten mangler
 
   Regel: Plassflyten kan ikke gå i ring
 
@@ -116,6 +117,6 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
 
     Scenario: Sirkulær plassflyt
       Gitt at ledige plasser i "Samisk språkkompetanse (SAM)" flyter til "Nordnorsk kvote (NN)" i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter setter at ledige plasser i "Nordnorsk kvote (NN)" skal flyte til "Samisk språkkompetanse (SAM)"
+      Når opptaksforvalter setter at ledige plasser i "Nordnorsk kvote (NN)" skal flyte til "Samisk språkkompetanse (SAM)"
       Så blir plassflyten ikke lagret
-      Og regelverksforvalter får beskjed om at plassflyten ikke kan gå i ring
+      Og opptaksforvalter får beskjed om at plassflyten ikke kan gå i ring

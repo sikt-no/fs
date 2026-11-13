@@ -241,6 +241,12 @@ Egenskap: Automatiske tilleggspoeng
     # endres (OPT-BEH-BEH-022, avklart 04.11.2026), så de står ikke tomme til
     # saksbehandleren beregner dem. At tilleggspoengene ikke avhenger av poengene fra
     # vitnemålet, er dekket av «Søker uten elektronisk vitnemål får tilleggspoeng».
+    #
+    # Endret 11.11.2026: avklaringen 04.11.2026 er erstattet. Saksbehandleren beregner
+    # poengene fra vitnemålet med en egen handling (OPT-BEH-BEH-004, «Poengene beregnes og
+    # lagres når saksbehandleren bruker dem»). Poengene står ikke tomme før saksbehandleren
+    # har beregnet: de sist lagrede poengene vises uendret (OPT-BEH-BEH-004, «De lagrede
+    # poengene vises til jeg beregner på nytt»), så scenarioet trengs fortsatt ikke.
 
   @implemented
   Regel: Saksbehandleren kan overstyre poeng automatikken har satt

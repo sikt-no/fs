@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 #
 # Grovutkast 21.10.2026. Kildene er samlet, men ingen regel er gjennomgått med
 # produkteier eller Team Puff. Reglene bygger på dagens FS-klient, koden i ny
@@ -168,7 +169,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så har fagkravet Fysikk 1 ingen karakter
       Og saksbehandleren ser at fagkravet må vurderes manuelt
 
-  @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001
+  @depends-on-OPT-BEH-BEH-004 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementene vurderes bare mot ett entydig vitnemål
     # Har søkeren flere vitnemål, velger saksbehandleren vitnemålet først (OPT-BEH-BEH-039).
 
@@ -185,7 +186,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkerens eneste elektroniske dokument er et kompetansebevis                                              |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
-    @implemented
     # Avklart 06.11.2026: kompetansebevis kommer ikke fra KREG, så raden om kompetansebevis er tatt ut.
     Scenariomal: Ingen automatisk vurdering når <grunn>
       Gitt at <grunn>
@@ -198,7 +198,6 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
         | søkeren har flere elektroniske vitnemål som ikke er annullert, og saksbehandleren ikke har valgt vitnemål |
         | søkeren ikke har noe elektronisk vitnemål                                                                |
 
-    @implemented
     Scenario: Opplastet kompetansebevis stopper ikke vurderingen
       # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
       # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
@@ -243,7 +242,8 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Og søkeren er ikke kvalifisert på grunnlaget "PRA"
 
     # Avklart 30.10.2026: i den automatiske vurderingen avgjøres kvalifiseringen per grunnlag.
-    # Om den også må avgjøres per poengvariant, er et spørsmål i OPT-BEH-BEH-022.
+    # Avklart 05.11.2026: også i vitnemålsbehandleren avgjøres kvalifiseringen per grunnlag,
+    # ikke per poengvariant (OPT-BEH-BEH-022, «Kravelementene vurderes per grunnlag»).
 
   @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kravelementene vurderes i den automatiske behandlingen
@@ -261,6 +261,37 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Når søknaden behandles automatisk
       Så er kravelementene ikke vurdert
       Og resten av den automatiske behandlingen er gjennomført
+
+  @draft @openquestion @ref-OPT-BEH-BEH-022
+  Regel: Kravelementene vurderes i samme bilde som fagene
+    # ÅPNE SPØRSMÅL:
+    # - Skal kravelementene kunne vurderes i samme bilde som fagene i
+    #   vitnemålsbehandleren, under «2. Grunnlag», så saksbehandleren slipper
+    #   å klikke fram og tilbake mellom steg 2 og steg 3? Det gjelder både
+    #   elektroniske og manuelt innlagte vitnemål, og «3. Spesielle
+    #   opptakskrav» må vise det som er vurdert i steg 2. Innspill fra Ingrid
+    #   Grimstad Helset på siden med åpne spørsmål for vitnemålsbehandlingen
+    #   05.11.2026, og teamet bak vitnemålsbehandleren er enig.
+    # - Skissen «Steg 2 Grunnlag – behandle e-vitnemål» (Figma, FS-Admin –
+    #   Seksjon Opptak) har allerede en grå seksjon «Spesielle opptakskrav»
+    #   nederst i steg 2, under fagene. Grått betyr at den ikke hører til
+    #   vitnemålsbehandleren. Hvem lager den, og skal den stå der eller
+    #   lenger opp?
+    # AVKLART 11.11.2026: når poengvariantene på samme grunnlag har ulikt
+    # fagvalg, kontrolleres kravelementene mot vitnemålet og fagene i
+    # poengvarianten saksbehandleren lagrer (OPT-BEH-BEH-022, «Kravelementene
+    # kontrolleres mot fagene i poengvarianten som lagres»).
+
+    Scenario: Vurdere kravelementene i grunnlaget
+      Gitt saksbehandleren har lagt et vitnemål til grunn i vitnemålsbehandleren
+      Når saksbehandleren ser grunnlaget på søknaden
+      Så ser saksbehandleren kravelementene for hvert grunnlag sammen med fagene
+      Og saksbehandleren kan vurdere kravelementene uten å gå til spesielle opptakskrav
+
+    Scenario: Spesielle opptakskrav viser vurderingen fra grunnlaget
+      Gitt saksbehandleren har vurdert et kravelement i grunnlaget
+      Når saksbehandleren går til spesielle opptakskrav
+      Så ser saksbehandleren vurderingen fra grunnlaget
 
   Regel: Saksbehandlerens vurdering av et kravelement endres ikke av automatikken
     # Kravelementet låses når saksbehandleren registrerer en karakter eller en
@@ -310,6 +341,7 @@ Egenskap: Automatisk vurdering av spesielle opptakskrav
       Så er fagkravet Fysikk 1 vurdert automatisk
       Og vurderingen av Matematikk R1 er uendret
 
+    @implemented
     Scenario: Nullstilt kravelement kan vurderes automatisk igjen
       Gitt at saksbehandleren har satt at fagkravet Norsk er oppfylt, med karakteren 4
       Når saksbehandleren nullstiller karakteren og vurderingen av fagkravet Norsk
