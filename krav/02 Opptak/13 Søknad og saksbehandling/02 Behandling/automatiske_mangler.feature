@@ -89,12 +89,14 @@ Egenskap: Automatiske mangler
         | den automatiske behandlingen |
         | saksbehandleren              |
 
+    @implemented
     Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene
       Gitt at saken har en automatisk mangeltekst
       Og at saksbehandleren har registrert en mangel
       Når saksbehandleren åpner manglene i saken
       Så ser saksbehandleren den automatiske mangelteksten og mangelen saksbehandleren har registrert
 
+    @implemented
     Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet
       # Avklart 2026-11-02: tekstene publiseres når saken blir ferdig behandlet, hvis
       # saksbehandleren ikke har publisert dem før.
