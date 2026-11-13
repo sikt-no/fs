@@ -432,7 +432,7 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
     # Om en konklusjon automatikken satte med KLY eller RFA fordi løpet manglet i listen over løp,
     # skal rettes når løpet legges inn, er åpent. Se regelen «Grunnlagskoden rettes når løpet er
@@ -442,7 +442,6 @@ Egenskap: Automatisk GSK-konklusjon
     # En konklusjon fra et tidligere opptak erstatter den ikke. En positiv konklusjon overskrives
     # aldri, heller ikke når vitnemålet den bygger på, er annullert.
 
-    @implemented
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren ikke har noen positiv GSK-konklusjon fra et tidligere opptak
@@ -450,14 +449,12 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden ingen GSK-konklusjon
       Og generell studiekompetanse vurderes manuelt
 
-    @implemented
     Scenario: Positiv konklusjon på søknaden overskrives ikke
       Gitt at søknaden har en positiv GSK-konklusjon, satt av en hvilken som helst organisasjon i opptaket
       Og at søkeren har et vitnemål som gir generell studiekompetanse
       Når vitnemålet importeres fra KREG
       Så er GSK-konklusjonen på søknaden uendret
 
-    @implemented
     Scenario: Systemet setter aldri en negativ konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
       Når søknaden opprettes

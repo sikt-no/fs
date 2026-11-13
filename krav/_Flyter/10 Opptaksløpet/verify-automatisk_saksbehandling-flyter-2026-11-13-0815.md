@@ -26,12 +26,12 @@ Stiene er forkortet:
 
 Tallene for hele kjøringen, regnet ut fra tabellene under.
 
-- Scenarioer: 26 funnet, 11 ikke funnet, 0 usikker, av 37
+- Scenarioer: 27 funnet, 10 ikke funnet, 0 usikker, av 37
 - Mangler: fs-plattform 6 scenarioer, fs-admin 4, min-kompetanse ikke med i kjøringen
-- Forslag: 0 kan leveres, 0 delvis levert, 2 kan slettes, 5 kan leveres når det er avklart, 4 blir stående
+- Forslag: 0 kan leveres, 0 delvis levert, 2 kan slettes, 4 kan leveres når det er avklart, 4 blir stående
 - Tilgang og datakonsistens: ingen rader (bare flyter og avhengigheter i omfanget)
 - Regler i koden uten scenario: 0
-- Endringer gjort: 3 krav fikk ny status (039 `@in-progress`, 029 og 032 `@implemented`), 10 deler fikk `@implemented` og 2 `@deprecated` (031, 029), og 6 krav ble rettet (019, 020, 025, 026, 028 og AUT-001)
+- Endringer gjort: 3 krav fikk ny status (039 `@in-progress`, 029 og 032 `@implemented`), 11 deler fikk `@implemented` og 2 `@deprecated` (031, 029), og 6 krav ble rettet (019, 020, 025, 026, 028 og AUT-001)
 - Åpne spørsmål: 1 regel og 3 scenarioer i gating-settet, 0 utenfor gating (`@draft`)
 
 ## Forslag til endringer
@@ -40,8 +40,7 @@ Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis lever
 
 **Kan leveres når det er avklart**
 
-- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature`): kan få `@implemented` når de seks fasene som ikke er levert, er levert. Alle overleveringene i de leverte fasene er funnet (12/12) `[P ✓ · A –]`. Det som holder fasene igjen, står i kravene under.
-- `@OPT-BEH-BEH-015` — Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/automatisk_gsk_konklusjon.feature:435`): kan få `@implemented` når «Automatikken kan sette en ny konklusjon etter annulleringen» (`:462`) er bygget `[P ✗]`: `P/autosak/gsk/GskVedtakAutoService.java:69-71` og `P/soknad/gskvedtak/GskVedtakConditions.java:14-15` regner `KVALIFISERT_MEN_ANNULLERT` som gjeldende konklusjon, så automatikken setter ingen ny · mangler i fs-plattform (1). Holder igjen AUT-fasen «Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG».
+- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature`): kan få `@implemented` når de to fasene som ikke er levert, er levert. Alle overleveringene i de leverte fasene er funnet (12/12) `[P ✓ · A –]`. Det som holder fasene igjen, står i kravene under.
 - `@OPT-BEH-BEH-036` — Automatiske mangler, de tre reglene AUT bygger på (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/automatiske_mangler.feature:22`, `:136`, `:203`): kan få `@implemented` på reglene når disse er bygget eller avklart (17/28 funnet) `[P ~ · A ✗]`: «Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene» (`:71`, usikker: navnet på kravlisten skrives ikke, `P/regelverk/kvalifisering/ManglendeKravTekstService.java:22-31`; fs-admin viser teksten som den er), «Saken får ikke mangel når ingen mangelkode er merket» (`:234`) og «Opptaksforvalteren får varselet bare første gang» (`:240`) (varselet finnes ikke), og saksloggen i «Alle sakene i søknaden får mangel …» (`:227`), «Mangelen slettes når søkeren endrer søknaden» (`:257`) og «Mangelen sjekkes ut når saken er behandlet helautomatisk» (`:279`) (V480). «Saksbehandleren ser de automatiske mangeltekstene …» (`:92`) og «Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet» (`:98`) fikk `@implemented` i denne kjøringen. Min kompetanse er sjekket i GitLab: to scenarioer er fortsatt usikre, «Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet» (`:120`, teksten kan slettes) og «Søkeren ser den automatiske mangelen i Min kompetanse» (`:246`, vises ikke før saken er Under behandling) · mangler i fs-plattform (6), fs-admin (2). Holder igjen AUT-fasene «Saken får mangeltekster …» og «Mangelen for GSK som fullføres i vår …».
 - `@OPT-BEH-BEH-033` — Regel: Jobbplanleggeren starter jobbene i opptaket (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/kjøre_jobbene_i_opptak.feature:28`): kan få `@implemented` når raden «importen av resultater fra høyere utdanning» i «Jobbplanleggeren starter <jobb>» (`:30`) er bygget `[P ~]`: ingen planlagt jobb, og `P/vitnemalsportalen/VitnemalsportalenService.java:38,57` har ingen kallere · mangler i fs-plattform (1). Holder igjen VIT-fasen «Jobbplanleggeren starter importen av VGS-vitnemål fra KREG», selv om KREG-jobben finnes (se `## Andre funn`).
 - `@OPT-BEH-BEH-039` — Regel: Grunnlaget, poengene og kravelementene avgjøres på vitnemålet saksbehandleren har valgt (`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/behandle_automatisk_på_valgt_vitnemål.feature:66`): kan få `@implemented` når «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:93`) er bygget eller tatt ut av regelen `[P ✗ · A ✗]`. De tre andre scenarioene i regelen fikk `@implemented` i denne kjøringen (se `## Endringer`) · mangler i fs-plattform (1), fs-admin (1). Holder igjen VAL-fasen «Resten av saken …» sammen med `@FLY-OPT-AUT-001`, og to faser i SAM.
@@ -54,7 +53,7 @@ Hva som kan endres i kravene, ut fra resultatene. *Kan leveres* og *Delvis lever
 
 **Blir stående**
 
-- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`@planned`, 17/20 funnet): 15 av 18 faser levert. 3 scenarioer er ikke funnet fordi fasen ikke er levert: «Søknaden får GSK-konklusjonen …», «Saken får mangeltekster …» og «Mangelen for GSK som fullføres i vår …».
+- `@FLY-OPT-AUT-001` — Automatisk saksbehandling (`@planned`, 18/20 funnet): 16 av 18 faser levert. 2 scenarioer er ikke funnet fordi fasen ikke er levert: «Saken får mangeltekster …» og «Mangelen for GSK som fullføres i vår …».
 - `@FLY-OPT-VIT-001` — Importere VGS-vitnemål fra KREG (`@planned`, 8/9 funnet): 6 av 7 faser levert. «Importen starter når jobbplanleggeren kjører jobben» er ikke funnet: fasen er ikke levert, fordi `@OPT-BEH-BEH-033` er `@planned`.
 - `@FLY-OPT-VAL-001` — Automatisk saksbehandling på vitnemålet saksbehandleren velger (`@draft`, 1/2 funnet): 1 av 2 faser levert. «Saken er ferdig behandlet på det valgte vitnemålet» venter på `@FLY-OPT-AUT-001` og regelen om grunnlag, poeng og kravelementer i `@OPT-BEH-BEH-039`. Flyten er `@draft`, og må valideres med `fs-krav` før den kan få ny status.
 - `@FLY-OPT-SAM-001` — Automatisk saksbehandling på sammensatt vitnemål (`@draft`, 0/6 funnet): 0 av 4 faser levert, og én fase mangler krav. Sammensatt vitnemål finnes ikke i koden · mangler i fs-plattform (5), fs-admin (4).
@@ -86,6 +85,8 @@ Det som er endret i kravfilene og i resultatet: i kjøringen (det sikre, når br
 | `@OPT-BEH-BEH-036` | Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene | `ikke funnet` → `funnet` | fs-admin !3421 ble merget 09:11 (e76a4e3fc, det samme som ble kontrollert på branchen). Kravfila er ikke endret |
 | `@OPT-BEH-BEH-036` | Scenario: Saksbehandleren kan ikke endre en automatisk mangeltekst | `usikker` → `funnet` | Samme: teksten vises nå, skrivebeskyttet. Kravfila er ikke endret |
 | `@OPT-BEH-BEH-029` | Scenario: Saksloggen viser endring av behandlingsstatus når <årsak> | ingen | Brukeren spurte om !3421 løser saksloggen. Den gjør ikke det: ingen kode skriver saksloggen etter V480 |
+| `@OPT-BEH-BEH-015` | Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes | `@implemented` på regelen (fra scenarioene) | #1031 (avklart 13.11.2026) la til tre scenarioer og én scenariomal, og fs-plattform !6761 (STEK-249) ble merget samme dag. Alle sju scenarioene er funnet og bekreftet av `fs-verify-kontroll` |
+| `@FLY-OPT-AUT-001` | Scenario: Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG | `ikke funnet` → `funnet` | Fasen er levert etter taggingen over, og overleveringen er funnet |
 
 Ellers var det ingenting som var sikkert levert og manglet tagg: alt som er funnet og bekreftet av kontrollen, er allerede `@implemented` i kravfilene.
 
@@ -95,7 +96,7 @@ Hvor mange scenarioer som er funnet i hvert krav, og hvor mange som mangler i hv
 
 | Feature-ID | Egenskap | Funnet | Mangler i P | Mangler i A | Mangler i M | Hva som gjenstår |
 | --- | --- | --- | --- | --- | --- | --- |
-| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 17/20 | 0 | – | – | 3 faser venter på kravene de bygger på (3 scenarioer, «fasen er ikke levert») |
+| `@FLY-OPT-AUT-001` | Automatisk saksbehandling | 18/20 | 0 | – | – | 2 faser venter på kravene de bygger på (2 scenarioer, «fasen er ikke levert») |
 | `@FLY-OPT-VIT-001` | Importere VGS-vitnemål fra KREG | 8/9 | 0 | – | – | Fasen om jobbplanleggeren venter på `@OPT-BEH-BEH-033` |
 | `@FLY-OPT-VAL-001` | Automatisk saksbehandling på vitnemålet saksbehandleren velger | 1/2 | 0 | 0 | – | Fasen «Resten av saken …» venter på `@FLY-OPT-AUT-001` og regelen om grunnlag, poeng og kravelementer i `@OPT-BEH-BEH-039` |
 | `@FLY-OPT-SAM-001` | Automatisk saksbehandling på sammensatt vitnemål | 0/6 | 6 | 4 | – | Sammensatt vitnemål finnes ikke, og én fase mangler krav |
@@ -112,7 +113,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | --- | --- | --- | --- |
 | `@FLY-OPT-AUT-001` | Søkerens resultater importeres fra KREG når saken er opprettet | `@OPT-BEH-BEH-030` (`@implemented`) | ja |
 | `@FLY-OPT-AUT-001` | Den automatiske behandlingen starter når søkerens resultater er importert | `@OPT-BEH-BEH-032` (`@implemented`) | ja |
-| `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Automatikken setter bare positive konklusjoner … ikke levert: «Automatikken kan sette en ny konklusjon etter annulleringen»), `@OPT-BEH-BEH-027` (`@implemented`) | nei |
+| `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Automatikken setter bare positive konklusjoner … levert, satt 13.11.2026 etter fs-plattform !6761), `@OPT-BEH-BEH-027` (`@implemented`) | ja |
 | `@FLY-OPT-AUT-001` | Den automatiske behandlingen setter GSK-konklusjonen der den mangler | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører levert) | ja |
 | `@FLY-OPT-AUT-001` | Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Vitnemålet gir GSK når det har GSK OK fra KREG levert), `@OPT-BEH-BEH-025` (`@in-progress`, Regel: Bare saker der søkeren har ett vitnemål … levert) | ja |
 | `@FLY-OPT-AUT-001` | To identiske vitnemål reknes som ett vitnemål | `@OPT-BEH-BEH-025` (`@in-progress`, Regel: Bare saker der søkeren har ett vitnemål, og vitnemålet gir GSK, behandles helautomatisk levert; scenarioet «To identiske vitnemål regnes som ett vitnemål» lagt til i denne kjøringen) | ja |
@@ -143,7 +144,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | `@FLY-OPT-SAM-001` | Søknaden får ikke grunnlaget for førstegangsvitnemål på det sammensatte vitnemålet | `@OPT-BEH-BEH-019` (`@in-progress`, Regel: Grunnlaget velges ut fra egenskapene … levert), `@OPT-BEH-BEH-039` (`@planned`) | nei |
 | `@FLY-OPT-SAM-001` | Resten av saken behandles som i den automatiske saksbehandlingen | `@FLY-OPT-AUT-001` (`@planned`) | nei |
 
-`@FLY-OPT-AUT-001`: 15 av 18 faser levert (fasen med `@wont` er ikke telt med).
+`@FLY-OPT-AUT-001`: 16 av 18 faser levert (fasen med `@wont` er ikke telt med).
 `@FLY-OPT-VIT-001`: 6 av 7 faser levert.
 `@FLY-OPT-VAL-001`: 1 av 2 faser levert.
 `@FLY-OPT-SAM-001`: 0 av 4 faser levert.
@@ -157,7 +158,7 @@ Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avh
 | `@FLY-OPT-AUT-001` | `@FLY-OPT-SAK-001` Saksbehandlertildeling | 1 | `@planned` | – | ikke levert; bare status (handler ikke om automatikken) |
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-030` Importere resultater fra KREG | 1 | `@implemented` | 16/16 | ankrene: fire regler |
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` Starte automatisk behandling | 1 | `@implemented` (var `@in-progress`) | 2/2 | ankrene: to regler |
-| `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` Automatisk GSK-konklusjon | 1 | `@in-progress` | 40/41 | ankrene: sju regler |
+| `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` Automatisk GSK-konklusjon | 1 | `@in-progress` | 45/45 | ankrene: sju regler; regelen «Automatikken setter bare positive konklusjoner …» fikk tre nye scenarioer og én scenariomal i #1031 |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` Beregne GSK fra vitnemål | 1 | `@implemented` | 27/27 | hele kravet |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` Ferdigbehandle en sak | 1 | `@in-progress` | 7/8 | ankrene: to regler; 1 usikker (Min kompetanse) |
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` Automatisk grunnlag | 1 | `@in-progress` | 14/14 | ankrene: tre regler |
@@ -235,12 +236,15 @@ Stiforkortelser i tabellen som ikke står over: `SYNC` = `P/saksbehandling/GskFu
 | `@OPT-BEH-BEH-015` | Konklusjon med annullering fram i tid gjenbrukes ikke | funnet | P ✓ · A – — TidligereGskKonklusjonService.java:115,167 |
 | `@OPT-BEH-BEH-015` | Konklusjon som bygger på et annullert vitnemål gjenbrukes ikke | funnet | P ✓ · A – — TidligereGskKonklusjonService.java:118,191-197 |
 | `@OPT-BEH-BEH-015` | Ingen grunnlag for generell studiekompetanse | funnet | P ✓ · A – — GskVedtakAutoService.java:92 |
-| `@OPT-BEH-BEH-015` | Konklusjon på søknaden overskrives ikke | funnet | P ✓ · A – — GskVedtakAutoService.java:245-252 |
+| `@OPT-BEH-BEH-015` | Positiv konklusjon på søknaden overskrives ikke | funnet | P ✓ · A – — autosak/gsk/GskVedtakAutoService.java:63-66,94-109,164-165 |
 | `@OPT-BEH-BEH-015` | Systemet setter aldri en negativ konklusjon | funnet | P ✓ · A – — GskVedtakAutoService.java:54,343 |
-| `@OPT-BEH-BEH-015` | Automatikken kan sette en ny konklusjon etter annulleringen | ikke funnet | P ✗ · A – — GskVedtakAutoService.java:69-71 + soknad/gskvedtak/GskVedtakConditions.java:14-15,84-86: KVALIFISERT_MEN_ANNULLERT regnes som gjeldende og stopper automatikken; behandleEtterImport (L108-113) erstatter bare GJENBRUK/KVALIFISERT. Søkt «KVALIFISERT_MEN_ANNULLERT», «annuller» i autosak/gsk og i !6714 |
+| `@OPT-BEH-BEH-015` | Automatikken kan sette en ny konklusjon etter annulleringen | funnet | P ✓ · A – — GskVedtakAutoService.java:82-83,126,157-166 (erstatter `KVALIFISERT_MEN_ANNULLERT`, !6761); kalt fra AutomatiskSaksbehandlingService.java:136,247 |
+| `@OPT-BEH-BEH-015` | Vitnemålet erstatter en <konklusjon> konklusjon | funnet | P ✓ · A – — GskVedtakAutoService.java:94-101,157-166,375-377; GskKonklusjonEtterImportService.java:53-60,99 |
+| `@OPT-BEH-BEH-015` | En positiv konklusjon blir stående når vitnemålet den bygger på, er annullert | funnet | P ✓ · A – — GskVedtakAutoService.java:63-66,100,108-109; KregImportService.java:135-145 |
+| `@OPT-BEH-BEH-015` | En konklusjon fra et tidligere opptak erstatter ikke en negativ konklusjon | funnet | P ✓ · A – — GskVedtakAutoService.java:134-137 |
 | `@OPT-BEH-BEH-015` | Søknaden får konklusjonen fra vitnemålet i den automatiske behandlingen | funnet | P ✓ · A – — AutomatiskSaksbehandlingService.java:136,240-247 |
 | `@OPT-BEH-BEH-015` | Søknaden får konklusjonen fra et tidligere opptak i den automatiske behandlingen | funnet | P ✓ · A – — GskVedtakAutoService.java:86-91 |
-| `@OPT-BEH-BEH-015` | Konklusjonen overskrives ikke i den automatiske behandlingen | funnet | P ✓ · A – — GskVedtakAutoService.java:69-71 |
+| `@OPT-BEH-BEH-015` | En positiv konklusjon overskrives ikke i den automatiske behandlingen | funnet | P ✓ · A – — GskVedtakAutoService.java:63-64,82-83,108-109 |
 | `@OPT-BEH-BEH-015` | Automatisk konklusjon står når vitnemålet annulleres | funnet | P ✓ · A – — saksbehandling/AnnullertVitnemaalService.java:49-81, 24-30 |
 | `@OPT-BEH-BEH-015` | Gjenbrukt konklusjon står når vitnemålet annulleres | funnet | P ✓ · A – — GskVedtakAutoService.java:288; AnnullertVitnemaalService.java:156-163 |
 | `@OPT-BEH-BEH-015` | Konklusjon i avsluttet opptak trekkes ikke tilbake | funnet | P ✓ · A – — AnnullertVitnemaalService.java:24-30 (NB: tagger også saker i avsluttede opptak) |
@@ -422,7 +426,6 @@ Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i ko
 
 | Feature-ID | Scenario | Resultat | Bevis |
 | --- | --- | --- | --- |
-| `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-015` «Automatikken kan sette en ny konklusjon etter annulleringen» (automatisk_gsk_konklusjon.feature:462), ikke funnet i koden: `P/autosak/gsk/GskVedtakAutoService.java:69-71` stopper på en annullert konklusjon (`KVALIFISERT_MEN_ANNULLERT`). Overleveringen selv finnes: `P/autosak/KregImportService.java:98` → `GskKonklusjonEtterImportService` |
 | `@FLY-OPT-AUT-001` | Saken får mangeltekst for kravelementet vitnemålet ikke oppfyller | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-036` «Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene» (automatiske_mangler.feature:71), usikker: navnet på kravlisten skrives ikke (`P/regelverk/kvalifisering/ManglendeKravTekstService.java:22-31`); «Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene» (:92), funnet etter at !3421 ble merget 09:11 (`A/SakDrawer/components/ManglerCard/ManglerCard.tsx:217`), men uten statustag; «Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet» (:98), usikker: fs-plattform publiserer, Min kompetanse ikke sjekket |
 | `@FLY-OPT-AUT-001` | Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-036` «Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår» (automatiske_mangler.feature:227), ikke funnet: saksloggen viser ikke grunnen (V480); «Saken får ikke mangel når ingen mangelkode er merket» (:234), ikke funnet: varselet til opptaksforvalteren finnes ikke; «Opptaksforvalteren får varselet bare første gang» (:240), ikke funnet; «Søkeren ser den automatiske mangelen i Min kompetanse» (:246), usikker: vises ikke mens saken er ubehandlet (`P-mig/V514__behandlingsstatus_fjern_ferdig_behandlet.sql:16-20`); «Mangelen slettes når søkeren endrer søknaden» (:257), ikke funnet: saksloggen (V480); «Mangelen sjekkes ut når saken er behandlet helautomatisk» (:279), ikke funnet: utsjekkingen finnes (`P/autosak/FerdigbehandlingService.java:69,222-236`), men ikke saksloggen |
 | `@FLY-OPT-VIT-001` | Importen starter når jobbplanleggeren kjører jobben | ikke funnet | P – · A – — fasen er ikke levert. Ikke levert: `@OPT-BEH-BEH-033` er `@planned`, og «Jobbplanleggeren starter <jobb>» (kjøre_jobbene_i_opptak.feature:30) er ikke funnet: raden «importen av resultater fra høyere utdanning» har ingen jobb. KREG-jobben finnes (`P-app/KregImportJobb.java:84,89`), men er av i produksjon |
@@ -435,6 +438,7 @@ Resultatet for hvert scenario i gating-settet etter kontrollen, med beviset i ko
 | `@FLY-OPT-SAM-001` | Saken er ferdig behandlet på det sammensatte vitnemålet | ikke funnet | P ✗ · A – — fasen er ikke levert. Ikke levert: `@FLY-OPT-AUT-001` er `@planned`. Ferdigbehandlingen krever VM med `gsk_ok` fra KREG (`P/autosak/FerdigbehandlingService.java:99-103`) |
 | `@FLY-OPT-AUT-001` | Vitnemålet fra KREG er klart for behandlingen når saken er opprettet | funnet | P ✓ · A – — lages: `P-app/SoknadshendelseJobb.java:330-339` · brukes: `P-app/SoknadshendelseJobb.java:132-140,409-411` → `P/vgs/HentVgsVitnemaalService.java:103-124,218-228` |
 | `@FLY-OPT-AUT-001` | Saken behandles automatisk når vitnemålet er importert | funnet | P ✓ · A – — lages: `P/autosak/KregImportService.java:74-76` · brukes: `P/autosak/KregImportService.java:93,109-110` → `P/autosak/AutomatiskBehandlingEtterImportService.java:70-93,108-111` |
+| `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG | funnet | P ✓ · A – — lages: `P/autosak/KregImportService.java:97-102` (`fullfoer` etter importen) · brukes: `P/autosak/gsk/GskKonklusjonEtterImportService.java:53-60,99` → `P/autosak/gsk/GskVedtakAutoService.java:94-101,157-166` (en negativ eller annullert konklusjon erstattes, fs-plattform !6761). Fasen ble levert 13.11.2026, bekreftet av `fs-verify-kontroll` |
 | `@FLY-OPT-AUT-001` | Søknaden uten GSK-konklusjon får konklusjonen i kjøringen | funnet | P ✓ · A – — lages: `P/vgs/KregVgsParser.java:104` · brukes: `P/autosak/AutomatiskSaksbehandlingService.java:135-136,240-247` → `P/autosak/gsk/GskVedtakAutoService.java:68-84,268-269,302-306` |
 | `@FLY-OPT-AUT-001` | Saken behandles helautomatisk på vitnemålet som gir GSK | funnet | P ✓ · A – — lages: `P/autosak/AutomatiskSaksbehandlingService.java:170,214-223` · brukes: `P/autosak/SetteGrunnlagService.java:111-131`, `P/autosak/FerdigbehandlingService.java:89-103` |
 | `@FLY-OPT-AUT-001` | Saken behandles helautomatisk når søkeren har to identiske vitnemål | funnet | P ✓ · A – — lages: `P/vgs/HentVgsVitnemaalService.java:190-211` (begge vitnemålene importeres) · brukes: `P/autosak/AutomatikkensVitnemaal.java:108-116,168-197` (`velgBlantIdentiske` velger ett) → `P/autosak/FerdigbehandlingService.java:89-103` |
@@ -511,6 +515,8 @@ Det som må følges opp, og som ikke står i de andre tabellene: det kravet ikke
 | Merknad | `@FLY-OPT-VIT-001` | «Vitnemålene hentes for den aktive søkeren» | Koden regner en søker som aktiv når søkeren har en aktiv sak i et publisert opptak (`P/saksbehandling/KregImportKjoringService.java:70-89`), ikke «en søknad som ikke er trukket». En søknad uten sak får vitnemålet når tildelingen oppretter saken |
 | Merknad | `@FLY-OPT-SAM-001` | Fasen «Saksbehandleren starter den automatiske behandlingen på det sammensatte vitnemålet» | Ankeret står på et `@draft @openquestion`-scenario i `@OPT-BEH-BEH-039` (`:54`), så fasen kan ikke bli levert før scenarioet er avklart |
 | Merknad | `@OPT-BEH-BEH-015` | «Konklusjon i avsluttet opptak trekkes ikke tilbake» | Sakene i avsluttede opptak får likevel taggen «Vitnemål annullert» (`P/saksbehandling/AnnullertVitnemaalService.java:55-62`), mot regelkommentaren «står saken urørt» |
+| Merknad | `@OPT-BEH-BEH-015` | Knappen for automatisk GSK-konklusjon på et valgt vitnemål | `P/autosak/gsk/SettGskKonklusjonService.java:101` bruker fortsatt `harGjeldendeVedtak` (`P/autosak/gsk/GskVedtakAutoService.java:274-281`), så saksbehandlerens knapp avviser når søknaden har en negativ eller annullert konklusjon, selv om automatikken nå erstatter den (!6761). Hører ikke til regelen som ble levert. Avklar om knappen skal følge samme regel |
+| Merknad | `@OPT-BEH-BEH-015` | Regelen «Vitnemålet erstatter en gjenbrukt konklusjon», scenarioet «En gjenbrukt konklusjon som en saksbehandler satte, blir stående» | En positiv konklusjon med kilden «gjenbruk» erstattes ved import uansett hvem som satte den (`P/autosak/gsk/GskVedtakAutoService.java:65-66,160`), og saksbehandleren kan velge kilden selv (`P/soknad/gskvedtak/GskVedtakService.java:499,525,560`). Påvirker ikke regelen som ble levert. Klassekommentaren i `P/autosak/gsk/GskKonklusjonEtterImportService.java:27-28` er utdatert etter !6761 |
 | Merknad | `@OPT-BEH-BEH-026` | Kommentaren under «I saker den automatiske behandlingen har behandlet …» (`beregne_automatisk_på_nytt.feature:80-82`) | Kravet regner saken som automatisk behandlet når automatikken har kjørt på den. Koden bruker `status_automatisk_behandlet`, som bare betyr at automatikken satte saken til ferdig behandlet (`P-mig/V522__sak_status_automatisk_behandlet_betyr_ferdig.sql:8`), og som nullstilles når saksbehandleren endrer statusen (`P/saksbehandling/EndreStatusService.java:41-44`). Kravet eller koden bør rettes |
 | Merknad | `@OPT-BEH-BEH-029` | Saksloggen etter !3421 | fs-admin !3421 (merget 09:11) henter endringsloggen på nytt etter en statusendring (`A/.../useEndreBehandlingsstatus.ts`), men ingen kode skriver nye rader etter V480, så «Saksloggen viser endring av behandlingsstatus når <årsak>» er fortsatt ikke funnet |
 | Merknad | `@OPT-BEH-BEH-031` | Endringsloggen i saksbehandling | `P-mig/V480__stopp_endringslogg.sql` (BAT-324) stoppet endringsloggen. Det gjelder alle krav som viser til den (f.eks. `@OPT-BEH-BEH-012`, `-016`, `-029`, `-036`), og kommentarene i `P/regelverk/poeng/PoengsumService.java:65,392` er utdatert |
