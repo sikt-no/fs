@@ -145,8 +145,9 @@ slik valglisten for rolle i «Tildel roller» ikke tilbyr en rolle utenfor deleg
 ### Regel: En utgått rolle kan ikke gis fra siden for rollen
 Rollens oversiktsside sier at rollen er utgått, og knappen «Gi rollen til en person» vises ikke.
 Listen over tildelingene vises som for andre roller, og direkte tildelinger kan fortsatt fjernes
-med «Fjern tildeling». fs-admin !3431 skjuler valget; om API-et også skal avvise at en utgått
-rolle gis, er et åpent spørsmål i regelen.
+med «Fjern tildeling». fs-admin !3431 skjuler valget. API-et avviser også at en utgått rolle
+gis (avklart 13.11.2026, Kjetil), med en egen feiltype. Avvisningen kommer i MR-en for
+tilgangsstyringen under BAT-257; i dag sjekker `krev_tilgangskode` bare at rollen finnes.
 
 ### Scenario: Brukeradministrator med bare leserett kan ikke gi eller fjerne
 Knappen «Gi rollen til en person» og «Fjern tildeling» vises ikke. Listen og filtrene vises.

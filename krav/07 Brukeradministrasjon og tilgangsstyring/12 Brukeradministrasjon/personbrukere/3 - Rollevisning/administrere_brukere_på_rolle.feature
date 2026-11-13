@@ -137,13 +137,12 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Når brukeradministrator åpner detaljsiden for personen
       Så kan brukeradministrator sette stedkoder og tidsbegrensning for tildelingen der
 
-  @ref-BRU-PER-GRU-003 @openquestion
+  @ref-BRU-PER-GRU-003
   Regel: En utgått rolle kan ikke gis fra siden for rollen
     # Det samme gjelder i valglisten på personbrukerens side (BRU-PER-GRU-003).
     # AVKLART 13.11.2026 (Kjetil): En utgått rolle kan aldri gis, heller ikke fra rollesiden, men
     # den kan ses: rollens oversiktsside og tildelingene vises som for andre roller.
-    # ÅPNE SPØRSMÅL:
-    # - Skal API-et også avvise at en utgått rolle gis, eller gjelder regelen bare i skjermbildet? (fs-admin MR !3431 skjuler valget, og avvisningen i API-et er varslet i en senere MR)
+    # AVKLART 13.11.2026 (Kjetil): API-et avviser også at en utgått rolle gis, ikke bare skjermbildet.
 
     Scenario: Siden for en utgått rolle sier at rollen er utgått
       Gitt en forretningsrolle er markert som utgått i rollekatalogen

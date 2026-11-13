@@ -135,7 +135,9 @@ Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
   men aldri gis. ROL-002: lagt inn i regelen «En utgått rolle kan ikke gis fra siden for rollen»
   fra sikt-no/fs#1033 (Mats, flettet til main), som AVKLART og et ekstra steg om at
   tildelingene vises. Vårt eget scenario «En utgått rolle kan ikke gis fra rollesiden» er tatt
-  bort, så det ikke står to ganger.
+  bort, så det ikke står to ganger. Regelen er ikke lenger `@openquestion`: API-et avviser også
+  at en utgått rolle gis, med en egen feiltype, og avvisningen kommer i MR-en for
+  tilgangsstyringen under BAT-257 (AVKLART 13.11.2026, Kjetil).
 - **Feide-brukere** står ikke i listen før tildelingene er flyttet (BRU-PER-GRU-014).
 - **Søk på navn** og **organisasjonsfilteret** beholdes (ikke lenger `@draft`/`@openquestion`).
 - **Tekster godkjent:** bekreftelsen før «Fjern tildeling», antallet «tildelinger i listen»,
