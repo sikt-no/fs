@@ -1,7 +1,7 @@
 ---
 name: fs-krav-avvik
-description: Ser etter avvik fra konvensjonene i `.feature`-filene i en mappe eller fil under `krav/`, for reglene som krever skjønn og derfor ikke sjekkes automatisk av FS Kravforvaltning (Avvik-modusen). Reglene leses fra `krav/README.md` (bl.a. *Konkrete henvisninger* om «egne», «mine», «dem» og «denne», *Terminologi*, *Gode scenarioer*), `.claude/rules/listevisning-pattern.md` for listevisninger og `.claude/rules/design-patterns-for-krav.md`. Sjekker også referansene mellom krav (`@depends-on-` og `@ref-`) som krever flere filer: ID-er som ikke finnes, `@depends-on-` i ring, regeltitler i «…» under taggen som ikke finnes i kravet det pekes på, ankre (`@ref-` på en del i kravet det pekes på) som ikke stemmer med regeltittelen, og referanser som står i fritekst. For flyter i `krav/_Flyter/`: faser uten krav, flyt på flyt på tvers av prosesser, og regler gjentatt i flyten. Rapporterer hvert funn med `fil:linje`, regel, forslag til ny tekst, og om det er bare ordlyd eller trenger faglig avklaring. Retter bare funn som er bare ordlyd, og bare når brukeren sier ja. Endrer aldri tagger. Trigges av "se etter avvik i mappe", "sjekk konvensjonene i", "review kravteksten", "gå gjennom ordlyden", "finn «egne» og «dem»", "finn «min» og «denne»", "fs-krav-avvik".
-allowed-tools: Read, Grep, Glob, Edit, AskUserQuestion
+description: Ser etter avvik fra konvensjonene i `.feature`-filene i en mappe eller fil under `krav/`, for reglene som krever skjønn og derfor ikke sjekkes automatisk av FS Kravforvaltning (Avvik-modusen). Reglene leses fra `krav/README.md` (bl.a. *Konkrete henvisninger* om «egne», «mine», «dem» og «denne», *Terminologi*, *Gode scenarioer*), `.claude/rules/listevisning-pattern.md` for listevisninger og `.claude/rules/design-patterns-for-krav.md`. Sjekker også referansene mellom krav (`@depends-on-` og `@ref-`) som krever flere filer: ID-er som ikke finnes, `@depends-on-` i ring, regeltitler i «…» under taggen som ikke finnes i kravet det pekes på, ankre (`@ref-` på en del i kravet det pekes på) som ikke stemmer med regeltittelen, og referanser som står i fritekst. Sjekker rollenavnene mot rollekatalogen. For flyter i `krav/_Flyter/`: faser uten krav, flyt på flyt på tvers av prosesser, og regler gjentatt i flyten. Rapporterer hvert funn med `fil:linje`, regel, forslag til ny tekst, og om det er bare ordlyd eller trenger faglig avklaring. Retter bare funn som er bare ordlyd, og bare når brukeren sier ja. Endrer aldri tagger. Trigges av "se etter avvik i mappe", "sjekk konvensjonene i", "review kravteksten", "gå gjennom ordlyden", "finn «egne» og «dem»", "finn «min» og «denne»", "fs-krav-avvik".
+allowed-tools: Read, Grep, Glob, Edit, AskUserQuestion, mcp__plugin_sta-development-starter-pack_fs-rollekatalog__finn_roller, mcp__plugin_sta-development-starter-pack_fs-rollekatalog__sjekk_rollenavn, mcp__plugin_sta-development-starter-pack_fs-rollekatalog__roller_som_gir
 ---
 
 # Avvik i kravtekst
@@ -68,6 +68,13 @@ Brukeren oppgir en mappe eller fil under `krav/`. Mangler den, spør. Finn filen
    - **Regel gjentatt i flyten:** et scenario som beskriver en valideringsregel, en feilmelding eller felter som står i kravet fasen bygger på, i stedet for overleveringen. Les kravet før du melder det.
    - **Flyt som faller på terskelen:** flyten går ikke over minst to sub-domener eller domener (les mappene til kravene i `@depends-on-`), eller har ingen overlevering. Foreslå referanser mellom kravene i stedet.
    - Funnene her er alltid *trenger avklaring*, og rettes med `fs-krav` (modus E for flyter).
+8. **Roller** ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)). Samle rollenavnene i fila: aktøren i `Som …`, rollen i steg som «jeg er innlogget som …», «jeg har rollen …» og «… har ikke …-rollen», og koden i `forretningsrollen "…"`. Kjør `sjekk_rollenavn` på alle i ett kall.
+   - `finnes`: ikke avvik. Står koden i et steg og ikke i testdata, gjelder punkt 4.
+   - `sannsynlig`: *bare ordlyd* når visningsnavnet bare skiller seg i skrivemåte. Ellers *trenger avklaring*, med rollen som forslag.
+   - `tvetydig` og `ukjent`: *trenger avklaring*, med forslagene.
+   - `feil_type`: *trenger avklaring*. Kravet nevner en tilgang som en rolle; foreslå forretningsrollen fra `roller_som_gir`.
+   - Er rollen utgått (`utgatt`), *trenger avklaring*.
+   - Svarer ikke rollekatalogen, si det i rapporten og hopp over punktet.
 
 ## Klassifiser hvert funn
 

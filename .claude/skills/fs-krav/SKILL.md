@@ -69,7 +69,7 @@ Modusene kan kjedes: fullføring avdekker ofte behov for nye scenarios eller nye
 Hvis brukeren allerede har jobbet med et initiativ i denne samtalen, bruk det uten å spørre på nytt. Ellers, spør brukeren om det scopet ikke svarer på:
 
 - Hva heter initiativet / hvilken funksjonalitet skal spesifiseres?
-- Hvem er aktørene?
+- Hvem er aktørene? Slå opp aktørene som er roller, med `finn_roller` i rollekatalogen ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)), og bruk visningsnavnet til rollen som finnes.
 - Hvilket domene hører dette til? (se `krav/` for eksisterende domener)
 - **Bygger kravet på kode, schema, skisser eller FS-klienten** (også når det står i scopet)? Følg da *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`.
 - **Hører kravet til et GitHub-issue?** (f.eks. `#1234`). Valgfritt: svarer brukeren "nei" eller "hopp over", skrives fila uten `# GitHub:`-linje.
@@ -329,7 +329,7 @@ Ta ett draft-krav om gangen. For hvert:
 3. **Oppsummer for brukeren** hva som mangler eller er uavklart:
    - Åpne spørsmål som ikke er besvart
    - Skisse-pregede scenarios uten konkrete data / forventet resultat
-   - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler
+   - Uklare feltlister, rolle-navn, feilmeldinger, forretningsregler. Kjør `sjekk_rollenavn` på rollenavnene i `Som …` og stegene ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)): `sannsynlig`, `tvetydig`, `feil_type` og `ukjent` er spørsmål til brukeren
    - Avvik fra *Gode scenarioer* og *Terminologi* i `krav/README.md`
    - Manglende `Bakgrunn:` der det ville redusert duplisering
    - Referanser: `@depends-on-` og `@ref-` til ID-er som ikke finnes, og referanser som står i fritekst i kommentarene (se *Referanser mellom krav* under). Spør om de skal bli tagger
@@ -413,7 +413,7 @@ Les så taggene på delen som endres. Er den `@draft`, `@planned` eller `@in-pro
 
 Finn kravene som bygger på kravet: `Grep "@depends-on-<ID>"` i `krav/`. List dem for brukeren, med delen taggen står på, og spør om noen av dem må endres sammen med kravet.
 
-Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Sjekk branchen i hver klone før du leter ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)). Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Følg *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`: spør om det koden gjør, er ønsket atferd. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
+Finn koden for den leverte delen i kodeklonene (fs-admin, fs-plattform), og vis `fil:linje`. Bruk klonene som står i systemprompten, og spør om stien bare hvis de mangler. Sjekk branchen i hver klone før du leter ([`.claude/references/oppdatert-branch.md`](../../references/oppdatert-branch.md)). Har brukeren ingen klone, gå videre: `fs-specify` sjekker kravet mot koden før det blir `@in-progress`. Gjelder delen roller eller tilgang, slå opp hva rollene gir med `rolle_gir` ([`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)). Den nye delen skrives (D2) ut fra hva koden gjør i dag, ikke bare ut fra den gamle teksten. Følg *Krav fra kode, skisser eller FS-klienten* i `krav/README.md`: spør om det koden gjør, er ønsket atferd. Gjør koden noe annet enn den leverte teksten sier, spør før D2: *«Den leverte delen sier X, koden gjør Y. Hva skal den nye delen bygge på?»*
 
 ### D2. Skriv den nye delen som `@draft`
 

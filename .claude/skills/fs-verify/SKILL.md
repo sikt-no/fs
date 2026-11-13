@@ -219,7 +219,12 @@ Gjelder kravene i scope som verifiseres (ikke avhengighetene), og bare for krav 
 
 For hvert slikt krav, sjekk i koden (fs-plattform for tilgangssjekken i subgraph og backend, fs-admin og min-kompetanse for hva som vises og skjules):
 
-1. **Tilgangsreglene.** Roller × organisasjon × opprette/lese/endre/slette. Finn tilgangssjekken for hver handling kravet har, og sammenlign med rollene i kravet (`Gitt`-stegene, `Regel:`-titlene og `Synlighet`-reglene). Mangler tilgangssjekk, eller er den et annet sted enn grensesnittet, skriv det.
+1. **Tilgangsreglene.** Roller × organisasjon × opprette/lese/endre/slette. Finn tilgangssjekken for hver handling kravet har, og sammenlign med rollene i kravet (`Gitt`-stegene, `Regel:`-titlene og `Synlighet`-reglene). Mangler tilgangssjekk, eller er den et annet sted enn grensesnittet, skriv det. Rollene og hva de gir finnes bare i rollekatalogen, ikke i koden. Slå dem opp etter [`.claude/references/rollekatalog.md`](../../references/rollekatalog.md):
+   - Kravets roller → `sjekk_rollenavn`. En rolle som ikke er `finnes`, er en rad med `usikker` og spørsmålet om hvilken rolle kravet mener.
+   - **FS Admin:** frontend-kodene fra `rolle_gir(<rolle>)` mot rollene skjermen sjekker (`WithRole`, `useWithRole`, `useOrganisasjonerWithRole`). Mangler rollen koden skjermen krever, er raden `avviker`: rollen virker ikke i FS Admin.
+   - **API og RLS:** subgraf-kodene fra `rolle_gir(<rolle>)` mot koden policyen eller `Handling` sjekker. Den siste migreringen som endrer policyen gjelder. For sis og kompetanse (Oracle RAS) er ACL-ene ikke i repoet. Raden er da `usikker` med «koden ligger i subgraf-navnerommet, RAS-policyen er ikke lesbar», ikke `stemmer`.
+   - **«Koden gjør»:** `roller_som_gir(<koden sjekken krever>)` gir forretningsrollene som slipper gjennom. Slipper en rolle kravet ikke nevner gjennom, eller stoppes en rolle kravet nevner, er raden `avviker`.
+   - Skriv kjeden i beviset: `<rolle> → <kode> (rollekatalogen)` og `<repo>/<fil>:<linje>` for sjekken. Svarer ikke rollekatalogen, si det og vurder bare koden.
 2. **Organisasjonsgrensen.** Kan en bruker se eller endre data fra en annen organisasjon enn den hen har tilgang til? Se etter filter på organisasjon i spørringer og mutations, og at en id fra en annen organisasjon avvises.
 3. **Sletting og endring.** Gir det foreldreløse eller motstridende data? Se etter fremmednøkler og kaskade, referanser fra andre tabeller eller krav (`@depends-on-`), og avhengige verdier som ikke oppdateres sammen.
 
@@ -449,5 +454,6 @@ Ikke `git add`, `commit`, `push`, `checkout` eller `stash` i noe repo. Lesende g
 - **`fs-krav`** — setter `@deprecated` når et levert krav skal fjernes.
 - **`fs-specify` / `fs-specify-delta`** — setter `@in-progress`, på egenskaper og på deler i leverte krav som endres.
 - **`.claude/agents/fs-verify-kontroll.md`** — kontrolløren som sjekker resultatene uavhengig (*Kontroll*).
+- **[`.claude/references/rollekatalog.md`](../../references/rollekatalog.md)** — rollekatalogen: hva en rolle gir, og hvilke roller som gir en tilgang (*Tilgang og datakonsistens*).
 - **[`.claude/references/akseptansetest/`](../../references/akseptansetest/)** — scope som kilde, testplanen som scope, og Confluence-steget (*Confluence*).
 - **`fs-testplan`** — neste steg i akseptansetesten, og bygger på rapporten: kravene, åpne spørsmål, reglene uten scenario og tilgangsradene.
