@@ -1,5 +1,5 @@
 # language: no
-@OPT-OPT-UTD-029 @should @draft @scope-utdanningstilbud-2027
+@OPT-OPT-UTD-029 @must @draft @scope-utdanningstilbud-2027
 Egenskap: Vise poenggrense og ventelistenummer for søker
   Som opptaksforvalter
   ønsker jeg å bestemme om søkere skal se poenggrensen og ventelistenummeret sitt for utdanningstilbudet

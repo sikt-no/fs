@@ -223,7 +223,7 @@ Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav,
 - Den som ikke er nevnt i en regel, får ikke gjøre det ([`@FEL-TIL-GRU-001`](10%20Felleskrav/12%20Tilgang/01%20Grunnregler/ingen_tilgang_uten_regel.feature)). Kravet trenger derfor ikke liste opp alle som ikke får lov. Ta med den som ikke får lov, i samme regel bare når grensen er uventet: samme brukerrolle hos en annen organisasjonsrolle, en annen brukerrolle hos den samme organisasjonen, eller en rolle som ser, men ikke endrer. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
 - Skriv relasjonen, ikke organisasjonsnavnet, når det er relasjonen som avgjør utfallet (se *Gode scenarioer*): «forvalteren», «tilbyderen», «behandleren», «en organisasjon uten rolle i opptaket». Ett steg, «Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket», dekker alle rollene.
 - Regelen gjelder i API-et også, ikke bare i skjermbildene. Det står i felleskravet, og trenger ikke gjentas i hvert krav.
-- Arbeidet med å rette tilgangen i opptak, og lista over krav som mangler eller må rettes, står i scopet [`tilgang-i-opptak-2027`](../tasks/opptak/tilgang-i-opptak-2027/scope.md).
+- Hvem som har tilgang til hva i opptak, ut fra kravene, står i [`krav/02 Opptak/tilgangsmatrise.md`](02%20Opptak/tilgangsmatrise.md). Tilgangsreglene er ikke et eget scope. De tas inn når et team jobber med funksjonaliteten som bruker dem.
 
 Eksempel:
 

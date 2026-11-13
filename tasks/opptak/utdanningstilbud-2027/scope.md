@@ -5,7 +5,7 @@
 - **Initiativ**: [#398](https://github.com/sikt-no/fs/issues/398)
 - **Jira**: [sikt-no/fs#597](https://github.com/sikt-no/fs/issues/597), [sikt-no/fs#398](https://github.com/sikt-no/fs/issues/398)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-05
+- **Siste oppdatering**: 2026-11-13
 
 ## Mål
 
@@ -48,7 +48,7 @@
 | `@OPT-OPT-UTD-022` [angi_studieavgift.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/angi_studieavgift.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Jira SHI-701 |
 | `@OPT-OPT-UTD-025` [sette_tidlig_søknadsfrist.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/sette_tidlig_s%C3%B8knadsfrist.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Jira SHI-708 |
 | `@OPT-OPT-UTD-027` [sette_kjønnspoeng.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/sette_kj%C3%B8nnspoeng.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
-| `@OPT-OPT-UTD-029` [vise_poenggrense_og_ventelistenummer_for_søker.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/vise_poenggrense_og_ventelistenummer_for_s%C3%B8ker.feature) | Should | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
+| `@OPT-OPT-UTD-029` [vise_poenggrense_og_ventelistenummer_for_søker.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/vise_poenggrense_og_ventelistenummer_for_s%C3%B8ker.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
 | `@OPT-OPT-UTD-030` [eksportere_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/eksportere_utdanningstilbud.feature) | Could | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
 | `@OPT-OPT-UTD-031` [sammenligne_med_tidligere_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/sammenligne_med_tidligere_utdanningstilbud.feature) | Could | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
 | `@OPT-OPT-UTD-033` [angi_alternativt_visningsnavn.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/angi_alternativt_visningsnavn.feature) | Must | – | – | Jira SHI-780. Usikkert om det finnes skisse |
@@ -135,6 +135,7 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-13 | `@OPT-OPT-UTD-029` er endret fra Should til Must, fordi tilgangsregelen i kravet (poenggrensen er skjult til publisering) er Must. Se *Prioritet* i `krav/02 Opptak/tilgangsmatrise.md` | @karen.sikkeland | – |
 | 2026-11-05 | Åpent spørsmål: fasen i flyten Saksbehandlertildeling venter på `@OPT-OPT-UTD-004`. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra behandle-utdanningstilbud, opptaksinnstillinger, utdanningstilbud) | – | – |
 | 2026-10-12 | [behandle-utdanningstilbud] Opprettet i scope-utdanningstilbud-2027 | – | – |
