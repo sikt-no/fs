@@ -103,7 +103,8 @@ gir én feil, `UgyldigFodselsnummer`, for både ugyldig og FS-generert nummer. K
 teksten ut fra sin egen sjekk av serien.
 
 Regelen for det første kontrollsifferet som gjelder fra 2032 (BAT-433), er verken i klienten
-eller i API-et. Begge må endres samtidig.
+eller i API-et ennå. Den må være på plass i begge innen 2032, og begge må endres samtidig
+(Kjetil, 13.11.2026).
 
 ### Regel: En testperson kan ikke få tilgang i et ekte miljø, og en ekte person ikke i et testmiljø
 Det er API-et som avgjør om nummeret tilhører en testperson (Skatteetatens syntetiske serie), og

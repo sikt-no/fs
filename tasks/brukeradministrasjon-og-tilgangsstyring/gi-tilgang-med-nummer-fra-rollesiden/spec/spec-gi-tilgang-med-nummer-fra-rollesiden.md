@@ -141,5 +141,9 @@ Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
   lenger `@openquestion`), ingen synlig overskrift over listen, og «Fjern tildeling» bare der
   brukeradministratoren har rett til å tildele i både organisasjonen og miljøet (ROL-002: nytt
   scenario om «Fjern tildeling» og retten i organisasjonen og miljøet).
-- Fortsatt åpent: «Søke fram en rolle» (`@draft @openquestion`), BAT-433, og teksten for tom
-  rolleoversikt for den som bare kan lese.
+- **De siste fire, også avklart 13.11.2026:** «Søke fram en rolle» beholdes (ikke lenger
+  `@draft @openquestion`). Teksten for tom rolleoversikt er «Du har ingen roller du kan se.» for
+  både den som kan tildele og den som bare kan lese, fordi listen viser de samme rollene for
+  begge; den erstatter «Du har ingen roller du kan tildele.». Snackbaren «Tildelingen er
+  fjernet.» er godkjent. Den nye regelen for det første kontrollsifferet (BAT-433) må være på
+  plass innen 2032 i både API-et og FS Admin (GRU-013, ikke lenger `@openquestion`).

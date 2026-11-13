@@ -3,8 +3,7 @@
 **Relatert feature:** [`se_brukere_på_rolle.feature`](./se_brukere_på_rolle.feature)
 
 Detaljene gjelder scenarioene merket `@must`, og filtrene og antallet som er avklart i
-workshopen 09.–10.11.2026 og av Kjetil 13.11.2026. Søket på rolle er tatt med fordi det er
-bygget i fs-admin !3046, selv om scenarioet er `@draft`. Det finnes ingen skisser. Detaljene bygger på
+workshopen 09.–10.11.2026 og av Kjetil 13.11.2026. Det finnes ingen skisser. Detaljene bygger på
 mønstrene som finnes i FS Admin i dag (personbrukere-listen og detaljsiden for en personbruker),
 og er sjekket mot fs-admin !3046 og fs-plattform !6706 13.11.2026.
 
@@ -83,14 +82,14 @@ Velge en rolle i rolleoversikten åpner rollens oversiktsside.
 
 Tekstene er godkjent av Kjetil 09.10.2026, med endringene fra workshopen 09.–10.11.2026
 (kolonnen «Gjelder for organisasjon», nummeret i stedet for «Navn ikke kjent», og «Fjern
-tildeling»), og menypunktet «Roller» og antallet godkjent 13.11.2026. Dette er fasiten for
+tildeling»), og menypunktet «Roller», antallet og teksten for tom rolleoversikt godkjent 13.11.2026. Dette er fasiten for
 tekstene. Tekstene merket «fra fs-admin !3046, ikke godkjent» er bygget, men ikke godkjent.
 
 | Hvor | Når vises den | Tekst | Variasjoner | Scenario |
 |------|---------------|-------|-------------|----------|
 | Menypunkt og sidetittel | Alltid | «Roller» | – | Åpne en rolle fra rolleoversikten |
 | Kort på Tilgangsstyring-siden | Alltid | «Roller», «Se rollene du kan tildele, og hvem som har dem. Herfra gir du en rolle til en person med fødselsnummer, D-nummer eller SNR.», knappen «Gå til roller» (fra fs-admin !3046, ikke godkjent) | – | Åpne en rolle fra rolleoversikten |
-| Rolleoversikten | Ingen roller i delegeringstaket | «Du har ingen roller du kan tildele.» (teksten passer ikke for den som bare kan lese) | – | Rolleoversikten viser bare roller i delegeringstaket |
+| Rolleoversikten | Ingen roller i delegeringstaket | «Du har ingen roller du kan se.» | Den samme teksten for den som kan tildele og den som bare kan lese, fordi listen viser de samme rollene for begge |  Rolleoversikten viser bare roller i delegeringstaket |
 | Rolleoversikten, filter | Alltid | «Rolle eller beskrivelse» (fra fs-admin !3046, ikke godkjent) | – | Søke fram en rolle |
 | Rolleoversikten, filter | Alltid | «Utgåtte roller», med valgene «Skjul utgåtte» og «Vis utgåtte» (fra fs-admin !3046, ikke godkjent) | – | Utgåtte roller vises ikke i rolleoversikten som standard |
 | Rolleoversikten, ved rollekoden | Rollen er utgått | «Utgått» (fra fs-admin !3046, ikke godkjent) | – | En utgått rolle er merket når utgåtte roller vises |
@@ -166,12 +165,12 @@ Organisasjonene sorteres på navn i klienten.
 Søketeksten sendes som `navnContains`, og treffer «Fornavn Etternavn» og «Etternavn Fornavn».
 Et tomt søkefelt sendes som ingen filtrering.
 
-## Åpne designspørsmål
-
-- [ ] Teksten for tom rolleoversikt, «Du har ingen roller du kan tildele.», passer ikke for den
-      som bare kan lese. Hvilken tekst skal stå?
-
 ## Avklarte designspørsmål
+
+- Teksten for tom rolleoversikt er «Du har ingen roller du kan se.», for både den som kan
+  tildele og den som bare kan lese. Den erstatter «Du har ingen roller du kan tildele.».
+  Avklart 13.11.2026 (Kjetil).
+- Søket på rollekode og beskrivelse beholdes. Avklart 13.11.2026 (Kjetil).
 
 - Listen viser bare personer. Feide-brukere står ikke i listen før tildelingene er flyttet til
   personen (BRU-PER-GRU-014). Avklart 13.11.2026 (Kjetil).

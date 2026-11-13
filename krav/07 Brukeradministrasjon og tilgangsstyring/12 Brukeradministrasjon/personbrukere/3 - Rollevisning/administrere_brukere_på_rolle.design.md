@@ -88,7 +88,7 @@ hentes på nytt. Personen står da i listen.
 
 ## Tekster
 
-Tekstene er godkjent av Kjetil 09.10.2026, og tekstene i bekreftelsen før «Fjern tildeling» og hjelpeteksten under nummerfeltet 13.11.2026, bortsett fra der det står at de ikke er godkjent.
+Tekstene er godkjent av Kjetil 09.10.2026, og tekstene i bekreftelsen før «Fjern tildeling», snackbaren når tildelingen er fjernet og hjelpeteksten under nummerfeltet 13.11.2026, bortsett fra der det står at de ikke er godkjent.
 Tekstene for reglene i BRU-PER-GRU-013 (ugyldig nummer, testperson, rettighet og beskjeden ved
 suksess) står i implementasjonsdetaljene for GRU-013.
 
@@ -111,7 +111,7 @@ suksess) står i implementasjonsdetaljene for GRU-013.
 | Bekreftelsens overskrift | «Fjern tildeling» er valgt | «Fjerne tildelingen?» | – | Fjerne en tildeling fra rollens oversiktsside |
 | Bekreftelsens tekst | «Fjern tildeling» er valgt | «{navn} mister rollen {rollekode} for {organisasjon} i miljøet {miljø}. Tildelingen avsluttes, og rollen kan gis på nytt.» | `{navn}` er «Personen (navn ikke kjent)» når navnet mangler | Fjerne en tildeling fra rollens oversiktsside |
 | Bekreftelsens knapper | Alltid / mens operasjonen pågår | «Avbryt», «Fjern tildeling» / «Fjerner …» | per tilstand | Fjerne en tildeling fra rollens oversiktsside |
-| Snackbar | Tildelingen er fjernet | «Tildelingen er fjernet.» (fra fs-admin !3046, ikke godkjent) | «Tildelingen er fjernet — brukeren har fortsatt: {koder}» når personen fortsatt har rollen gjennom en annen rolle eller en organisasjonssamling | Fjerne en tildeling fra rollens oversiktsside |
+| Snackbar | Tildelingen er fjernet | «Tildelingen er fjernet.» | «Tildelingen er fjernet — brukeren har fortsatt: {koder}» når personen fortsatt har rollen gjennom en annen rolle eller en organisasjonssamling | Fjerne en tildeling fra rollens oversiktsside |
 | Tilbakemeldingsflaten i bekreftelsen | Fjerningen feilet | Feiltekstene fra «Fjern roller» på detaljsiden for personen (finnes i fs-admin) | Én tekst per feil: mangler rett, arvet, gitt gjennom en organisasjonssamling, finnes ikke, annen feil | Fjerne en tildeling fra rollens oversiktsside |
 
 **Skisser:** ingen skisser finnes.

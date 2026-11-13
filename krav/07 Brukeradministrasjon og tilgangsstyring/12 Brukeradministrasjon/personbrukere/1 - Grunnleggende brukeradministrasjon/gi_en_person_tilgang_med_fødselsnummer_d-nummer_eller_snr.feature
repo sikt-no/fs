@@ -191,18 +191,16 @@ Egenskap: Gi en person tilgang med fødselsnummer, D-nummer eller SNR
       Når personen logger inn
       Så finnes det fortsatt bare én person med fødselsnummeret
 
-  @openquestion
   Regel: Nummeret må ha gyldige kontrollsifre
     SNR har en egen personnummerserie, atskilt fra de fiktive numrene FS' egen generator lager
     (måned +50 og personnummer fra 70000 og oppover). Løsningen kan derfor skille et SNR fra dem.
     Et FS-generert nummer avvises med en egen beskjed, også når kontrollsifrene er gyldige.
     Nummeret må ha 11 siffer. Løsningen sjekker de to kontrollsifrene med mod 11, likt for
-    fødselsnummer, D-nummer og SNR.
+    fødselsnummer, D-nummer og SNR. Regelen for det første kontrollsifferet endres fra 2032, og
+    løsningen må følge den nye regelen innen 2032 (BAT-433).
 
-    # ÅPNE SPØRSMÅL:
-    # - Regelen for det første kontrollsifferet endres fra 2032 (BAT-433). Verken
-    #   API-et eller FS Admin har den nye regelen, så et nummer som bare er gyldig etter den, blir
-    #   avvist som ugyldig. Når må det være på plass?
+    # AVKLART 13.11.2026 (Kjetil): Den nye regelen for det første kontrollsifferet må være på plass
+    # innen 2032, både i API-et og i FS Admin.
 
     Scenariomal: Nummer med ugyldige kontrollsifre avvises
       Gitt brukeradministratoren oppgir et <nummertype> med ugyldige kontrollsifre

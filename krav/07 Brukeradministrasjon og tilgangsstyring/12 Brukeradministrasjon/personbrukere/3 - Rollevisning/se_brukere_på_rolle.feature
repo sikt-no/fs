@@ -124,11 +124,8 @@ Egenskap: Se brukere som har en spesifikk rolle
     Når brukeradministrator søker på en del av navnet til en bruker
     Så vises bare tildelingene til brukere der navnet inneholder søketeksten
 
-  @draft @openquestion
   Scenario: Søke fram en rolle
-    # ÅPNE SPØRSMÅL:
-    # - Søket er bygget i fs-admin !3046 (fra !3210) og treffer både rollekoden og beskrivelsen.
-    #   Er det riktig, så @draft kan fjernes?
+    # AVKLART 13.11.2026 (Kjetil): Søket på rollekode og beskrivelse beholdes.
     Gitt at brukeradministrator er i rolleoversikten
     Når brukeradministrator søker på en del av rollekoden eller beskrivelsen
     Så vises bare rollene der rollekoden eller beskrivelsen inneholder søketeksten
