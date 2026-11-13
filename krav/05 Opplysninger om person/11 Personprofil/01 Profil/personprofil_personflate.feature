@@ -42,6 +42,7 @@ Egenskap: Se og endre egne person- og kontaktopplysninger
       | astrid aga | mamma              | bodhild aga   |
       | per ulv    | jeg er syk         | bodhild aga   |
 
+  @ref-OPT-SØK-SØK-021
   Scenariomal: Se og endre Språk og målform
     Når "<person>" legger til <språk og målform>
     Så ser "<person>" oppdatert <språk og målform> 
@@ -51,5 +52,4 @@ Egenskap: Se og endre egne person- og kontaktopplysninger
     Eksempler:
       | person      | språk og målform | administrator |
       | Ola Normann | Norsk bokmål     | bodhild aga§  |
-      | King Arthur | Engelsk          | bodhild aga   |
       | Ivar Aasen  | Nynorsk          | bodhild aga   |
