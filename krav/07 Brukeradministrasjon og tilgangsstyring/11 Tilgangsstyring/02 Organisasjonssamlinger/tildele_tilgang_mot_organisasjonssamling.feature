@@ -20,12 +20,24 @@ Egenskap: Tildele tilgang til en applikasjon mot en organisasjonssamling
   gjelder enten medlemslistene vedlikeholdes gjennom løsningen eller av databaseforvaltningen.
   Forvaltningen av samlinger og medlemskap er en egen kravdiskusjon, jf. BRU-TIL-SAM-001.
 
+  # Spørsmålet om en tilgang som følger av en samling skal vises i applikasjonens egen
+  # tilgangsliste, er besvart av implementasjonen 13.11.2026. Se regelen «En tilgang gitt
+  # gjennom en samling vises i applikasjonens tilgangsliste, men fjernes ikke der».
+  #
   # ÅPNE SPØRSMÅL:
-  # - Skal en tilgang som følger av en samling vises i applikasjonens egen tilgangsliste, og
-  #   hvordan skal det i så fall fremgå at den ikke kan fjernes der? I dag leses den på
-  #   samlingen, ikke på applikasjonen.
   # - Skal brukere, og ikke bare applikasjoner, kunne være mottaker av en tildeling mot en
-  #   samling? Modellen skiller ikke, men behovet er bare kjent for applikasjoner.
+  #   samling? Behovet er bare kjent for applikasjoner. Implementasjonen 13.11.2026 skiller:
+  #   API-et for å tildele og trekke tilbake mot en samling tar bare applikasjoner, mens
+  #   rollelistene for personbrukere og siden for en rolle allerede viser roller en person har
+  #   fått gjennom en samling (BRU-PER-ROL-001). Det finnes ingen flate for å gi en person en
+  #   tilgang mot en samling. Med personer som mottaker følger også spørsmålene fra utkastet i
+  #   #546: om et rollenekt på personen slår tilgangen fra samlingen, og hvordan det fremgår i
+  #   visningen av mine tilganger at en tilgang følger av en samling.
+  # - Skal delegeringstaket til en applikasjon kunne utvides mot en samling fra løsningen?
+  #   Delegeringstaket har fått en egen samlingsform, som vises i applikasjonens delegeringstak
+  #   og gjelder valglisten for roller (BRU-PER-GRU-003), men det finnes ingen flate i løsningen
+  #   for å skrive den. Det er en annen mengde enn tilgangene i denne egenskapen: å
+  #   tildele en tilgang mot en samling endrer ikke applikasjonens delegeringstak.
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -120,6 +132,36 @@ Egenskap: Tildele tilgang til en applikasjon mot en organisasjonssamling
       Så er tilgangen gitt mot samlingen
       Men applikasjonen har ikke tilgangen i noen organisasjon
 
+  Regel: En utgått tilgang kan ikke tildeles mot en samling
+
+    # AVKLART 13.11.2026 (fra implementasjonen): API-et avviser at en utgått tilgang tildeles mot
+    # en samling, med feilen at tilgangskoden er utgått (fs-plattform !6766, BAT-257). Det er den
+    # samme regelen som for de andre tildelingsveiene, jf. «Utgåtte roller kan ikke tildeles» i
+    # BRU-PER-GRU-003. Tilgangen kan fortsatt trekkes tilbake. Å tildele en utgått tilgang som alt
+    # gjelder mot samlingen og miljøet, er suksess uten endring, som for andre tilganger.
+
+    Scenario: Tildeling av en utgått tilgang mot en samling avvises
+      Gitt en tilgang er markert som utgått i rollekatalogen
+      Og jeg har rettighet til å tildele i hver av samlingens medlemsorganisasjoner i miljøet
+      Når jeg forsøker å tildele den utgåtte tilgangen til en applikasjon mot samlingen i det miljøet
+      Så avvises tildelingen
+      Og det fremgår at tilgangen er utgått
+
+    Scenario: Utgåtte tilganger er ikke blant tilgangene som kan tildeles mot en samling
+      # Kommer med fs-plattform !6773 (BAT-434), som var åpen 13.11.2026. Til den er flettet,
+      # står utgåtte tilganger i listen over tilganger som kan tildeles mot samlingen.
+      Gitt en tilgang er markert som utgått i rollekatalogen
+      Og jeg har rettighet til å tildele i hver av samlingens medlemsorganisasjoner i miljøet
+      Når jeg velger tilganger å tildele mot samlingen
+      Så vises ikke den utgåtte tilgangen
+
+    Scenario: En tilgang som er blitt utgått, kan trekkes tilbake mot samlingen
+      Gitt en tilgang er gitt til en applikasjon mot en samling i et miljø
+      Og tilgangen er senere markert som utgått i rollekatalogen
+      Og jeg har rettighet til å tildele i hver av samlingens medlemsorganisasjoner i miljøet
+      Når jeg trekker tilbake tilgangen mot samlingen i det miljøet
+      Så har applikasjonen ikke lenger tilgangen i medlemsorganisasjonene i miljøet
+
   Regel: Å gi en tilgang som alt er gitt, eller trekke tilbake en som ikke gjelder, er suksess
 
     Scenario: Tildele en tilgang som alt gjelder mot samlingen
@@ -170,11 +212,43 @@ Egenskap: Tildele tilgang til en applikasjon mot en organisasjonssamling
       Så har applikasjonen fortsatt tilgangen i organisasjonen gjennom den andre samlingen
 
     Scenario: Å fjerne en direkte tildeling fjerner ikke tilgangen som følger av samlingen
+      # AVKLART 13.11.2026 (fra implementasjonen): FS Admin sier etter fjerningen at
+      # applikasjonen fortsatt har tilgangen, med tilgangskoden. API-et svarer at tilgangen
+      # fortsatt gjelder gjennom samlingen.
       Gitt en applikasjon har en tilgang både mot en samling og tildelt direkte i en medlemsorganisasjon
       Når jeg fjerner den direkte tildelingen i organisasjonen
       Så er den direkte tildelingen fjernet
       Og applikasjonen har fortsatt tilgangen i organisasjonen fordi organisasjonen er medlem av samlingen
+      Og det fremgår at applikasjonen fortsatt har tilgangen
       Og tildelingen mot samlingen står uendret
+
+  Regel: En tilgang gitt gjennom en samling vises i applikasjonens tilgangsliste, men fjernes ikke der
+
+    # AVKLART 13.11.2026 (fra implementasjonen): Tilgangslisten på applikasjonen viser en
+    # tilgang gitt gjennom en samling som en rad i hver organisasjon som er aktivt medlem av
+    # samlingen i miljøet, med «Via samlingen …» og navnet på samlingen. Tilgangene den omfatter,
+    # står som arvede rader. Listen kan filtreres på tilknytningen «Via samling». I dialogen for
+    # å fjerne tilganger kan raden ikke velges, med forklaringen «Via samling … — kan bare
+    # trekkes tilbake for hele samlingen». API-et avviser også å fjerne den for én organisasjon.
+    # Kilde: fs-admin (BAT-308 og BAT-311) og tilgangsstyringen på fs-plattform main.
+    # Det besvarer det åpne spørsmålet om visningen i applikasjonens egen tilgangsliste.
+
+    Scenario: Tilgangen vises i hver medlemsorganisasjon med samlingen den er gitt gjennom
+      Gitt en tilgang er gitt til en applikasjon mot en samling i et miljø
+      Når jeg åpner tilgangslisten på applikasjonen
+      Så ser jeg tilgangen i hver organisasjon som er aktivt medlem av samlingen i miljøet
+      Og det fremgår hvilken samling tilgangen er gitt gjennom
+
+    Scenario: Filtrere tilgangslisten på tilganger gitt gjennom en samling
+      Gitt applikasjonen har tilganger både tildelt direkte og gitt gjennom en samling
+      Når jeg filtrerer tilgangslisten på tilknytningen «Via samling»
+      Så ser jeg bare tilgangene som er gitt gjennom en samling
+
+    Scenario: En tilgang gitt gjennom en samling kan ikke fjernes for én organisasjon
+      Gitt applikasjonen har en tilgang i en medlemsorganisasjon bare gjennom en samling
+      Når jeg velger tilganger å fjerne for organisasjonen og miljøet
+      Så kan jeg ikke velge tilgangen som er gitt gjennom samlingen
+      Og det fremgår at tilgangen bare kan trekkes tilbake for hele samlingen
 
   Regel: Virkningen følger medlemslisten
 
@@ -202,9 +276,25 @@ Egenskap: Tildele tilgang til en applikasjon mot en organisasjonssamling
       Når en organisasjon meldes ut av samlingen i testmiljøet
       Så har applikasjonen fortsatt tilgangen i organisasjonen i produksjonsmiljøet
 
+  @openquestion
   Regel: Tildelingene mot en samling er skjermet, mens katalogen og medlemslisten er åpen
 
+    # ÅPNE SPØRSMÅL:
+    # - Implementasjonen 13.11.2026 skjermer listen over tildelingene mot samlingen slik regelen
+    #   sier, både på samlingen og på applikasjonen. Men raden i tilgangslisten på applikasjonen
+    #   (regelen over) vises for alle som ville sett en direkte tildeling til applikasjonen i den
+    #   organisasjonen og det miljøet, med navnet på samlingen. En administrator i én
+    #   medlemsorganisasjon ser altså at applikasjonen har tilgangen gjennom samlingen, men får en
+    #   tom liste over tildelingene mot samlingen. Er det slik vi vil ha det? Rollesiden gjør det
+    #   samme for personer (BRU-PER-ROL-001, avklart av Kjetil).
+
+    @openquestion
     Scenario: Se tildelingene mot en samling jeg kan tildele mot
+      # ÅPNE SPØRSMÅL:
+      # - I implementasjonen 13.11.2026 ser jeg tildelingen, men ikke hvilken applikasjon den er
+      #   gitt til, når jeg mangler innsyn i applikasjonen (lesetilgang i organisasjonen som eier
+      #   applikasjonen). Raden viser da tilgang, miljø og gyldighet. Skal kravet si det, eller
+      #   skal retten til å tildele mot samlingen også gi innsyn i applikasjonen?
       Gitt jeg har rettighet til å tildele tilganger i hver av samlingens medlemsorganisasjoner i miljøet
       Når jeg åpner tilgangene for samlingen
       Så ser jeg hvilke applikasjoner som har fått hvilke tilganger, i hvilket miljø
