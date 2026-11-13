@@ -155,3 +155,7 @@ Kjetils avklaringer 13.11.2026, lagt inn som AVKLART i kravene:
   begge; den erstatter «Du har ingen roller du kan tildele.». Snackbaren «Tildelingen er
   fjernet.» er godkjent. Den nye regelen for det første kontrollsifferet (BAT-433) må være på
   plass innen 2032 i både API-et og FS Admin (GRU-013, ikke lenger `@openquestion`).
+- **Korrigert 13.11.2026 (Kjetil):** «ingen synlig overskrift over listen» gjaldt seksjonen, som
+  allerede bare har en overskrift for skjermlesere. Listen har overskriften «Tildelinger», fordi
+  den viser tildelingene av rollen. Det er ikke lenger et avvik i FS Admin at listen har en
+  overskrift; fs-admin viser i dag «Brukere», og teksten skal være «Tildelinger».

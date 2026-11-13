@@ -36,7 +36,10 @@ personbrukere.
 ### Rollens oversiktsside
 
 - Overskrift: rollekoden, med beskrivelsen under.
-- Listen har ingen egen overskrift.
+- Seksjonen for listen har ingen synlig overskrift. Overskriften «Brukere med rollen» leses bare
+  av skjermlesere.
+- Listen har sin egen overskrift, «Tildelinger», fordi den viser tildelingene av rollen (Kjetil,
+  13.11.2026).
 - Knappen «Gi rollen til en person» ligger i listens egen flate, som handlingselement for
   listen. Den åpner dialogen fra BRU-PER-ROL-002. Den vises bare når rollen er i
   delegeringstaket for minst én organisasjon og ett miljø brukeradministratoren kan tildele i, og
@@ -97,6 +100,7 @@ tekstene. Tekstene merket «fra fs-admin !3046, ikke godkjent» er bygget, men i
 | Rolleoversikten | Ingen roller passer filteret | «Ingen roller funnet», «Endre eller tøm filtrene for å vise flere roller.» (fra fs-admin !3046, ikke godkjent) | – | Søke fram en rolle |
 | Rollens oversiktsside | Ingen brukere brukeradministratoren kan se, har rollen | «Ingen brukere du har tilgang til, har denne rollen.» | – | Vise tildelingene av en rolle |
 | Rollens oversiktsside | Ingen tildelinger passer filteret | «Ingen brukere funnet», «Endre eller tøm filtrene for å vise flere brukere.» (fra fs-admin !3046, ikke godkjent) | – | Filtrere tildelingene på organisasjon |
+| Listens overskrift | Alltid | «Tildelinger» | – | Vise tildelingene av en rolle |
 | Antallet over listen | Alltid | «{antall} tildelinger i listen», med «tildeling» i entall | entall og flertall | Antallet på rollens oversiktsside teller tildelinger |
 | Kolonneoverskrift | Alltid | «Gjelder for organisasjon» (finnes i fs-admin) | – | Vise tildelingene av en rolle |
 | Navnekolonnen | Navnet til personen er ikke kjent | Personens fødselsnummer, D-nummer eller SNR | – | GRU-013: Nummeret vises i stedet for navnet når navnet mangler |
@@ -178,6 +182,6 @@ Et tomt søkefelt sendes som ingen filtrering.
 - Listen viser bare personer. Feide-brukere står ikke i listen før tildelingene er flyttet til
   personen (BRU-PER-GRU-014). Avklart 13.11.2026 (Kjetil).
 - Menypunktet heter «Roller». Avklart 13.11.2026 (Kjetil).
-- Listen har ingen synlig overskrift. fs-admin !3046 viser «Brukere», fordi `ActionList` ikke
-  kan skjule overskriften uten å fjerne antallet, filtrene og knappen. Det er et avvik som rettes
-  i koden. Avklart 13.11.2026 (Kjetil).
+- Listen har overskriften «Tildelinger», fordi den viser tildelingene av rollen. Seksjonens
+  overskrift, «Brukere med rollen», leses bare av skjermlesere. Avklart 13.11.2026 (Kjetil). Det
+  erstatter avklaringen om at listen ikke skulle ha noen synlig overskrift.
