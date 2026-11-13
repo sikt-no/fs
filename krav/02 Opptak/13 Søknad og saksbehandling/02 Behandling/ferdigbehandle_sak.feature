@@ -74,19 +74,18 @@ Egenskap: Ferdigbehandle en sak
       Når søknaden behandles automatisk
       Så behandles ikke saken helautomatisk
 
-  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032
+  @ref-FLY-OPT-AUT-001 @ref-OPT-BEH-BEH-032 @implemented
   Regel: Den automatiske behandlingen setter saken til ferdig behandlet når alt er avgjort
 
     Bakgrunn:
       Gitt at søkeren har ett vitnemål, og vitnemålet gir GSK
 
-    @implemented
     Scenario: Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt
       Gitt at den automatiske behandlingen kan avgjøre alle stegene for saken
       Når søknaden behandles automatisk
       Så er saken ferdig behandlet
 
-    @depends-on-OPT-BEH-BEH-008 @depends-on-OPT-BEH-BEH-036 @implemented
+    @depends-on-OPT-BEH-BEH-008 @depends-on-OPT-BEH-BEH-036
     # OPT-BEH-BEH-008: «Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet»
     # OPT-BEH-BEH-036: «Saken får automatiske mangeltekster når søkeren ikke er kvalifisert»
     Scenario: Saken er ferdig behandlet selv om kravelementene ga mangeltekst
