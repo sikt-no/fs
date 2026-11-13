@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #216, #598
-@OPT-REG-KVO-003 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
+@OPT-REG-KVO-003 @must @implemented @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette standard plassflyt i regelverkssamlingen
   Som opptaksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å sette én standard plassflyt i regelverkssamlingen
