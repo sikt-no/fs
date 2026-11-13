@@ -112,7 +112,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 
 | Fase | Side | Status | Dato |
 |---|---|---|---|
-| 1. Verifisering (`fs-verify`) | [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-09-1136.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5180653598) | 2 ikke funnet, 0 usikker | 2026-11-09 |
+| 1. Verifisering (`fs-verify`) | [verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-13-1500.md](../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/verify-gi_tilbudsgaranti_ved_tidlig_opptak-2026-11-13-1500.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5194317873) | Alt funnet (de to siste scenarioene; kravet er `@implemented`) | 2026-11-13 |
 | 1. Testrapport – verifisering | [testrapport-verifisering-2026-11-09.md](testrapport-verifisering-2026-11-09.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5181767779) | Klar, med forbehold: de 25 leverte scenarioene kan testes | 2026-11-09 |
 | 1. Testplan | (denne siden) | Laget | 2026-11-09 |
 | 2. Agentisk funksjonstest – testcaser (`fs-testcaser-cdp`) | [`cdp-tester/02 Opptak/13 Søknad og saksbehandling/02 Behandling/`](../../cdp-tester/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature) | Laget (søkerne og flere testdata i miljøfila må fylles ut før kjøringen) | 2026-11-09 |

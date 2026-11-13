@@ -10,6 +10,7 @@
 - **Kontroll:** `fs-verify-kontroll`
 - **Menneskelig kontroll:** [Fylles ut: navn og dato for personen som har kontrollert rapporten]
 - **Skjermbilder:** nei
+- **Confluence:** https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5194317873
 
 Gating-sett: alle scenarioene i scope, også `@draft` og `@planned`, minus `@demo` (verifisert uansett status).
 
