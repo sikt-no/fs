@@ -2,10 +2,13 @@
 #
 # Kilder: Confluence PFS 4608491542 «Manuell behandling – GSK» (akseptansekravene 1–8),
 # PFS 4456513553 «GSK avklaringer med HK-Dir 23. mars 2026» og PFS 4593713169
-# «GSK-funksjonalitet – tilbakemeldinger fra sektor». Jira: SOPP-180.
+# «GSK-funksjonalitet – tilbakemeldinger fra sektor». Jira: SOPP-180, epic STEK-702.
 # Skisse: Figma «FS-Admin – Seksjon Opptak», seksjonen «GSK» (node 18259:99465). Den er justert
 # etter tilbakemeldingene om flyten. De eldre skissene gjelder ikke.
 # Avklart i møte 10.11.2026 (Marit, Sofie, Erik), svar i PR #1003.
+# Avklart 13.11.2026, svar fra fagperson etter verifiseringen: saksbehandleren setter ikke en
+# negativ konklusjon, men annullerer, alle grunnlagskodene kan velges, og tidligere konklusjoner
+# er konklusjonene fra tidligere opptak, ikke versjoner i samme opptak.
 #
 # Den automatiske GSK-konklusjonen står i OPT-BEH-BEH-015, som en del av den automatiske
 # saksbehandlingen. Der står også at automatikken aldri overskriver en konklusjon som finnes
@@ -36,22 +39,20 @@ Egenskap: Sette GSK-konklusjon manuelt
   Konklusjonen gjelder søknaden i opptaket, og er den samme for alle saksbehandlende
   organisasjoner i opptaket. En konklusjon fra et tidligere opptak gjenbrukes som en kopi
   (OPT-BEH-BEH-015). Konklusjonen kan endres fritt til opptaket er historisk, også når den er
-  satt automatisk, og tidligere versjoner bevares og kan ses. Automatikken overskriver aldri en
-  konklusjon saksbehandleren har satt. En positiv konklusjon kan annulleres av organisasjonen som
-  satte eller sist endret den, og av HK-dir. En konklusjon som er satt automatisk, kan alle
-  saksbehandlende organisasjoner annullere.
+  satt automatisk. Automatikken overskriver aldri en konklusjon saksbehandleren har satt. En
+  positiv konklusjon kan annulleres av organisasjonen som satte eller sist endret den, og av
+  HK-dir. En konklusjon som er satt automatisk, kan alle saksbehandlende organisasjoner annullere.
+  Saksbehandleren ser søkerens konklusjoner fra tidligere opptak, også fra det gamle
+  opptakssystemet.
 
-  En negativ GSK-konklusjon settes bare når saksbehandleren overstyrer en positiv konklusjon som
-  er satt automatisk. Ellers registrerer saksbehandleren manglende generell studiekompetanse som
-  en mangel, som andre mangler (OPT-BEH-BEH-008).
+  Saksbehandleren setter aldri en negativ GSK-konklusjon. Er en positiv konklusjon feil,
+  annullerer saksbehandleren den. Manglende generell studiekompetanse registreres som en mangel,
+  som andre mangler (OPT-BEH-BEH-008).
 
-  @openquestion
   Regel: Saksbehandleren setter GSK-konklusjonen med en grunnlagskode
-    # ÅPNE SPØRSMÅL:
-    # - Grunnlagskodene for GSK er i dag en fast liste, lik for alle opptak og år. De er ikke
-    #   grunnlagene i regelverkssamlingen (OPT-REG-GRU-001), som GSK-konklusjonen ikke bruker. Skal
-    #   saksbehandleren kunne velge alle kodene i lista, og hvem skal forvalte den? I dag kan den
-    #   bare endres av utviklerne.
+    # Grunnlagskodene for GSK er en fast liste, lik for alle opptak og år, og ikke grunnlagene i
+    # regelverkssamlingen (OPT-REG-GRU-001). Avklart 13.11.2026: saksbehandleren kan velge alle
+    # kodene i lista, og utviklerne endrer lista ved behov.
 
     Scenario: Sette GSK-konklusjon
       Gitt at søknaden ikke har noen GSK-konklusjon
@@ -70,28 +71,27 @@ Egenskap: Sette GSK-konklusjon manuelt
       Så viser GSK-konklusjonen organisasjonen saksbehandleren er ved, og datoen den ble satt
 
   @ref-OPT-BEH-BEH-008
-  Regel: En negativ GSK-konklusjon settes bare over en positiv konklusjon som er satt automatisk
-    # Avklart 11.11.2026 etter review av PR #1003: sier automatikken at søkeren har generell
-    # studiekompetanse, og det ikke stemmer, overstyrer saksbehandleren konklusjonen med en negativ
-    # konklusjon. Det er det eneste tilfellet med negativ konklusjon. Den negative konklusjonen
-    # stopper gjenbruken av eldre positive konklusjoner (OPT-BEH-BEH-015). Erstatter regelen
-    # «Saksbehandleren endrer GSK-konklusjonen» i OPT-BEH-BEH-015, der negativ konklusjon kunne
-    # settes over enhver positiv konklusjon.
+  Regel: Saksbehandleren setter ikke en negativ GSK-konklusjon
+    # Avklart 13.11.2026: sier automatikken at søkeren har generell studiekompetanse, og det ikke
+    # stemmer, annullerer saksbehandleren konklusjonen med en årsak. Manglende generell
+    # studiekompetanse registreres som en mangel (OPT-BEH-BEH-008). Erstatter regelen fra
+    # 11.11.2026 om at saksbehandleren kunne overstyre en automatisk konklusjon med en negativ
+    # konklusjon.
 
-    Scenario: Overstyre en automatisk konklusjon med en negativ konklusjon
+    Scenario: Annullere en automatisk konklusjon når søkeren ikke har generell studiekompetanse
       Gitt at søknaden har fått en positiv GSK-konklusjon automatisk
-      Når saksbehandleren setter en negativ GSK-konklusjon
-      Så er GSK-konklusjonen på søknaden negativ
+      Og at søkeren ikke har generell studiekompetanse
+      Når saksbehandleren annullerer konklusjonen med en årsak til annullering
+      Og saksbehandleren bekrefter annulleringen
+      Så er GSK-konklusjonen annullert
 
     Scenario: Ingen negativ konklusjon når søknaden ikke har noen konklusjon
-      # Manglende generell studiekompetanse registreres som en mangel (OPT-BEH-BEH-008).
       Gitt at søknaden ikke har noen GSK-konklusjon
       Når saksbehandleren setter GSK-konklusjonen
       Så kan saksbehandleren bare velge en grunnlagskode for generell studiekompetanse
 
-    Scenario: Ingen negativ konklusjon over en konklusjon saksbehandleren har satt
-      # En feil konklusjon saksbehandleren har satt, endres eller annulleres.
-      Gitt at søknaden har en positiv GSK-konklusjon satt av en saksbehandler
+    Scenario: Ingen negativ konklusjon når konklusjonen endres
+      Gitt at søknaden har en positiv GSK-konklusjon
       Når saksbehandleren endrer GSK-konklusjonen
       Så kan saksbehandleren bare velge en grunnlagskode for generell studiekompetanse
 
@@ -120,20 +120,6 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren endrer GSK-konklusjonen 2027-05-03
       Så er grunnlagsdatoen 2027-05-03
 
-    Scenario: Den forrige konklusjonen bevares når konklusjonen endres
-      # Akseptansekrav 6 og 6a, og HK-dir, alternativ 2.
-      Gitt at søknaden har en GSK-konklusjon med grunnlagskoden RFA
-      Når saksbehandleren endrer grunnlagskoden til KLS
-      Så er konklusjonen med grunnlagskoden RFA bevart som en tidligere konklusjon
-
-    Scenario: Se tidligere konklusjoner
-      # Akseptansekrav 6a. Å se konklusjoner fra tidligere opptak og hente én inn (STEK-443) er et
-      # eget krav.
-      Gitt at GSK-konklusjonen på søknaden er endret to ganger
-      Når saksbehandleren velger å se tidligere konklusjoner
-      Så ser saksbehandleren de to tidligere konklusjonene
-      Og hver tidligere konklusjon viser grunnlagskoden, hvem som satte den og datoen
-
     Scenario: Saksbehandleren angrer endringen
       Gitt at søknaden har en GSK-konklusjon
       Og at saksbehandleren endrer GSK-konklusjonen
@@ -152,6 +138,35 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren endrer grunnlagskoden til KLS
       Så har søknaden en GSK-konklusjon med grunnlagskoden KLS
       Og GSK-konklusjonen i det historiske opptaket har fortsatt grunnlagskoden RFA
+
+  Regel: Saksbehandleren ser søkerens GSK-konklusjoner fra tidligere opptak
+    # Avklart 13.11.2026: tidligere konklusjoner er konklusjonene fra historiske opptak og fra det
+    # gamle opptakssystemet, også de annullerte. Konklusjoner i opptak som ikke er historiske, er
+    # under arbeid og vises ikke. Endringer i samme opptak overskriver konklusjonen, og tidligere
+    # versjoner vises ikke. Å hente inn en tidligere konklusjon når automatikken ikke har satt noen
+    # (STEK-443), er et eget krav.
+
+    Scenario: Se konklusjonene fra tidligere opptak
+      # Akseptansekrav 6a.
+      Gitt at søkeren har GSK-konklusjoner fra to historiske opptak
+      Når saksbehandleren velger å se tidligere konklusjoner
+      Så ser saksbehandleren konklusjonene fra de to historiske opptakene
+      Og hver tidligere konklusjon viser grunnlagskoden, opptaket, organisasjonen som satte den og datoen
+
+    Scenario: Se konklusjonene fra det gamle opptakssystemet
+      Gitt at søkeren har en GSK-konklusjon fra det gamle opptakssystemet
+      Når saksbehandleren velger å se tidligere konklusjoner
+      Så ser saksbehandleren konklusjonen fra det gamle opptakssystemet
+
+    Scenario: Annullerte konklusjoner fra tidligere opptak vises
+      Gitt at søkeren har en annullert GSK-konklusjon fra et tidligere opptak
+      Når saksbehandleren velger å se tidligere konklusjoner
+      Så ser saksbehandleren den annullerte konklusjonen med årsaken til annulleringen
+
+    Scenario: Konklusjoner i opptak som ikke er historiske, vises ikke
+      Gitt at søkeren har en GSK-konklusjon i et annet opptak som ikke er historisk
+      Når saksbehandleren velger å se tidligere konklusjoner
+      Så ser ikke saksbehandleren konklusjonen fra det andre opptaket
 
   Regel: Alle saksbehandlende organisasjoner i opptaket ser den samme GSK-konklusjonen
 
@@ -172,8 +187,9 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren ved den andre organisasjonen ser på GSK-konklusjonen
       Så ser saksbehandleren hvilken organisasjon som endret konklusjonen, og datoen for endringen
 
-    Scenario: Saksbehandleren med tilgang til å se personen ser konklusjonen
-      Gitt at saksbehandleren har tilgang til å se personen, men ikke til å endre personen
+    Scenario: Saksbehandleren som kan se saken, ser konklusjonen
+      # Avklart 13.11.2026: tilgangen følger saken, ikke personen.
+      Gitt at saksbehandleren har tilgang til å se saken, men ikke til å endre saken
       Når saksbehandleren ser på GSK-konklusjonen
       Så ser saksbehandleren GSK-konklusjonen og de tidligere konklusjonene
       Men saksbehandleren ser ikke muligheten til å endre GSK-konklusjonen
@@ -191,7 +207,6 @@ Egenskap: Sette GSK-konklusjon manuelt
       Når saksbehandleren annullerer konklusjonen med en årsak til annullering
       Og saksbehandleren bekrefter annulleringen
       Så er GSK-konklusjonen annullert
-      Og den annullerte konklusjonen er bevart som en tidligere konklusjon
 
     Scenario: Organisasjonen som endret konklusjonen sist, kan annullere den
       Gitt at søknaden har saker ved to saksbehandlende organisasjoner
