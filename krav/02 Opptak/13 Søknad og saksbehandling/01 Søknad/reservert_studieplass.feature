@@ -3,7 +3,10 @@
 # Reservert studieplass er en tilbudsgaranti, se
 # 13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti.feature (OPT-BEH-BEH-010).
 # Kravet kan senere også få meldinger og varsling om reservert studieplass.
-@OPT-SØK-SØK-016 @could @draft @scope-tilbudsgaranti-2027
+# Tidligopptaket erstatter reservert studieplass fra opptaksforvalter med tilbudsgarantien
+# for tidlig opptak (OPT-BEH-BEH-007). Søkeren har da ikke lenger eksplisitt en reservert
+# studieplass, men en tilsvarende garanti.
+@OPT-SØK-SØK-016 @could @draft @scope-tilbudsgaranti-2027 @ref-OPT-BEH-BEH-007
 Egenskap: Reservert studieplass
   Som søker
   ønsker jeg å se at jeg har en reservert studieplass
