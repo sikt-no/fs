@@ -1,9 +1,13 @@
 # language: no
-# Generert av fs-testcaser-cdp 2026-11-09. Rettet 2026-11-10 etter kjøringen (Klargjøring K steg 5 og Poengsum P)
+# Generert av fs-testcaser-cdp 2026-11-09. Rettet 2026-11-10 etter kjøringen (Klargjøring K steg 5 og Poengsum P), og 2026-11-13
+# (testdataene for «Annen tilbudsgaranti på et høyere prioritert …» og en søker med to saker)
 # Krav: krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/gi_tilbudsgaranti_ved_tidlig_opptak.feature @ 9e267353 (blob a409c3e78fbabcdb46286c0e2d0163e9243154c2)
 #
 # Bare scenarioene som er levert, er med: regelen «Opptaksforvalter gjennomfører tidligopptaket», to scenarioer
 # om medianen, to om utfallet og regelen om manuell tilbudsgaranti. Scenarioene som er utkast (@draft), er ikke med.
+#
+# «Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak» er heller ikke med. Resultatet kan bare ses når
+# hovedopptaket kjøres, og det hører til plasstildelingen (@OPT-PLA-TIL-002), ikke til tidligopptaket.
 #
 # Gjennomføringen går gjennom alle søkerne i opptaket som har søkt om tidlig opptak, og kan ikke settes tilbake.
 # Derfor har hvert scenario sin egen søker: «sak-tidlig-opptak-…» er en liste med søkere i miljøfila, og hvert
@@ -33,6 +37,10 @@
 #   3. Velg «Kjør tidligopptak». Dialogen «Kjøre tidligopptak?» viser prøvekjøringen.
 #   4. Vent til «Beregner resultatet…» er borte, og velg «Kjør tidligopptak» i dialogen.
 #   5. «Tidligopptaket er kjørt.» vises.
+#
+# «Og fordelingen har delt saken (opptil 2 minutter)»: fordelingen skjer i tildelingsjobben. Agenten søker på søknadsnummeret
+# under «Gå til søknader» som «opptak-saksbehandler-behandlende-tidlig-opptak-andre» omtrent hvert 30. sekund, til saken
+# finnes, og ellers i inntil 2 minutter. Finnes den ikke da, er testcasen «Ikke testet».
 #
 # Se tilbudsgarantien S: som «opptak-saksbehandler-behandlende-tidlig-opptak», åpne saken til søkeren på nytt
 # (last inn siden), og les «Tilbudsgaranti fra forvalter» for hvert søknadsalternativ i saken.
@@ -250,15 +258,25 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
       Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
 
+    # Prioritet 1 skal ikke selv gi tilbudsgaranti i tidligopptaket, for da erstattes tilbudsgarantien der
+    # (som i «Tilbudsgaranti fra opptaksforvalter som gir tilbud blir erstattet»). Derfor er poenggrensen
+    # på prioritet 1 over søkerens poengsum.
+    @endrer-data
     Scenario: Annen tilbudsgaranti på et høyere prioritert søknadsalternativ stopper ikke tidligopptaket
-      Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-prioritet-1-uten-tidlig-opptak»
-      Og poenggrensen for «utdanningstilbud-tidlig-opptak» i fanen «Tidlig opptak» er lavere enn søkerens poengsum
+      Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
+      Og jeg leser søkerens poengsum P til «utdanningstilbud-tidlig-opptak» i saken (som i Poengsum P)
+      Og poenggrensen for «utdanningstilbud-tidlig-opptak-andre» i fanen «Tidlig opptak» er lavere enn søkerens poengsum
       Og jeg er logget inn som «opptak-forvalter-forvaltende»
-      Og jeg velger «tilbudsgarantitype-forvalter-gir-tilbud» i «Tilbudsgaranti fra forvalter» for «utdanningstilbud-uten-tidlig-opptak» i saken til søkeren, og «Tilbudsgaranti lagret» vises
+      Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
+      Og jeg noterer verdien i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>»
+      Og jeg skriver P + 5 i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>», og velger «Lagre poenggrenser»
+      Og jeg velger «tilbudsgarantitype-forvalter-gir-tilbud» i «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren, og «Tilbudsgaranti lagret» vises
       Og jeg gjør søkerens sak klar som i Klargjøring K
       Når jeg gjennomfører tidligopptaket som i Gjennomføring G
-      Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
-      Og står «tilbudsgarantitype-forvalter-gir-tilbud» fortsatt under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-uten-tidlig-opptak»
+      Så står «tilbudsgarantitype-tidlig-opptak» under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak-andre» i saken til søkeren (som i S)
+      Og står «tilbudsgarantitype-forvalter-gir-tilbud» fortsatt under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak»
+      # Setter tilbake:
+      Og jeg skriver verdien jeg noterte i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>», og velger «Lagre poenggrenser»
 
     @endrer-data
     Scenario: Tidligopptakstilbud fra tilbyder går foran poengsummen
@@ -366,17 +384,6 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       # Setter tilbake:
       Og jeg skriver verdien jeg noterte i «Poenggrense tidlig opptak for <utdanningstilbud-tidlig-opptak>», og velger «Lagre poenggrenser»
 
-    @ref-OPT-PLA-TIL-002
-    Scenario: Søknadsalternativ uten tilbudsgaranti går videre til ordinært opptak
-      # Hovedopptaket kjøres ikke i denne testen. Det nærmeste som kan ses, er en prøvetildeling i plasstildelingen,
-      # som ikke publiseres. [Sjekk begrep: stegene for prøvetildelingen]
-      Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-kvalifisert»
-      Og jeg gjør søkerens sak klar som i Klargjøring K, men velger konklusjonen der søkeren ikke deltar i «Konklusjon»
-      Og jeg gjennomfører tidligopptaket som i Gjennomføring G
-      Og «tilbudsgarantitype-tidlig-opptak» står ikke under «Tilbudsgaranti fra forvalter» for «utdanningstilbud-tidlig-opptak» i saken til søkeren (som i S)
-      Når jeg er logget inn som «opptak-forvalter-forvaltende», og kjører en prøvetildeling i «Plasstildeling» for «opptak-tidlig-opptak» [Sjekk begrep]
-      Så er søkeren med blant søkerne til «utdanningstilbud-tidlig-opptak» i resultatet av prøvetildelingen [Sjekk begrep]
-
   Regel: Median poengsum fra forrige opptak brukes når poenggrensen ikke er satt
 
     # Søkerne i «sak-tidlig-opptak-median-over», «-lik» og «-under» har poengsummen over, lik og under medianen
@@ -446,11 +453,16 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
 
     # Teknikk: ekvivalensklasser (en søker med to saker som ikke er ferdig behandlet, telles én gang)
+    # Søknaden får én sak, hos organisasjonen som saksbehandler prioritet 1. Med realkompetanse saksbehandler hver
+    # tilbyder sitt eget søknadsalternativ, så saken deles i to når saksbehandleren overstyrer utdanningsbakgrunnen.
     @utledet
     Scenario: Opptaksforvalter ser utfallet av tidligopptaket: en søker med to saker som ikke er ferdig behandlet
-      Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-to-saker»
-      Og jeg er logget inn som «opptak-forvalter-forvaltende»
-      Og jeg har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
+      Gitt jeg tar en ubrukt søker fra «sak-tidlig-opptak-to-tilbydere»
+      Og jeg er logget inn som «opptak-saksbehandler-behandlende-tidlig-opptak»
+      Og jeg åpner saken til søkeren, og velger «Realkompetanse» i «Velg overstyrt utdanningsbakgrunn» under «Utdanningsbakgrunn»
+      Og jeg ser «Utdanningsbakgrunn overstyrt»
+      Og fordelingen har delt saken (opptil 2 minutter)
+      Og jeg bytter til «opptak-forvalter-forvaltende», og har åpnet fanen «Tidlig opptak» under «Plasstildeling» i «opptak-tidlig-opptak»
       Og jeg velger «Kjør tidligopptak», og noterer tallet ved «Har saker som ikke er behandlet» i dialogen «Kjøre tidligopptak?»
       Og jeg lukker dialogen uten å velge «Kjør tidligopptak»
       Og jeg gjør søkerens sak hos organisasjonen til «opptak-saksbehandler-behandlende-tidlig-opptak» klar som i Klargjøring K
