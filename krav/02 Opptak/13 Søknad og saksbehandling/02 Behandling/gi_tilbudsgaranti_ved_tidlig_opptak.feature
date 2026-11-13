@@ -124,12 +124,17 @@
 #   kvalifisert, eller kvalifiseringen ikke er vurdert. Tilbudsgaranti er tilbudsgaranti.
 #   Fagperson avklarte dette, sendte spørsmålet videre til en annen domeneekspert, og har
 #   ikke fått innsigelser.
+#   (13.11.2026) Reservert studieplass fra opptaksforvalter (RSO) erstattes av
+#   tilbudsgarantien fra tidligopptaket, som de andre tilbudsgarantiene fra
+#   opptaksforvalter. Reservert studieplass fra behandler (RES) blir stående.
 # - Manuell tilbudsgaranti har ingen betingelser knyttet til tidlig opptak, heller
 #   ikke for typer som gjelder tidlig opptak. Tilbudsgaranti er generell, og gis av
 #   flere grunner enn tidlig opptak. Betingelsen fra dagens løsning (tidligsvar bare
 #   når søkeren har søkt om tidlig opptak) videreføres ikke. At tilbyder bare gir
 #   FOP eller FAL til søkere med godkjent grunn (fagperson i PR #654, 01.10.2026),
 #   er praksis, ikke en regel i systemet (avklart 12.10.2026).
+#   (13.11.2026) Tidligopptakstilbudet gjelder også når søkeren ikke har søkt om tidlig
+#   opptak: gjennomføringen tar søkeren med, og søkeren får svaret innvilget tidlig opptak.
 # - Kodeverkene tidlig opptak bygger på (begrunnelser, konklusjoner og
 #   tilbudsgarantityper) legges inn i databasen per opptak, og vedlikeholdes ikke i
 #   løsningen nå. At opptaksforvalter kan forvalte dem, kommer senere, bekreftet av
@@ -253,6 +258,14 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Når opptaksforvalter gjennomfører tidligopptaket
       Så får søkeren tilbudsgaranti på "Sykepleie, høst 2027"
 
+    @ref-OPT-SØK-SØK-016
+    Scenario: Reservert studieplass fra opptaksforvalter blir erstattet
+      Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
+      Og opptaksforvalter har satt reservert studieplass på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så får søkeren tilbudsgaranti for tidlig opptak på "Sykepleie, høst 2027"
+      Og søkeren har ikke lenger reservert studieplass fra opptaksforvalter på "Sykepleie, høst 2027"
+
     Scenario: Den høyeste poengsummen til søknadsalternativet gjelder
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
       Og søkeren er kvalifisert til "Sykepleie, høst 2027"
@@ -308,6 +321,12 @@ Egenskap: Gi tilbudsgaranti ved tidlig opptak
       Og tilbyder har gitt tidligopptakstilbud på "Sykepleie, høst 2027"
       Når opptaksforvalter gjennomfører tidligopptaket
       Så har søkeren fortsatt tidligopptakstilbud på "Sykepleie, høst 2027"
+
+    Scenario: Tidligopptakstilbud fra tilbyder gjelder også uten søknad om tidlig opptak
+      Gitt en annen søker har ikke søkt om tidlig opptak
+      Og tilbyder har gitt den andre søkeren tidligopptakstilbud på "Sykepleie, høst 2027"
+      Når opptaksforvalter gjennomfører tidligopptaket
+      Så har den andre søkeren tidligopptakstilbud på "Sykepleie, høst 2027"
 
     Scenario: Prøvekjøre tidligopptaket
       Gitt saksbehandler har konkludert med at søkeren deltar i tidligopptaket
