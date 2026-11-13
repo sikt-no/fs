@@ -1,7 +1,7 @@
 # language: no
 # BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «forvaltende organisasjon» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #207
-@OPT-BEH-BEH-011 @must @in-progress
+@OPT-BEH-BEH-011 @must @implemented
 Egenskap: Tildele saksbehandlende organisasjon
   Som opptaksforvalter ved forvaltende organisasjon
   ønsker jeg å bestemme hvilken organisasjon som saksbehandler hvert søknadsalternativ
@@ -33,7 +33,7 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 1. Oppsett ───────────────────────────────────────────────
 
-  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001 @implemented
+  @ref-OPT-OPT-UTD-004 @ref-FLY-OPT-SAK-001
   Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket
     # Lærestedets valg av behandlertildelingsregel per utdanningstilbud står der.
 
@@ -96,7 +96,6 @@ Egenskap: Tildele saksbehandlende organisasjon
 
   # ── 2. Fordeling ─────────────────────────────────────────────
 
-  @implemented
   Regel: Ved «Alle som deltar i opptaket» saksbehandler lærestedet søkeren har prioritert høyest
 
     Scenario: Lærestedet på første prioritet saksbehandler hele søknaden
@@ -113,7 +112,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "NTNU" saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og "UiT Norges arktiske universitet" er saksbehandlende organisasjon for "Historie, UiT" og "Informatikk, UiO"
 
-  @implemented
   Regel: Ved «Bare tilbyderen – også for studieønsker uten egen regel» saksbehandler tilbyderen også søknadsalternativene uten egen behandlertildelingsregel
 
     Scenario: Tilbyderen saksbehandler søknadsalternativene uten egen behandlertildelingsregel
@@ -129,7 +127,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Musikkpedagogikk, HVL" og "Informatikk, UiO"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
 
-  @implemented
   Regel: Ved «Bare tilbyderen – bare dette studieønsket» saksbehandler tilbyderen bare søknadsalternativet med behandlertildelingsregelen
 
     Scenario: Tilbyderen saksbehandler ikke søkerens andre søknadsalternativer
@@ -146,7 +143,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Fagskolen Innlandet" saksbehandlende organisasjon for "Elektrofag, Fagskolen Innlandet"
       Og "Fagskolen i Viken" er saksbehandlende organisasjon for "Helsefag, Fagskolen i Viken"
 
-  @implemented
   Regel: Ved «Tilbydere i samme sektor» saksbehandler én organisasjon alle søknadsalternativene i sektoren
 
     Scenario: Tilbyderen søkeren har prioritert høyest i sektoren saksbehandler hele sektoren
@@ -183,8 +179,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så er "Høgskulen på Vestlandet" saksbehandlende organisasjon for "Journalistikk, HVL" og "Informatikk, UiO"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       # AVKLART 08.10.2026 med domeneekspert: verken SPE eller JOU sier at tilbyderen bare skal
-      # saksbehandle sine egne søknadsalternativer, så søkerens prioritering avgjør. Koden gir i dag
-      # SPE forrang uansett prioritering.
+      # saksbehandle sine egne søknadsalternativer, så søkerens prioritering avgjør.
 
     Scenariomal: Opptaksforvalteren kan velge <organisasjon> som organisasjon for sektoren
       Når opptaksforvalteren ved HK-dir velger "<organisasjon>" som organisasjon på "JOU"
@@ -200,7 +195,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når opptaksforvalteren ved HK-dir velger organisasjon på "JOU"
       Så ser ikke opptaksforvalteren "Universitetet i Bergen" blant valgene
 
-  @implemented
   Regel: Unntak for utdanningsbakgrunn og ledige studieplasser overstyrer behandlertildelingsregelen
 
     Scenario: Legge til unntak for utdanningsbakgrunn
@@ -271,40 +265,75 @@ Egenskap: Tildele saksbehandlende organisasjon
       # AVKLART 08.10.2026 i PR #684: det som avgjør, er om ledige studieplasser har åpnet. Om perioden
       # for ledige studieplasser er stengt, spiller ingen rolle.
 
-  @ref-FLY-OPT-SAK-001 @openquestion
+  @ref-FLY-OPT-SAK-001
   Regel: Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket
-    # ÅPNE SPØRSMÅL:
-    # - Ingrid Helset foreslår i STEK-579 (22.10.2026), og Marit Bjørnerud Rønning er enig, at dette lages
-    #   som en behandlertildelingsregel som opptaksforvalteren ved organisasjonen som oppretter opptaket,
-    #   setter. Skal regelen skrives om slik?
+    # AVKLART 23.10.2026 i STEK-579 (Ingrid Helset, Marit Bjørnerud Rønning): valget er et unntak for
+    # lærested på behandlertildelingsregelen, som opptaksforvalteren ved forvaltende organisasjon setter.
+    # Lærestedet er fortsatt tilbyder av utdanningstilbudet.
 
-    Scenario: Velge organisasjon som saksbehandler på vegne av lærestedet når lærestedet legges til i opptaket
-      Når opptaksforvalteren ved HK-dir legger til "Arkitektur- og designhøgskolen i Oslo" som deltaker i opptaket
-      Og opptaksforvalteren velger at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
-      Så saksbehandler "OsloMet" på vegne av "Arkitektur- og designhøgskolen i Oslo" i opptaket "Samordna opptak 2027"
-      # AVKLART 07.10.2026 i PR #684: valget gjelder ett bestemt opptak, og gjøres når organisasjonene
-      # som deltar i opptaket settes opp (opptak.opptak_samordna_organisasjon).
+    Scenario: Legge til unntak for lærested
+      Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
+      Når opptaksforvalteren ved HK-dir legger til følgende unntak for lærested på standardregelen
+        | saksbehandles av | på vegne av                           |
+        | OsloMet          | Arkitektur- og designhøgskolen i Oslo |
+      Så gjelder unntaket for søknadsalternativene som fordeles etter standardregelen
 
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet får søknadsalternativene
       Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
-      Og at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Og at standardregelen har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Og at søkeren har søkt "Arkitektur, AHO"
       Når søknadsalternativene fordeles
       Så er "OsloMet" saksbehandlende organisasjon for "Arkitektur, AHO"
 
-    Scenario: Organisasjonen som saksbehandler på vegne av lærestedet må delta i opptaket
-      Gitt at "Universitetet i Bergen" ikke deltar i opptaket
-      Når opptaksforvalteren ved HK-dir velger "Universitetet i Bergen" til å saksbehandle på vegne av "Arkitektur- og designhøgskolen i Oslo"
-      Så avvises valget
+    Scenariomal: Unntaket for lærested gjelder også når <tilfelle>
+      Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
+      Og at "Arkitektur, AHO" har behandlertildelingsregelen "UVH"
+      Og at "UVH" har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Og at <forutsetning>
+      Når søknadsalternativene fordeles
+      Så er "OsloMet" saksbehandlende organisasjon for "Arkitektur, AHO"
 
-    Scenario: Endret valg gjelder bare søknadsalternativer som ikke er fordelt
+      Eksempler:
+        | tilfelle                        | forutsetning                                             |
+        | bare tilbyderen saksbehandler   | søkeren har søkt "Arkitektur, AHO"                       |
+        | søkeren har realkompetanse      | søkeren har realkompetanse og har søkt "Arkitektur, AHO" |
+        | søkeren søker ledig studieplass | søkeren har søkt ledig studieplass på "Arkitektur, AHO"  |
+
+    Scenariomal: Organisasjonene i unntaket for lærested må delta i opptaket
+      Gitt at "Universitetet i Bergen" ikke deltar i opptaket
+      Når opptaksforvalteren ved HK-dir legger til unntak for lærested på standardregelen
+      Så ser ikke opptaksforvalteren "Universitetet i Bergen" blant valgene i <kolonne>
+
+      Eksempler:
+        | kolonne            |
+        | «Saksbehandles av» |
+        | «På vegne av»      |
+
+    Scenario: Forvaltende organisasjon kan saksbehandle på vegne av et lærested
+      Gitt at "Arkitektur- og designhøgskolen i Oslo" deltar i opptaket
+      Og at standardregelen har unntak for lærested der "HK-dir" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Og at søkeren har søkt "Arkitektur, AHO"
+      Når søknadsalternativene fordeles
+      Så er "HK-dir" saksbehandlende organisasjon for "Arkitektur, AHO"
+
+    Scenario: Lærestedet kan bare ha ett unntak for lærested per behandlertildelingsregel
+      Gitt at standardregelen har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Når opptaksforvalteren ved HK-dir legger til et nytt unntak for lærested på standardregelen
+      Så kan ikke opptaksforvalteren velge "Arkitektur- og designhøgskolen i Oslo" i «På vegne av»
+
+    Scenario: Nytt unntak for lærested gjelder bare søknadsalternativer som ikke er fordelt
       Gitt at "Arkitektur, AHO" er fordelt til "Arkitektur- og designhøgskolen i Oslo"
-      Når opptaksforvalteren ved HK-dir velger "OsloMet" til å saksbehandle på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Når opptaksforvalteren ved HK-dir legger til unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Så er "Arkitektur- og designhøgskolen i Oslo" fortsatt saksbehandlende organisasjon for "Arkitektur, AHO"
+
+    Scenario: Organisasjon i et unntak for lærested kan ikke tas ut av opptaket
+      Gitt at den aktive standardregelen har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
+      Når opptaksforvalteren ved HK-dir tar "OsloMet" ut av opptaket
+      Så avvises endringen
 
   # ── 3. Endring ───────────────────────────────────────────────
 
-  @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032 @implemented
+  @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
   Regel: Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast
 
     Scenariomal: Søknadsalternativene fordeles når <hendelse>
@@ -354,7 +383,7 @@ Egenskap: Tildele saksbehandlende organisasjon
       # sendte inn først. Som hovedregel endres den ikke når søkeren sender inn på nytt, endrer
       # prioriteringen, sletter eller legger til søknadsalternativer.
 
-  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001 @implemented
+  @depends-on-OPT-OVO-FRI-001 @ref-FLY-OPT-SAK-001
   # OPT-OVO-FRI-001: «Opptaksforvalter ved forvaltende organisasjon må kunne sette frist for endring av utdanningsbakgrunn»
   Regel: Søknadsalternativene flyttes når utdanningsbakgrunnen endres til en bakgrunn med unntak
     # AVKLART 22.10.2026: Fristen for endring av utdanningsbakgrunn gjelder bare saksbehandlerens endring.
@@ -427,27 +456,30 @@ Egenskap: Tildele saksbehandlende organisasjon
         | tilbyder         |
         | opptaksforvalter |
 
-    @draft @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Avklares med domeneekspert: Workshoprapporten (29.05.2026) foreslår at en flyttet sak får
-    #   status «Overført», og at dokumentene merkes som uleste hos den nye organisasjonen.
-    #   Statusen skifter til «Under behandling» ved første endring. Ikke bygget. Skal det med,
-    #   og hører det i så fall hjemme her eller i et eget krav om endring av B-rolle sammen med
-    #   de andre behovene fra workshopen (merknader, batch-flytting)?
-    # - Ingrid Helset (23.10.2026): påbegynt saksbehandling følger med til den nye organisasjonen,
-    #   bortsett fra interne merknader. Behandlingsstatusen settes til «ikke behandlet», og dokumentene
-    #   nullstilles til uåpnet. Skal scenarioet si det i stedet for status «Overført»?
-    Scenario: Flyttet søknadsalternativ vises som overført hos organisasjonen det flyttes til
+    Scenario: Organisasjonen søknadsalternativet flyttes til, får en ubehandlet sak
+      Gitt at søknaden ikke har sak hos "HK-dir"
+      Og at saken hos "Universitetet i Oslo" er under behandling
       Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
-      Så har saken hos "HK-dir" status «Overført»
-      Og dokumentene i saken er merket som uleste hos "HK-dir"
+      Så har søknaden en ubehandlet sak hos "HK-dir" med "Informatikk, UiO"
+      # AVKLART 04.11.2026: status «Overført» og uleste dokumenter (workshoprapporten 29.05.2026)
+      # er tatt ut av kravet. Det tas opp igjen hvis det meldes behov.
+
+    Scenario: Interne merknader blir igjen hos organisasjonen søknadsalternativet flyttes fra
+      Gitt at saksbehandleren ved Universitetet i Oslo har skrevet en intern merknad i saken
+      Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
+      Så ser ikke saksbehandleren ved HK-dir den interne merknaden
+
+    Scenario: Organisasjonen søknadsalternativet flyttes til, ser dokumentene søkeren har lastet opp
+      Gitt at søkeren har lastet opp et vitnemål til søknaden
+      Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo"
+      Når "Informatikk, UiO" flyttes fra "Universitetet i Oslo" til "HK-dir"
+      Så ser saksbehandleren ved HK-dir vitnemålet
 
   # ── 4. Innsyn ────────────────────────────────────────────────
 
   @ref-FLY-OPT-SAK-001 @ref-OPT-BEH-BEH-032
   Regel: Saksbehandlende organisasjon ser bare saker hos organisasjonen
 
-    @implemented
     Scenario: Saksbehandleren ser bare saken hos organisasjonen sin
       Gitt at søknaden har saker hos "Universitetet i Oslo" og "UiT Norges arktiske universitet"
       Når saksbehandleren ved Universitetet i Oslo åpner søknaden
@@ -459,11 +491,24 @@ Egenskap: Tildele saksbehandlende organisasjon
       Så ser søkeren saksbehandlende organisasjon for hvert søknadsalternativ
       Men søkeren ser ikke sakene
 
-    @implemented
     Scenario: Saksbehandleren ved forvaltende organisasjon ser bare saken hos forvaltende organisasjon
       Gitt at søknaden har saker hos "HK-dir" og "Universitetet i Oslo"
       Når saksbehandleren ved HK-dir åpner søknaden
       Så ser saksbehandleren bare saken hos "HK-dir"
+
+    Scenario: Saksbehandleren ser alle søknadsalternativene på søknaden
+      Gitt at søkeren har søkt "Informatikk, UiO" og "Historie, UiT" i den rekkefølgen
+      Og at "Informatikk, UiO" er fordelt til "Universitetet i Oslo" og "Historie, UiT" til "UiT Norges arktiske universitet"
+      Når saksbehandleren ved Universitetet i Oslo åpner saken hos "Universitetet i Oslo"
+      Så ser saksbehandleren "Informatikk, UiO" og "Historie, UiT" med prioritet, tilbyder og saksbehandlende organisasjon
+      Men saksbehandleren ser ikke saksbehandlingen av "Historie, UiT"
+      # AVKLART 05.11.2026 i den interne akseptansetesten: saksbehandleren skal se hele søknaden når hen står
+      # i en sak. Saksbehandlingen av søknadsalternativene i andre saker vises ikke.
+
+    Scenario: Saksbehandleren ser dokumentene søkeren har lastet opp
+      Gitt at søkeren har lastet opp et vitnemål til søknaden
+      Når saksbehandleren ved Universitetet i Oslo åpner saken hos "Universitetet i Oslo"
+      Så ser saksbehandleren vitnemålet
 
   # Avklart 2026-11-10 (svar 20 og 7b): behandlerne ser vurderingen og poengene i hverandres saker på samme
   # søknad, også praksiskalkulatoren, men endrer bare saken sin. Når regelen er validert, får scenarioene over
@@ -493,7 +538,6 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved UiT Norges arktiske universitet ser søknadsalternativene til utdanningstilbudene ved UiT
       Så ser saksbehandleren "Historie, UiT" og saksbehandlingen "Universitetet i Oslo" har gjort
 
-  @implemented
   Regel: Opptaksforvalteren ved forvaltende organisasjon ser alle sakene i opptaket
 
     Scenario: Opptaksforvalteren ved HK-dir ser sakene hos alle saksbehandlende organisasjoner
@@ -520,5 +564,23 @@ Egenskap: Tildele saksbehandlende organisasjon
       Når saksbehandleren ved UiT Norges arktiske universitet ser "Historie, UiT"
       Så ser ikke saksbehandleren de interne merknadene til "Universitetet i Oslo"
       Og saksbehandleren ser ikke muligheten til å endre grunnlaget eller poengene
-      # AVKLART 08.10.2026 i PR #684: tilbyderen ser alt unntatt de interne merknadene, og kan bare
-      # sette tilbudsgaranti.
+      # AVKLART 08.10.2026 i PR #684: tilbyderen ser saken, men ikke de interne merknadene, og kan bare
+      # sette tilbudsgaranti. AVKLART 04.11.2026: tilbyderen ser ikke dokumentene i saken. Endres 05.11.2026:
+      # tilbyderen skal se dokumentene søkeren har lastet opp (se «Tilbyderen ser dokumentene søkeren har lastet opp»).
+
+    Scenario: Tilbyderen ser alle søknadsalternativene på søknaden
+      Gitt at søkeren har søkt "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" i den rekkefølgen
+      Og at alle søknadsalternativene er fordelt til "Universitetet i Oslo"
+      Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
+      Så ser saksbehandleren "Informatikk, UiO", "Historie, UiT" og "Sykepleie, NTNU" med prioritet, tilbyder og saksbehandlende organisasjon
+      Men saksbehandleren ser ikke saksbehandlingen av "Informatikk, UiO" og "Sykepleie, NTNU"
+      # AVKLART 05.11.2026 i den interne akseptansetesten: tilbyderen skal se hele søknaden, men saksbehandlingen
+      # bare for søknadsalternativene til utdanningstilbudene sine.
+
+    Scenario: Tilbyderen ser dokumentene søkeren har lastet opp
+      Gitt at "Historie, UiT" er fordelt til "Universitetet i Oslo"
+      Og at søkeren har lastet opp et vitnemål til søknaden
+      Når saksbehandleren ved UiT Norges arktiske universitet åpner saken med "Historie, UiT"
+      Så ser saksbehandleren vitnemålet
+      Men saksbehandleren kan ikke endre eller slette vitnemålet
+      # AVKLART 12.11.2026 i STEK-687: tilbyderen ser dokumentene i saken, men kan ikke endre dem.

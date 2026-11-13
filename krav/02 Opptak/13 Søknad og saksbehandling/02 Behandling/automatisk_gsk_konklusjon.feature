@@ -57,7 +57,8 @@ Egenskap: Automatisk GSK-konklusjon
   manuelt. Den automatiske saksbehandlingen setter også konklusjonen, som første steg, på
   søknadene i opptaket som ikke har en. Påstandene på vitnemålet beregnes ikke på nytt da.
   Automatikken setter aldri en negativ konklusjon på søknaden, og overskriver aldri en
-  konklusjon som finnes. Den gjelder alle opptak, også fagskoleopptak.
+  positiv konklusjon. En negativ eller annullert konklusjon regnes som ingen konklusjon. Den
+  gjelder alle opptak, også fagskoleopptak.
 
   # Fagskoleopptak: avklart 2026-10-13 at automatikken også gjelder fagskoleopptak.
   # Det avviker fra Sikts tolkning i Confluence v2 om at GSK i fagskoleopptak ikke
@@ -431,14 +432,16 @@ Egenskap: Automatisk GSK-konklusjon
       Når søknaden opprettes
       Så får søknaden ingen GSK-konklusjon fra tidligere opptak
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Automatikken setter bare positive konklusjoner, og bare der ingen finnes
     # Om en konklusjon automatikken satte med KLY eller RFA fordi løpet manglet i listen over løp,
     # skal rettes når løpet legges inn, er åpent. Se regelen «Grunnlagskoden rettes når løpet er
     # lagt inn i listen over løp».
-    # En annullert konklusjon regnes som ingen konklusjon.
+    # Avklart 13.11.2026 (Sondre): en negativ eller annullert konklusjon regnes som ingen
+    # konklusjon, også når en saksbehandler har satt den. Gir et vitnemål GSK, erstattes den.
+    # En konklusjon fra et tidligere opptak erstatter den ikke. En positiv konklusjon overskrives
+    # aldri, heller ikke når vitnemålet den bygger på, er annullert.
 
-    @implemented
     Scenario: Ingen grunnlag for generell studiekompetanse
       Gitt at søknaden ikke får GSK-konklusjon fra vitnemålet
       Og at søkeren ikke har noen positiv GSK-konklusjon fra et tidligere opptak
@@ -446,14 +449,12 @@ Egenskap: Automatisk GSK-konklusjon
       Så får søknaden ingen GSK-konklusjon
       Og generell studiekompetanse vurderes manuelt
 
-    @implemented
-    Scenario: Konklusjon på søknaden overskrives ikke
-      Gitt at søknaden har en GSK-konklusjon, satt av en hvilken som helst organisasjon i opptaket
+    Scenario: Positiv konklusjon på søknaden overskrives ikke
+      Gitt at søknaden har en positiv GSK-konklusjon, satt av en hvilken som helst organisasjon i opptaket
       Og at søkeren har et vitnemål som gir generell studiekompetanse
       Når vitnemålet importeres fra KREG
       Så er GSK-konklusjonen på søknaden uendret
 
-    @implemented
     Scenario: Systemet setter aldri en negativ konklusjon
       Gitt at søkeren ikke har noe grunnlag for generell studiekompetanse
       Når søknaden opprettes
@@ -466,6 +467,30 @@ Egenskap: Automatisk GSK-konklusjon
       Og at søkeren har et vitnemål som gir GSK
       Når den automatiske behandlingen kjører for opptaket
       Så får søknaden en positiv GSK-konklusjon
+
+    Scenariomal: Vitnemålet erstatter en <konklusjon> konklusjon
+      Gitt at søknaden har en <konklusjon> GSK-konklusjon som en saksbehandler har satt
+      Og at ingen av søkerens saker i opptaket er ferdig behandlet
+      Når et vitnemål som gir GSK, importeres fra KREG
+      Så får søknaden en positiv GSK-konklusjon som bygger på vitnemålet
+
+      Eksempler:
+        | konklusjon |
+        | negativ    |
+        | annullert  |
+
+    Scenario: En positiv konklusjon blir stående når vitnemålet den bygger på, er annullert
+      Gitt at søknaden har en positiv GSK-konklusjon som bygger på et vitnemål
+      Og at vitnemålet er annullert
+      Når et nytt vitnemål som gir GSK, importeres fra KREG
+      Så er GSK-konklusjonen på søknaden uendret
+
+    Scenario: En konklusjon fra et tidligere opptak erstatter ikke en negativ konklusjon
+      Gitt at søknaden har en negativ GSK-konklusjon
+      Og at ingen av søkerens vitnemål gir GSK
+      Og at den siste GSK-konklusjonen søkeren har fra et tidligere opptak, er positiv
+      Når den automatiske behandlingen kjører for opptaket
+      Så er GSK-konklusjonen på søknaden uendret
 
   @ref-OPT-BEH-BEH-026 @draft @openquestion
   Regel: Grunnlagskoden rettes når løpet er lagt inn i listen over løp
@@ -613,8 +638,8 @@ Egenskap: Automatisk GSK-konklusjon
   Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører
     # Første steg når den automatiske behandlingen kjører for et opptak. Konklusjonen settes
     # etter de samme reglene som når vitnemålet importeres fra KREG: vitnemålet går foran tidligere
-    # konklusjoner, bare den siste tidligere konklusjonen gjenbrukes, og en konklusjon som
-    # finnes, overskrives ikke. GSK-vitnemålsberegningen kjøres ikke på nytt.
+    # konklusjoner, bare den siste tidligere konklusjonen gjenbrukes, og en positiv konklusjon
+    # som finnes, overskrives ikke. GSK-vitnemålsberegningen kjøres ikke på nytt.
     # Etter prosesstegningen «GSK-beregning for gitt opptak» (2026-10-29). Tegningen kaller
     # GSK-konklusjonen «GSK-beregning». Begrepet er avklart 2026-11-03, se begreper.md.
 
@@ -631,8 +656,8 @@ Egenskap: Automatisk GSK-konklusjon
       Når den automatiske behandlingen kjører for opptaket
       Så får søknaden en positiv GSK-konklusjon
 
-    Scenario: Konklusjonen overskrives ikke i den automatiske behandlingen
-      Gitt at søknaden har en GSK-konklusjon
+    Scenario: En positiv konklusjon overskrives ikke i den automatiske behandlingen
+      Gitt at søknaden har en positiv GSK-konklusjon
       Når den automatiske behandlingen kjører for opptaket
       Så er GSK-konklusjonen på søknaden uendret
 

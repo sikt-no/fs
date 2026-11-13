@@ -75,7 +75,7 @@ Egenskap: Automatiske tilleggspoeng
       Når saken får et grunnlag
       Så viser kjønnspoengene at de er regnet ut for kvinne
 
-  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-038
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-038 @implemented
   Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng
     # Studiepoengene kommer fra tjenesten for resultater fra høyere utdanning. Resultatene hentes og lagres på samme
     # måte som vitnemål fra videregående skole hentes og lagres via KREG.
@@ -114,6 +114,8 @@ Egenskap: Automatiske tilleggspoeng
       Så har saken 0 poeng for høyere utdanning
 
     Scenario: Bare beståtte emner teller
+      # Avklart 13.11.2026: tjenesten for resultater fra høyere utdanning gir bare gyldige resultater,
+      # så opptakssystemet trenger ikke å filtrere bort emner som ikke er bestått.
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 50 studiepoeng
       Og at søkeren ikke har bestått et emne på 10 studiepoeng

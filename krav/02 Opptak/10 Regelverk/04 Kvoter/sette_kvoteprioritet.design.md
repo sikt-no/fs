@@ -8,6 +8,8 @@ Kvoteprioriteten vises i kvotetypelista (Regelverk › Regelverksamlinger › en
 
 Modalen henter alle kvotetypene i regelverkssamlingen, fordi en rangering må ha med alle.
 
+Har regelverkssamlingen bare én kvotetype, vises ikke knappen «Kvoteprioritet», og kolonnen «Kvoteprioritet» viser «-» (se [`sette_plassflyt.design.md`](./sette_plassflyt.design.md)).
+
 ## Komponenter og layout
 
 - **Kolonnen «Kvoteprioritet»** i kvotetypelista: kvoteprioriteten som tall, eller taggen «Mangler kvoteprioritet» (advarsel). Kolonnen vises for alle som ser lista.
@@ -44,6 +46,7 @@ Bare rollen `FS_ADMIN_MODIFISERE_REGELVERK` i organisasjonen som eier regelverks
 | Alle har kvoteprioritet | «Uten kvoteprioritet» viser at alle har kvoteprioritet. Ikke noe varsel |
 | Feil ved lagring | `Alert` (kritisk) i bunnen av modalen |
 | Lagret | Snackbar, og modalen lukkes |
+| Bare én kvotetype | Knappen vises ikke, og kolonnen viser «-». Ikke noe varsel |
 
 ## Tekster
 
@@ -53,6 +56,7 @@ Dette er fasiten for tekstene, også når en skisse viser noe annet. Feilmelding
 |------|---------------|-------|-------------|----------|
 | Knapp i headeren til kvotetypelista | Med redigeringstilgang | «Kvoteprioritet» | – | Alle kvotetypene i regelverkssamlingen rangeres |
 | Kolonne i kvotetypelista | Alltid | «Kvoteprioritet» | Verdien er kvoteprioriteten som tall | Sette kvoteprioritet i regelverkssamlingen |
+| Kolonnen i kvotetypelista | Bare én kvotetype | «-» | – | Den eneste kvotetypen trenger ikke kvoteprioritet |
 | Tagg i kolonnen i kvotetypelista | Kvotetypen mangler kvoteprioritet | «Mangler kvoteprioritet» | – | Varsel om kvotetyper uten kvoteprioritet |
 | Overskrift i modalen | Alltid | «Ranger kvotetypene» | – | Alle kvotetypene i regelverkssamlingen rangeres |
 | Forklaring øverst i modalen | Alltid | «Søkere som konkurrerer i flere kvoter på samme utdanningstilbud, får først tilbud i kvoten med høyest prioritet. 1 er høyest.» | – | Alle kvotetypene i regelverkssamlingen rangeres |
@@ -85,6 +89,9 @@ Gir seg av rangeringslisten: når en kvotetype flyttes til en plass, skyves de a
 
 ### Scenariomal: Ugyldig kvoteprioritet
 Skjermbildet kan ikke lage ugyldige tall. Avviser API-et kvoteprioriteten, vises den generelle feilteksten.
+
+### Scenario: Den eneste kvotetypen trenger ikke kvoteprioritet
+Med bare én kvotetype er det ingenting å rangere. Knappen vises ikke, kolonnen viser «-», og kvotetypen får ikke taggen «Mangler kvoteprioritet».
 
 ## Åpne designspørsmål
 

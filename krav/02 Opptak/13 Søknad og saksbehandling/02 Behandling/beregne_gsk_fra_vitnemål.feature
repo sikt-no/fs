@@ -30,7 +30,7 @@ Egenskap: Beregne GSK fra vitnemål
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
   utstedelsesdato og kompetansebevis.
 
-  At saksbehandleren kan ta et fag ut av kontrollene, står i @OPT-BEH-BEH-023.
+  Hvilke fag saksbehandleren velger at skal telle, står i @OPT-BEH-BEH-022.
 
   Regel: Reformen på vitnemålet avgjør hvilke delkrav som gjelder
 

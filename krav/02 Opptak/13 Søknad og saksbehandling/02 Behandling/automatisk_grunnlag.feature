@@ -120,8 +120,9 @@ Egenskap: Automatisk grunnlag
   @depends-on-OPT-BEH-BEH-015 @ref-FLY-OPT-AUT-001 @implemented
   Regel: Ingen automatisk grunnlag uten ett vitnemål som gir generell studiekompetanse
     # Ett vitnemål er nok, også når søkeren har lastet opp et kompetansebevis.
-    # Har søkeren flere vitnemål, stopper den automatiske behandlingen til
-    # saksbehandleren har valgt vitnemålet (OPT-BEH-BEH-039).
+    # Har søkeren flere ulike vitnemål, stopper den automatiske behandlingen til
+    # saksbehandleren har valgt vitnemålet (OPT-BEH-BEH-039). To identiske vitnemål
+    # regnes som ett vitnemål.
 
     @deprecated
     Scenariomal: Ingen grunnlag settes automatisk når <grunn> (avvikles)
@@ -148,8 +149,8 @@ Egenskap: Automatisk grunnlag
         | vitnemålet ikke gir generell studiekompetanse         |
         | ingen av grunnlagene i regelverket passer til søkeren |
 
-    Scenario: Søker med flere vitnemål behandles ikke automatisk
-      Gitt at søkeren har to elektroniske vitnemål som ikke er annullert
+    Scenario: Søker med flere ulike vitnemål behandles ikke automatisk
+      Gitt at søkeren har to ulike elektroniske vitnemål som ikke er annullert
       Og at saksbehandleren ikke har valgt ett av vitnemålene
       Når søknaden behandles automatisk
       Så blir søknaden ikke behandlet automatisk
