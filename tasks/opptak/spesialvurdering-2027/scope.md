@@ -5,7 +5,7 @@
 - **Initiativ**: –
 - **Jira**: [TAKE-493](https://sikt.atlassian.net/browse/TAKE-493), [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-06
+- **Siste oppdatering**: 2026-11-13
 
 ## Mål
 
@@ -37,7 +37,7 @@
 |---|---|---|---|---|
 | `@OPT-REG-KVO-001` — Regel: En kvotetype kan være uten plasser | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Ny regel i [kvoterregelverk.feature](../../../krav/02%20Opptak/10%20Regelverk/04%20Kvoter/kvoterregelverk.feature) (levert, regelverk-2027). Finnes i koden på fs-plattform-branchen `feature/take-492-kvotetype-innstillinger` |
 | `@OPT-REG-KVO-001` — Regel: En kvotetype kan være standardkvote for utdanningstilbudene | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Standardkvoten legges på utdanningstilbudet når det legges til i opptaket, ikke på utdanningstilbud som allerede er i opptaket, og blir stående når innstillingen slås av (avklart 2026-11-06). Stemmer med koden på TAKE-492-branchen |
-| `@OPT-REG-KVO-001` — Regel: En kvotetype kan stenges for fjerning fra utdanningstilbudet | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Avvik fra koden på TAKE-492-branchen: koden lar organisasjonen som eier opptaket, alltid fjerne kvoten (`kan_fjernes_av_deltaker` gjelder bare deltakende organisasjoner). Kravet sier at innstillingen gjelder alle, og ikke kan overstyres (avklart 2026-11-06) |
+| `@OPT-REG-KVO-001` — Regel: En standardkvote kan stenges for fjerning fra utdanningstilbudet | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Avvik fra koden på TAKE-492-branchen: koden lar organisasjonen som eier opptaket, alltid fjerne kvoten (`kan_fjernes_av_deltaker` gjelder bare deltakende organisasjoner). Kravet sier at innstillingen gjelder alle, og ikke kan overstyres (avklart 2026-11-06) |
 | `@OPT-REG-KVO-005` [opprette_ventekvote.feature](../../../krav/02%20Opptak/10%20Regelverk/04%20Kvoter/opprette_ventekvote.feature) | Must | – | [TAKE-492](https://sikt.atlassian.net/browse/TAKE-492) | Hele oppsettet av ventekvoten, som grunnlag for brukerveiledningen i fs-admin |
 | `@OPT-BEH-BEH-040` [sette_interne_poeng.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/sette_interne_poeng.feature) | Must | – | [TAKE-493](https://sikt.atlassian.net/browse/TAKE-493) | Intern stipulering, høyst 999,99 |
 | `@OPT-BEH-BEH-041` [kontrollere_ventekvoten.feature](../../../krav/02%20Opptak/13%20S%C3%B8knad%20og%20saksbehandling/02%20Behandling/kontrollere_ventekvoten.feature) | Must | – | [TAKE-493](https://sikt.atlassian.net/browse/TAKE-493) | Tilsvarer «Diagnose NOM» i gamle FS |
@@ -62,6 +62,7 @@ Rangeringsmetodene på kvotetypen (åpent spørsmål i `kvoterregelverk.feature`
 
 | Dato | Hendelse | Av | Lenke til review |
 |------|----------|----|------------------|
+| 2026-11-13 | Bare en standardkvote kan stenges for fjerning. Slutter kvotetypen å være standardkvote, er den åpen for fjerning igjen (etter fs-admin) | – | – |
 | 2026-11-06 | Standardkvoten gjelder bare utdanningstilbud som legges til i opptaket, og blir stående når den slås av | – | – |
 | 2026-11-06 | Stengt for fjerning gjelder alle, og kan ikke overstyres av organisasjonen som eier opptaket | – | – |
 | 2026-11-06 | Opprettet med fs-scope | – | – |
