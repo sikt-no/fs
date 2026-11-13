@@ -134,6 +134,44 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 `@FLY-OPT-VAL-001`: 1 av 2 faser levert.
 `@FLY-OPT-SAM-001`: 0 av 4 faser levert.
 
+### Kravene flytene bygger på
+
+Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og krav. `Levert` er statusen fra taggene, og `Funnet i koden` er resultatet av verifiseringen. Fasene med `@wont` er ikke med.
+
+| Flyt | Krav | Egenskap | Status | Levert | Funnet i koden | Ikke levert | Levert, men ikke funnet i koden |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-030` | Importere resultater fra KREG | `@implemented` | 8/8 | 8/8 | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@in-progress` | 2/2 | 2/2 | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 36/37 | 36/37 | «Automatikken kan sette en ny konklusjon etter annulleringen» (`:462`, ikke funnet) | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` | Beregne GSK fra vitnemål | `@implemented` | 27/27 | 27/27 | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` | Ferdigbehandle en sak | `@in-progress` | 6/7 | 6/7 | «Den automatiske behandlingen publiserer manglene når saken blir ferdig behandlet» (`:96`, usikker) | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 14/14 | 13/14 | – | «Søker med flere vitnemål behandles ikke automatisk» (`:151`, usikker) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-018` | Automatisk beregning av vitnemålspoeng | `@in-progress` | 5/5 | 5/5 | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-001` | Rangeringsregelverk | `@implemented` | 5/5 | – | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-REG-RAN-002` | Poengberegning | `@implemented` | 10/10 | – | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-028` | Automatiske tilleggspoeng | `@in-progress` | 19/20 | 19/20 | «Bare beståtte emner teller» (`:119`, ikke funnet) | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-020` | Automatisk vurdering av spesielle opptakskrav | `@in-progress` | 18/18 | 17/18 | – | «Ingen automatisk vurdering når <grunn>» (`:190`, usikker) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-012` | Automatisk kvoteplassering | `@implemented` | 8/8 | 8/8 | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-002` | Kvotespørsmål | `@implemented` | 7/7 | – | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-031` | Beregne poengsum per kvote | `@implemented` | 13/13 | 12/13 | – | «Uendret poengsum gir ikke nytt innslag i endringsloggen» (`:82`, usikker) |
+| `@FLY-OPT-AUT-001` | `@OPT-REG-KVO-001` | Kvotetype | `@implemented` | 1/1 | – | – | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-036` | Automatiske mangler | `@in-progress` | 19/28 | 17/28 | «Mangelteksten viser kravelementene som ikke er oppfylt, ordnet etter kravlistene» (`:71`, usikker); «Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene» (`:92`, funnet); «Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet» (`:98`, usikker); «Alle sakene i søknaden får mangel når søkeren oppgir at generell studiekompetanse fullføres i vår» (`:227`, ikke funnet); «Saken får ikke mangel når ingen mangelkode er merket» (`:234`, ikke funnet); «Opptaksforvalteren får varselet bare første gang» (`:240`, ikke funnet); «Søkeren ser den automatiske mangelen i Min kompetanse» (`:246`, usikker); «Mangelen slettes når søkeren endrer søknaden» (`:257`, ikke funnet); «Mangelen sjekkes ut når saken er behandlet helautomatisk» (`:279`, ikke funnet) | «Søkeren ser ikke de automatiske mangeltekstene mens saken er under behandling» (`:106`, usikker); «Søkeren ser mangeltekstene per søknadsalternativ» (`:113`, usikker); «Søkeren ser ikke mangelteksten når søknadsalternativet er fjernet» (`:120`, usikker) |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-029` | Behandlingsstatus | `@in-progress` | 2/3 | 2/3 | «Saksloggen viser endring av behandlingsstatus når <årsak>» (`:141`, ikke funnet) | – |
+| `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-026` | Beregne automatisk på nytt | `@in-progress` | 11/12 | 10/12 | «Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet» (`:164`, usikker) | «Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen» (`:175`, usikker) |
+| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-033` | Kjøre jobbene i opptak | `@planned` | 0/1 | 0/1 | «Jobbplanleggeren starter <jobb>» (`:30`, ikke funnet) | – |
+| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-030` | Importere resultater fra KREG | `@implemented` | 11/11 | 11/11 | – | – |
+| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` | Automatisk GSK-konklusjon | `@in-progress` | 22/22 | 22/22 | – | – |
+| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@in-progress` | 1/1 | 1/1 | – | – |
+| `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-034` | Håndtere annullert vitnemål | `@implemented` | 7/7 | 7/7 | – | – |
+| `@FLY-OPT-VAL-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 5/6 | 5/6 | «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
+| `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-039` | Behandle automatisk på vitnemålet saksbehandleren velger | `@in-progress` | 0/2 | 0/1 | «Saken behandles automatisk på et sammensatt vitnemål» (`:54`, ikke sjekket i koden); «Sammensatt vitnemål gir ikke grunnlaget som krever førstegangsvitnemål» (`:95`, ikke funnet) | – |
+| `@FLY-OPT-SAM-001` | `@OPT-BEH-BEH-019` | Automatisk grunnlag | `@in-progress` | 7/7 | 7/7 | – | – |
+
+`@FLY-OPT-AUT-001`: 211 av 225 scenarioer i 18 krav er levert, og 182 av 202 er funnet i koden (23 har bare status fra taggene).
+`@FLY-OPT-VIT-001`: 41 av 42 scenarioer i 5 krav er levert, og 41 av 42 er funnet i koden.
+`@FLY-OPT-VAL-001`: 5 av 6 scenarioer i 1 krav er levert, og 5 av 6 er funnet i koden.
+`@FLY-OPT-SAM-001`: 7 av 9 scenarioer i 2 krav er levert, og 7 av 8 er funnet i koden (1 har bare status fra taggene).
+
 ## Avhengigheter
 
 Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avhengighetene får aldri ny status i denne kjøringen.
