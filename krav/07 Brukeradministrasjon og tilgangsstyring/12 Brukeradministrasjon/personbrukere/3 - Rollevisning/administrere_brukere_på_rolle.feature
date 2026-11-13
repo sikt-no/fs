@@ -40,9 +40,11 @@ Egenskap: Administrere brukere på en spesifikk rolle
       Når brukeradministrator fjerner brukeren fra rollen
       Så skal rollen ikke lenger være tildelt brukeren
 
+# AVKLART 13.11.2026:
+# - Brukere legges til og fjernes fra rollen én om gangen, ikke flere i én operasjon.
+# - Det kjøres ingen valideringer (organisasjonstilhørighet, taushetserklæring eller konfliktrolle) når en bruker legges til på rollen.
+
 # ÅPNE SPØRSMÅL:
-# - Skal det være mulig å legge til/fjerne flere brukere i én batch-operasjon?
-# - Hvilke valideringer kjøres (organisasjonstilhørighet, taushetserklæring, eksisterende konfliktrolle)?
 # - Skal stedkoder og tidsbegrensning settes per bruker, eller arves fra rollen?
 # - Hva skjer hvis rollen er "delt" (BRU-PER-DEL-001) — kan vi legge til brukere fra andre organisasjoner?
 # - Forholdet til BRU-PER-GRU-003 — overlapper administrasjon fra rolle-siden med tildeling fra bruker-siden? Skal det være konsistent UX?
