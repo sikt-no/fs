@@ -39,8 +39,9 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Så er ingen utdanningsbakgrunn valgt i søknaden til "Lokalt opptak høst 2027"
 
     # AVKLART 2026-11-12 (TOT-2635): Ingen utdanningsbakgrunn er valgt på forhånd, fordi vi ikke
-    # vet utdanningsbakgrunnen fra før. Søkeren velger selv. Unntaket er preutfylling fra
-    # elektronisk vitnemål, se «Utdanningsbakgrunn preutfylles fra søkerens vitnemål».
+    # vet utdanningsbakgrunnen fra før. Søkeren velger selv. Unntaket er søkeren med
+    # elektronisk vitnemål, som ikke blir spurt, se «Søkeren med elektronisk vitnemål velger
+    # ikke utdanningsbakgrunn».
     Scenario: Ingen utdanningsbakgrunn er valgt på forhånd
       Gitt at søkeren ikke har elektronisk vitnemål fra norsk videregående opplæring
       Når søkeren skal velge utdanningsbakgrunn i søknaden
@@ -56,7 +57,9 @@ Egenskap: Velge utdanningsbakgrunn i søknad
 
   Regel: Søkeren kan endre utdanningsbakgrunn frem til søknadsfristen
     # AVKLART 2026-11-12 (TOT-2635): Søkeren kan selv endre utdanningsbakgrunnen i en innsendt
-    # søknad frem til søknadsfristen, men ikke etter.
+    # søknad frem til søknadsfristen, men ikke etter. Unntaket er søkeren med elektronisk
+    # vitnemål, som ikke kan endre den, se «Søkeren med elektronisk vitnemål velger ikke
+    # utdanningsbakgrunn».
     # Kilde: HK-Dir-historiene 9467 «Endre utdanningsbakgrunn» og 9448 «Endre innsendt søknad».
     # Saksbehandlerens endring hører til søknadsbehandlingen. Hvilken organisasjon som
     # saksbehandler søknaden etter endringen, står i @OPT-BEH-BEH-011.
@@ -128,22 +131,33 @@ Egenskap: Velge utdanningsbakgrunn i søknad
       Når søkeren går gjennom søknaden
       Så blir søkeren ikke spurt om utdanningsbakgrunn
 
-  Regel: Utdanningsbakgrunn preutfylles fra søkerens vitnemål
+  Regel: Søkeren med elektronisk vitnemål velger ikke utdanningsbakgrunn
     # AVKLART 2026-10-27 (planleggingsmøte): Hvilke vitnemålstyper som gir hvilken
     # utdanningsbakgrunn, er en forretningsregel som ligger fast i backend. Opptaksforvalteren
     # bestemmer det ikke.
-    # AVKLART 2026-11-12 (TOT-2635): Har søkeren elektronisk vitnemål fra norsk videregående
-    # opplæring, er «Norsk videregående skole» preutfylt.
+    # AVKLART 2026-11-13: Har søkeren elektronisk vitnemål fra norsk videregående opplæring,
+    # hoppes steget over. Søkeren trenger ikke ta stilling til utdanningsbakgrunnen, og
+    # «Norsk videregående skole» registreres i søknaden. Erstatter preutfyllingen fra
+    # 2026-11-12 (TOT-2635), der søkeren kunne endre den preutfylte verdien.
+    # AVKLART 2026-11-13: Søkeren kan ikke endre utdanningsbakgrunnen når steget er hoppet
+    # over, hverken før eller etter innsending. Det gjør unntak fra «Søkeren kan endre
+    # utdanningsbakgrunn frem til søknadsfristen».
 
-    Scenario: Utdanningsbakgrunn preutfylles fra vitnemål
+    Scenario: Søkeren med elektronisk vitnemål blir ikke spurt om utdanningsbakgrunn
       Gitt at søkeren har elektronisk vitnemål fra norsk videregående opplæring
-      Når søkeren skal velge utdanningsbakgrunn i søknaden
-      Så er "Norsk videregående skole" preutfylt som utdanningsbakgrunn i søknaden
+      Når søkeren går gjennom søknaden
+      Så blir søkeren ikke spurt om utdanningsbakgrunn
 
-    Scenario: Søkeren kan endre preutfylt utdanningsbakgrunn
-      Gitt at "Norsk videregående skole" er preutfylt som utdanningsbakgrunn i søknaden
-      Når søkeren velger utdanningsbakgrunnen "Rudolf Steinerskole"
-      Så er "Rudolf Steinerskole" registrert som utdanningsbakgrunn i søknaden
+    Scenario: Utdanningsbakgrunnen registreres fra elektronisk vitnemål
+      Gitt at søkeren har elektronisk vitnemål fra norsk videregående opplæring
+      Når søkeren går gjennom søknaden
+      Så er "Norsk videregående skole" registrert som utdanningsbakgrunn i søknaden
+
+    Scenario: Søkeren med elektronisk vitnemål kan ikke endre utdanningsbakgrunn
+      Gitt at søkeren har elektronisk vitnemål fra norsk videregående opplæring
+      Og at søkeren har sendt inn søknaden
+      Når søkeren vil endre utdanningsbakgrunnen i søknaden
+      Så kan søkeren ikke endre utdanningsbakgrunnen
 
   @could
   Regel: Utdanningsland fra en tidligere søknad foreslås
