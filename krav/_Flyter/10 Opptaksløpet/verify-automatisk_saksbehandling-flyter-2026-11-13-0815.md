@@ -31,7 +31,7 @@ Tallene for hele kjøringen, regnet ut fra tabellene under.
 - Forslag: 0 kan leveres, 0 delvis levert, 2 kan slettes, 5 kan leveres når det er avklart, 4 blir stående
 - Tilgang og datakonsistens: ingen rader (bare flyter og avhengigheter i omfanget)
 - Regler i koden uten scenario: 0
-- Endringer gjort: 2 krav fikk ny status (039 `@in-progress`, 029 `@implemented`), 10 deler fikk `@implemented` og 2 `@deprecated` (031, 029), og 6 krav ble rettet (019, 020, 025, 026, 028 og AUT-001)
+- Endringer gjort: 3 krav fikk ny status (039 `@in-progress`, 029 og 032 `@implemented`), 10 deler fikk `@implemented` og 2 `@deprecated` (031, 029), og 6 krav ble rettet (019, 020, 025, 026, 028 og AUT-001)
 - Åpne spørsmål: 1 regel og 3 scenarioer i gating-settet, 0 utenfor gating (`@draft`)
 
 ## Forslag til endringer
@@ -72,6 +72,7 @@ Det som er endret i kravfilene og i resultatet: i kjøringen (det sikre, når br
 | `@OPT-BEH-BEH-039` | Scenario: Grunnlag fra vitnemålet saksbehandleren har valgt; Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt; Scenario: Kravelementene vurderes mot vitnemålet saksbehandleren har valgt | `@implemented` på delene | Brukeren: det samme for den andre VAL-fasen. Funnet i fs-plattform og bekreftet av kontrollen. «Sammensatt vitnemål …» står urørt, så regelen og VAL-fasen er fortsatt ikke levert, og fasen venter også på `@FLY-OPT-AUT-001` |
 | `@FLY-OPT-VAL-001` | Scenario: Saken behandles automatisk på vitnemålet saksbehandleren velger | `ikke funnet` → `funnet` | Fasen er levert etter taggingen over, og overleveringen er funnet i begge repoene |
 | `@OPT-BEH-BEH-026` | Scenario: Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet; Scenario: Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen | `Gitt` presisert til «den automatiske behandlingen har satt saken til ferdig behandlet», og `@implemented` på regelen «Bare saker som er ferdig behandlet, beregnes på nytt» | Brukeren: presiser `Gitt`. Koden vurderer kravelementene på nytt bare i saker med `status_automatisk_behandlet`, som betyr at automatikken satte saken til ferdig behandlet (`P-mig/V522__sak_status_automatisk_behandlet_betyr_ferdig.sql:8`). `usikker` → `funnet`. AUT-fasen «Søknadsalternativene beregnes på nytt …» er dermed levert |
+| `@OPT-BEH-BEH-032` | Starte automatisk behandling | `@in-progress` → `@implemented`, og `@implemented` fjernet fra delene | Brukeren: krav som er `@in-progress`, men der alt er levert, settes til `@implemented`. 032 er det eneste i `krav/` der alle scenarioene i gating-settet er `@implemented` (7 av 7). Regelen som er `@draft`, står urørt |
 | `@OPT-BEH-BEH-029` | Regel: Saksloggen viser endringene i behandlingsstatusen | `@deprecated`; ankeret `@ref-FLY-OPT-AUT-001` flyttet bort fra regelen, og regeltittelen tatt ut av «…» i AUT-fasen | Brukeren: «Den ønsker vi ikke». Andre krav med `@depends-on-OPT-BEH-BEH-029` (039, 025, 032, 034) bygger på behandlingsstatusen, ikke saksloggen |
 | `@OPT-BEH-BEH-029` | Behandlingsstatus | `@in-progress` → `@implemented`, og `@implemented` fjernet fra de fire reglene | Alle de andre reglene var `@implemented`, så resten av kravet er levert |
 | `@OPT-BEH-BEH-036` | Scenario: Saksbehandleren ser de automatiske mangeltekstene sammen med de registrerte manglene; Scenario: Søkeren ser de automatiske mangeltekstene når saken er ferdig behandlet | `@implemented` på delene | Brukeren ba om å sjekke Min kompetanse. Funnet i fs-plattform, fs-admin (!3421) og min-kompetanse |
@@ -110,7 +111,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | Flyt | Fase | Bygger på | Fase levert |
 | --- | --- | --- | --- |
 | `@FLY-OPT-AUT-001` | Søkerens resultater importeres fra KREG når saken er opprettet | `@OPT-BEH-BEH-030` (`@implemented`) | ja |
-| `@FLY-OPT-AUT-001` | Den automatiske behandlingen starter når søkerens resultater er importert | `@OPT-BEH-BEH-032` (`@in-progress`, Regel: Behandlingen kjører for hver ny sak … og Regel: Behandlingen kjører når importen har hentet vitnemålene … levert) | ja |
+| `@FLY-OPT-AUT-001` | Den automatiske behandlingen starter når søkerens resultater er importert | `@OPT-BEH-BEH-032` (`@implemented`) | ja |
 | `@FLY-OPT-AUT-001` | Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Automatikken setter bare positive konklusjoner … ikke levert: «Automatikken kan sette en ny konklusjon etter annulleringen»), `@OPT-BEH-BEH-027` (`@implemented`) | nei |
 | `@FLY-OPT-AUT-001` | Den automatiske behandlingen setter GSK-konklusjonen der den mangler | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: GSK-konklusjonen settes også når den automatiske behandlingen kjører levert) | ja |
 | `@FLY-OPT-AUT-001` | Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Vitnemålet gir GSK når det har GSK OK fra KREG levert), `@OPT-BEH-BEH-025` (`@in-progress`, Regel: Bare saker der søkeren har ett vitnemål … levert) | ja |
@@ -133,7 +134,7 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 | `@FLY-OPT-VIT-001` | Vitnemål som ikke finnes fra før, importeres | `@OPT-BEH-BEH-030` (`@implemented`) | ja |
 | `@FLY-OPT-VIT-001` | GSK-vitnemålsberegningen kjører når det nye vitnemålet er importert | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Opptakssystemets påstand om GSK på vitnemålet levert) | ja |
 | `@FLY-OPT-VIT-001` | Den automatiske GSK-konklusjonen startes for hvert opptak der søkeren har en sak | `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Konklusjon på søknaden fra vitnemålet levert) | ja |
-| `@FLY-OPT-VIT-001` | Den automatiske behandlingen starter når importen har hentet vitnemålene til en søker uten vitnemål | `@OPT-BEH-BEH-032` (`@in-progress`, Regel: Behandlingen kjører når importen har hentet vitnemålene … levert) | ja |
+| `@FLY-OPT-VIT-001` | Den automatiske behandlingen starter når importen har hentet vitnemålene til en søker uten vitnemål | `@OPT-BEH-BEH-032` (`@implemented`) | ja |
 | `@FLY-OPT-VIT-001` | Annullerte vitnemål håndteres | `@OPT-BEH-BEH-030` (`@implemented`), `@OPT-BEH-BEH-015` (`@in-progress`, Regel: Annullert vitnemål levert), `@OPT-BEH-BEH-034` (`@implemented`) | ja |
 | `@FLY-OPT-VAL-001` | Saksbehandleren starter den automatiske behandlingen på vitnemålet saksbehandleren velger | `@OPT-BEH-BEH-039` (`@in-progress`, Regel: Har søkeren flere vitnemål, behandles saken automatisk på vitnemålet saksbehandleren velger levert, satt i denne kjøringen) | ja |
 | `@FLY-OPT-VAL-001` | Resten av saken behandles som i den automatiske saksbehandlingen | `@OPT-BEH-BEH-039` (`@in-progress`, Regel: Grunnlaget, poengene og kravelementene avgjøres på vitnemålet saksbehandleren har valgt ikke levert: 3 av 4 scenarioer `@implemented`, «Sammensatt vitnemål gir ikke grunnlaget …» mangler), `@FLY-OPT-AUT-001` (`@planned`) | nei |
@@ -193,7 +194,7 @@ Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avh
 | --- | --- | --- | --- | --- | --- |
 | `@FLY-OPT-AUT-001` | `@FLY-OPT-SAK-001` Saksbehandlertildeling | 1 | `@planned` | – | ikke levert; bare status (handler ikke om automatikken) |
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-030` Importere resultater fra KREG | 1 | `@implemented` | 16/16 | ankrene: fire regler |
-| `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` Starte automatisk behandling | 1 | `@in-progress` | 2/2 | ankrene: to regler |
+| `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-032` Starte automatisk behandling | 1 | `@implemented` (var `@in-progress`) | 2/2 | ankrene: to regler |
 | `@FLY-OPT-AUT-001`, `@FLY-OPT-VIT-001` | `@OPT-BEH-BEH-015` Automatisk GSK-konklusjon | 1 | `@in-progress` | 40/41 | ankrene: sju regler |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-027` Beregne GSK fra vitnemål | 1 | `@implemented` | 27/27 | hele kravet |
 | `@FLY-OPT-AUT-001` | `@OPT-BEH-BEH-025` Ferdigbehandle en sak | 1 | `@in-progress` | 7/8 | ankrene: to regler; 1 usikker (Min kompetanse) |
