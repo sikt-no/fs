@@ -18,6 +18,9 @@ interface Props {
   toPhase: (n: number) => void;
   /** Åpner kravet i Krav, på delen fasen bygger på (en flyt åpnes i Flyter) */
   openKrav: (id: string, focus?: Focus) => void;
+  /** Kartet dekker hele appen */
+  full: boolean;
+  onFull: (on: boolean) => void;
 }
 
 type PhaseData = { m: MapPhase; overview: boolean; dim: boolean };
@@ -82,7 +85,7 @@ const nodeTypes = { phase: PhaseNode, krav: KravNode } as const;
 
 const edgeColor = (e: MapEdge) => (e.status === 'broken' ? 'var(--err)' : stColor(e.status));
 
-function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav }: Props) {
+function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav, full, onFull }: Props) {
   const rf = useReactFlow();
   const [hover, setHover] = useState<string | null>(null);
   const layout = useMemo(() => flowMapLayout(ix, flow, tree, depth, follow), [ix, flow, tree, depth, follow]);
@@ -137,7 +140,8 @@ function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav }: Props) {
     [layout, near, x],
   );
 
-  // Ny flyt, nivå eller «Følg»: alt får plass. En lang flyt blir da uleselig, og starter øverst med en zoom som kan leses
+  // Ny flyt, nivå, «Følg» eller fullskjerm: alt får plass. En lang flyt blir da uleselig, og starter øverst med en
+  // zoom som kan leses
   useEffect(() => {
     const t = setTimeout(() => {
       rf.fitView({ padding: 0.12, maxZoom: 1 });
@@ -145,7 +149,7 @@ function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav }: Props) {
       if (vp.zoom < 0.7) rf.setViewport({ x: Math.max(24, vp.x), y: 24, zoom: 0.8 });
     }, 30);
     return () => clearTimeout(t);
-  }, [flow.id, depth, follow]);
+  }, [flow.id, depth, follow, full]);
 
   return (
     <ReactFlow
@@ -169,6 +173,13 @@ function MapView({ ix, flow, tree, depth, follow, toPhase, openKrav }: Props) {
       <Background gap={18} size={1.2} color="var(--line2)" />
       <Controls showInteractive={false} position="bottom-left" />
       <MiniMap pannable zoomable position="bottom-right" nodeColor={(n: Node) => (n.type === 'phase' ? 'var(--k-rule-soft)' : 'var(--line2)')} maskColor="rgba(120, 120, 120, .12)" />
+      {!full && (
+        <Panel position="top-left">
+          <button class="fl-fullbtn" onClick={() => onFull(true)} title="Vis kartet i hele vinduet">
+            <span aria-hidden="true">⤢</span> Fullskjerm
+          </button>
+        </Panel>
+      )}
       <Panel position="top-right" className="fl-maplegend">
         <span>
           <svg width="26" height="6" aria-hidden="true">

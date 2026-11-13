@@ -488,6 +488,47 @@ function FlowView(p: ViewProps) {
   const domCount = new Set(list.map(k => ix.krav.get(k.id)!.domain + '/' + ix.krav.get(k.id)!.sub)).size;
   const followT = follow === 'part' ? ', bare delen fasen bygger på' : '';
 
+  // Kartet i fullskjerm: dekker hele appen, med navnet på flyten og valgene over. Esc lukker
+  const [full, setFull] = useState(false);
+  useEffect(() => setFull(false), [flow.path, tab]);
+  useEffect(() => {
+    if (!full) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setFull(false);
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, [full]);
+
+  // Valgene står i knapperaden, og over kartet i fullskjerm
+  const opts = (
+    <div class="fl-opts">
+      <div class="fl-ctl">
+        <span class="lbl">Avhengigheter</span>
+        <Seg
+          label="Avhengigheter: hvor mange nivåer med @depends-on- som vises"
+          cur={depth}
+          set={p.onDepth}
+          opts={[1, 2, 3, Infinity].map(v => ({ v, l: v === 1 ? '1 nivå' : v === Infinity ? 'Alle' : String(v), n: countLabel(v), title: v === 1 ? 'Kravene fasene bygger på' : 'Også kravene de kravene bygger på' }))}
+        />
+      </div>
+      <div class="fl-ctl">
+        <span class="lbl">Følg</span>
+        <Seg
+          label="Følg: hvilken del av kravet som følges"
+          cur={follow}
+          set={p.setFollow}
+          opts={[
+            { v: 'part', l: 'Bare delen fasen bygger på' },
+            { v: 'whole', l: 'Hele kravet' },
+          ]}
+        />
+      </div>
+      <span class="fl-sum">
+        Viser <b>{depth === 1 ? 'kravene fasene bygger på direkte' : depth === Infinity ? 'hele kjeden av krav' : `krav i ${depth} nivåer`}</b>, og{' '}
+        <b>{follow === 'part' ? 'bare delen fasen bygger på' : 'hele kravet'}</b>.{levelMsg && ' ' + levelMsg}
+      </span>
+    </div>
+  );
+
   return (
     <>
       <div class="fl-toolbar">
@@ -513,33 +554,7 @@ function FlowView(p: ViewProps) {
             </button>
           ))}
         </div>
-        <div class="fl-opts">
-          <div class="fl-ctl">
-            <span class="lbl">Avhengigheter</span>
-            <Seg
-              label="Avhengigheter: hvor mange nivåer med @depends-on- som vises"
-              cur={depth}
-              set={p.onDepth}
-              opts={[1, 2, 3, Infinity].map(v => ({ v, l: v === 1 ? '1 nivå' : v === Infinity ? 'Alle' : String(v), n: countLabel(v), title: v === 1 ? 'Kravene fasene bygger på' : 'Også kravene de kravene bygger på' }))}
-            />
-          </div>
-          <div class="fl-ctl">
-            <span class="lbl">Følg</span>
-            <Seg
-              label="Følg: hvilken del av kravet som følges"
-              cur={follow}
-              set={p.setFollow}
-              opts={[
-                { v: 'part', l: 'Bare delen fasen bygger på' },
-                { v: 'whole', l: 'Hele kravet' },
-              ]}
-            />
-          </div>
-          <span class="fl-sum">
-            Viser <b>{depth === 1 ? 'kravene fasene bygger på direkte' : depth === Infinity ? 'hele kjeden av krav' : `krav i ${depth} nivåer`}</b>, og{' '}
-            <b>{follow === 'part' ? 'bare delen fasen bygger på' : 'hele kravet'}</b>.{levelMsg && ' ' + levelMsg}
-          </span>
-        </div>
+        {opts}
       </div>
 
       {flow.error && (
@@ -670,9 +685,40 @@ function FlowView(p: ViewProps) {
       {tab === 'dom' && <DomTab ix={ix} list={list} follow={follow} onOpen={p.onOpen} intro={`Kravene flyten bygger på, til ${depthText(depth)}${followT}, samlet per domene og sub-domene. Hvert sub-domene er et team som kan levere til flyten.`} />}
       {tab === 'mx' && <MatrixTab ix={ix} flow={flow} list={list} toPhase={p.toPhase} depth={depth} follow={follow} />}
       {tab === 'map' && (
-        <Suspense fallback={<div class="fl-mapwrap fl-maploading muted">Laster kartet …</div>}>
-          <FlowMap ix={ix} flow={flow} tree={tree} depth={depth} follow={follow} toPhase={p.toPhase} openKrav={p.openKrav} />
-        </Suspense>
+        <div class={full ? 'fl-mapfull' : undefined} role={full ? 'dialog' : undefined} aria-modal={full ? true : undefined} aria-label={full ? `Kartet for ${flow.title}` : undefined}>
+          {full && (
+            <div class="fl-mapfullhead">
+              <div class="fl-titlebar">
+                <span class="cur">{flow.title}</span>
+                <span class="mono id">@{flow.id}</span>
+                <St c={flow.status ? STC[flow.status] : 'var(--st-none)'} l={flow.status ?? 'ingen status'} />
+                <button class="fl-fullbtn close" onClick={() => setFull(false)}>
+                  Lukk fullskjerm <kbd>Esc</kbd>
+                </button>
+              </div>
+              {opts}
+            </div>
+          )}
+          <Suspense fallback={<div class="fl-mapwrap fl-maploading muted">Laster kartet …</div>}>
+            <FlowMap
+              ix={ix}
+              flow={flow}
+              tree={tree}
+              depth={depth}
+              follow={follow}
+              full={full}
+              onFull={setFull}
+              toPhase={n => {
+                setFull(false);
+                p.toPhase(n);
+              }}
+              openKrav={(id, focus) => {
+                setFull(false);
+                p.openKrav(id, focus);
+              }}
+            />
+          </Suspense>
+        </div>
       )}
     </>
   );

@@ -1428,6 +1428,16 @@ body.resizing iframe, body.resizing .main { pointer-events: none; }
 /* Kartet (fanen «Kart», FlowMap.tsx): fasene til venstre, kravene i én kolonne per nivå */
 .fl-mapwrap { height: max(480px, calc(100vh - 210px)); position: relative; border-bottom: 1px solid var(--line); }
 .fl-maploading { display: grid; place-content: center; font-size: 13px; }
+/* Kartet i fullskjerm: dekker hele appen, med navnet på flyten og valgene over kartet */
+.fl-mapfull { position: fixed; inset: 0; z-index: 60; display: grid; grid-template-rows: auto minmax(0, 1fr); background: var(--bg); }
+.fl-mapfull .fl-mapwrap { height: auto; min-height: 0; border-bottom: 0; }
+.fl-mapfullhead { border-bottom: 1px solid var(--line); background: var(--bg); }
+.fl-mapfullhead .fl-titlebar { padding-top: 10px; }
+.fl-mapfullhead .cur { font-size: 15px; font-weight: 600; }
+.fl-fullbtn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line2); border-radius: 5px; background: var(--surface); color: var(--ink); font: 500 12.5px var(--sans); padding: 4px 10px; cursor: pointer; }
+.fl-fullbtn:hover { background: var(--sunken); border-color: var(--acc); }
+.fl-fullbtn.close { margin-left: auto; }
+.fl-fullbtn kbd { font: 10.5px var(--mono); color: var(--ink2); border: 1px solid var(--line2); border-radius: 3px; padding: 0 4px; }
 .fl-mapwrap .react-flow { background: var(--bg); }
 .fl-mapwrap .react-flow__handle { opacity: 0; width: 6px; height: 6px; min-width: 0; min-height: 0; border: 0; }
 .fl-mapwrap .react-flow__controls { box-shadow: none; border: 1px solid var(--line2); border-radius: 5px; overflow: hidden; }
