@@ -87,5 +87,5 @@ Egenskap: Behandle yrkesfaglig vitnemål med påbygging
       # AVKLART 11.11.2026 (gjennomgang med domeneekspertene, i L3): løsningen
       # håndhever ikke unntaket. Saksbehandleren kan velge forbedringer i
       # poengvarianten for førstegangsvitnemål, og får varselet i «Varsel om
-      # forbedringer i poengvarianten for førstegangsvitnemål når jeg
-      # <handling>» (L3).
+      # forbedringer for grunnlaget VOV når jeg <handling>» (L4a, flyttet fra
+      # L3 13.11.2026).

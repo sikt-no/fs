@@ -133,31 +133,86 @@ Egenskap: Endre fag i grunnlaget
       # tillegg fra «Vg.dok fag», uten annullerte vitnemål (teknisk beskrivelse
       # av vitnemålsbehandling, G. M. Vangen).
 
-    Scenariomal: Advarsel om grunnlag uten forbedringer når jeg <handling>
-      Gitt søkeren har bare grunnlag som ikke tillater forbedringer
-      Og jeg har lagt inn en forbedring på et fag på vitnemålet
+    @openquestion
+    Scenariomal: Varsel om forbedringer for grunn laget VOV når jeg <handling>
+      # ÅPNE SPØRSMÅL:
+      # - Skal forbedringer (tilleggsfag og forbedrede karakterer) kunne tas
+      #   med for grunnlaget VOV, med et varsel som ikke stopper noe (avklart
+      #   11.11 og 12.11.2026), eller skal det ikke være mulig, slik som i
+      #   FS-klienten? Bekreft med domeneekspertene.
+      Gitt jeg behandler en poengvariantskombinasjon med grunnlaget VOV
+      Og jeg har tatt med forbedringer i poengvariantskombinasjonen
       Når jeg velger å <handling>
-      Så ser jeg at søkeren ikke har grunnlag som tillater forbedringer
+      Så ser jeg et varsel om at forbedringer som hovedregel ikke teller i kvoten for førstegangsvitnemål
       Men <resultat>
 
       Eksempler:
         | handling         | resultat                                           |
-        | beregne poengene | poengene er beregnet med forbedringen              |
-        | bruke poengene   | grunnlaget og poengene er lagret med forbedringen  |
-      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): advarselen
-      # kommer når saksbehandleren beregner og bruker poengene, ikke når
-      # forbedringen legges inn, som varselet om forbedringer i kvoten for
-      # førstegangsvitnemål i L3. Het «Advarsel når grunnlaget ikke tillater
-      # forbedringer».
+        | beregne poengene | poengene er beregnet med forbedringene             |
+        | bruke poengene   | grunnlaget og poengene er lagret med forbedringene |
+      # Endret 13.11.2026: flyttet hit fra L3 (velge_fag_per_poengvariant.feature),
+      # der det het «Varsel om forbedringer i poengvarianten for
+      # førstegangsvitnemål når jeg <handling>», og slått sammen med «Advarsel
+      # om grunnlag uten forbedringer når jeg <handling>», som sto her. De to
+      # gjaldt samme situasjon: saksbehandleren behandler en
+      # poengvariantskombinasjon med grunnlaget VOV, og har tatt med
+      # forbedringer. En søker har aldri bare grunnlaget VOV. VOV kommer i
+      # tillegg til et annet grunnlag, og gir kvoten for førstegangsvitnemål.
       #
-      # AVKLART 04.11.2026: saksbehandleren advares, men advarselen stopper
-      # ingenting. Den sier at forbedringen ikke får betydning for søkeren.
-      # Forslaget kom fra FS-klienten, som gir advarselen «Søker har ikke
-      # grunnlag som tillater forbedringer» (teknisk beskrivelse av
-      # vitnemålsbehandling, G. M. Vangen). Henger sammen med kvoteregelen i
-      # L3 («Varsel om forbedringer i poengvarianten for førstegangsvitnemål
-      # når jeg <handling>»). Teksten hører i
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene, for advarselen
+      # som sto her): varselet kommer når saksbehandleren beregner og bruker
+      # poengene, ikke når forbedringen legges inn.
+      #
+      # AVKLART 04.11.2026 (for advarselen som sto her): varselet stopper
+      # ingenting. Forslaget kom fra FS-klienten, som gir advarselen «Søker
+      # har ikke grunnlag som tillater forbedringer» (teknisk beskrivelse av
+      # vitnemålsbehandling, G. M. Vangen).
+      #
+      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): erstatter
+      # «Tilleggsfag kan ikke velges i poengvarianten for førstegangsvitnemål».
+      # Forbedringer er tilleggsfag og forbedrede karakterer. Saksbehandleren
+      # kan legge dem til i poengvarianten for kvoten for førstegangsvitnemål,
+      # og får et varsel som ikke stopper noe, når poengene beregnes og brukes.
+      # Om et unntak gjelder (R2, og poenggivende fag på yrkesfagsløpet i L4c),
+      # er saksbehandlerens vurdering. Avviker fra FS-klienten, der grunnlaget VOV
+      # ikke tillater tillegg. Teksten hører i
       # endre_fag_i_grunnlaget.design.md.
+      #
+      # AVKLART 07.10.2026: nye fag og forbedringer teller bare i ordinær
+      # kvote, aldri i kvoten for førstegangsvitnemål (Samordna opptaks wiki,
+      # sidene «Kvoter» og «Poengberegning norske søkere»). Søkeren konkurrerer
+      # i begge kvotene med hver sin poengsum, og mister ikke kvoten fordi et
+      # tilleggsfag velges i ordinær kvote. Dette erstatter begrunnelsen fra
+      # 21.09.2026, som sa at søkeren kunne slås ut av kvoten. Unntaket for R2
+      # står i L3 («Matematikk R2 på kompetansebevis kan tas med i kvoten for
+      # førstegangsvitnemål»), og unntaket for poenggivende fag på
+      # yrkesfagsløpet i L4c (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).
+      # Fra 11.11.2026 er hovedregelen et varsel,
+      # ikke en sperre.
+      #
+      # Hvilken poengvariant som hører til hvilken kvote, står i regelverket.
+      #
+      # Verifisert i FS-klienten: f_forbedretvitnemal(vgdoknr, poengvariant)
+      # returnerer 1 når vitnemålet har et valgt tilleggsfag for akkurat den
+      # poengvarianten. Valget er altså per poengvariant, og det er derfor
+      # varselet kan gjelde én poengvariant og ikke en annen.
+      #
+      # Et vitnemål med forbedringer kan legges til grunn for poengvarianten
+      # for førstegangsvitnemål, med det samme varselet (endret 11.11.2026,
+      # var en sperre).
+      #
+      # AVKLART 04.11.2026: «Et vitnemål gjelder ikke alle poengvarianter» er
+      # fjernet. Det bygde på at tabellen POENGVARIANTVITNEMAL i FS-klienten
+      # sier hvilke vitnemål som gjelder for hver poengvariant. Ifølge den
+      # tekniske beskrivelsen av vitnemålsbehandling (G. M. Vangen) lagrer
+      # tabellen bare hvilket vitnemål saksbehandleren har valgt. Den eneste
+      # regelen er kvoteregelen i dette scenarioet (da i L3), som fra 11.11.2026 er et
+      # varsel.
+      #
+      # Bekreftet i den tekniske beskrivelsen av vitnemålsbehandling i
+      # FS-klienten (G. M. Vangen, lest 03.11.2026): grunnlaget VOV tillater
+      # ikke tillegg («Det er ikke anledning å velge tillegg for grunnlag
+      # VOV»). Det videreføres ikke (11.11.2026).
 
     Scenario: Privatisteksamen erstatter både standpunkt- og eksamenskarakter
       Gitt søkeren har tatt et fag på nytt som privatist

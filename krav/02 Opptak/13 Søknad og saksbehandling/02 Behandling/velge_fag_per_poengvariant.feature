@@ -170,9 +170,9 @@ Egenskap: Velge fag per poengvariant
       Og jeg velger å bruke poengene
       Så er poengene for den poengvarianten beregnet fra de valgte fagene
       Og fagvalget er lagret på poengvarianten
-      # Fagvalget låser poenget mot automatisk reberegning på samme måte som
-      # valget av vitnemål i L2 («Valget av grunnlag låser poenget mot
-      # automatisk reberegning»).
+      # Poengene låses mot automatisk reberegning når saksbehandleren bruker
+      # dem (L2, «Poengene låses mot automatisk reberegning når jeg bruker
+      # dem»). Endret 13.11.2026: sto at fagvalget låser.
 
     Scenario: Fagvalget i én poengvariant påvirker ikke en annen
       Gitt jeg har valgt et tilleggsfag i én poengvariant
@@ -292,60 +292,11 @@ Egenskap: Velge fag per poengvariant
       # dm_vitnemalbehandl_vmfag_tillegg bruker rå TVAR.status_valgt, altså
       # ikke med. Forskjellen ser ut som en tilfeldighet, og videreføres ikke.
 
-    Scenariomal: Varsel om forbedringer i poengvarianten for førstegangsvitnemål når jeg <handling>
-      Gitt grunnlaget for poengvarianten for kvoten for førstegangsvitnemål har forbedringer
-      Når jeg velger å <handling>
-      Så ser jeg et varsel om at forbedringer som hovedregel ikke teller i kvoten for førstegangsvitnemål
-      Men <resultat>
-
-      Eksempler:
-        | handling         | resultat                                           |
-        | beregne poengene | poengene er beregnet med forbedringene             |
-        | bruke poengene   | grunnlaget og poengene er lagret med forbedringene |
-      # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): erstatter
-      # «Tilleggsfag kan ikke velges i poengvarianten for førstegangsvitnemål».
-      # Forbedringer er tilleggsfag og forbedrede karakterer. Saksbehandleren
-      # kan legge dem til i poengvarianten for kvoten for førstegangsvitnemål,
-      # og får et varsel som ikke stopper noe, når poengene beregnes og brukes.
-      # Om et unntak gjelder (R2, og poenggivende fag på yrkesfagsløpet i L4c),
-      # er saksbehandlerens vurdering. Avviker fra FS-klienten, der grunnlaget VOV
-      # ikke tillater tillegg. Teksten hører i
-      # velge_fag_per_poengvariant.design.md.
-      #
-      # AVKLART 07.10.2026: nye fag og forbedringer teller bare i ordinær
-      # kvote, aldri i kvoten for førstegangsvitnemål (Samordna opptaks wiki,
-      # sidene «Kvoter» og «Poengberegning norske søkere»). Søkeren konkurrerer
-      # i begge kvotene med hver sin poengsum, og mister ikke kvoten fordi et
-      # tilleggsfag velges i ordinær kvote. Dette erstatter begrunnelsen fra
-      # 21.09.2026, som sa at søkeren kunne slås ut av kvoten. Unntaket for R2
-      # står i scenarioet under, og unntaket for poenggivende fag på
-      # yrkesfagsløpet i L4c (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).
-      # Fra 11.11.2026 er hovedregelen et varsel,
-      # ikke en sperre.
-      #
-      # Hvilken poengvariant som hører til hvilken kvote, står i regelverket.
-      #
-      # Verifisert i FS-klienten: f_forbedretvitnemal(vgdoknr, poengvariant)
-      # returnerer 1 når vitnemålet har et valgt tilleggsfag for akkurat den
-      # poengvarianten. Valget er altså per poengvariant, og det er derfor
-      # varselet kan gjelde én poengvariant og ikke en annen.
-      #
-      # Et vitnemål med forbedringer kan legges til grunn for poengvarianten
-      # for førstegangsvitnemål, med det samme varselet (endret 11.11.2026,
-      # var en sperre).
-      #
-      # AVKLART 04.11.2026: «Et vitnemål gjelder ikke alle poengvarianter» er
-      # fjernet. Det bygde på at tabellen POENGVARIANTVITNEMAL i FS-klienten
-      # sier hvilke vitnemål som gjelder for hver poengvariant. Ifølge den
-      # tekniske beskrivelsen av vitnemålsbehandling (G. M. Vangen) lagrer
-      # tabellen bare hvilket vitnemål saksbehandleren har valgt. Den eneste
-      # regelen er kvoteregelen i dette scenarioet, som fra 11.11.2026 er et
-      # varsel.
-      #
-      # Bekreftet i den tekniske beskrivelsen av vitnemålsbehandling i
-      # FS-klienten (G. M. Vangen, lest 03.11.2026): grunnlaget VOV tillater
-      # ikke tillegg («Det er ikke anledning å velge tillegg for grunnlag
-      # VOV»). Det videreføres ikke (11.11.2026).
+    # «Varsel om forbedringer i poengvarianten for førstegangsvitnemål når jeg
+    # <handling>» er flyttet til L4a 13.11.2026 (endre_fag_i_grunnlaget.feature),
+    # og heter nå «Varsel om forbedringer for grunnlaget VOV når jeg
+    # <handling>». Det er slått sammen med «Advarsel om grunnlag uten
+    # forbedringer når jeg <handling>», som gjaldt samme situasjon.
 
     Scenario: Tilleggsfag kan velges i ordinær kvote
       Gitt søkeren har et førstegangsvitnemål med et tilleggsfag
@@ -365,8 +316,8 @@ Egenskap: Velge fag per poengvariant
       # AVKLART 11.11.2026 (gjennomgang med domeneekspertene): løsningen
       # håndhever ikke unntakene. Saksbehandleren kan velge forbedringer i
       # poengvarianten for førstegangsvitnemål for alle søkere, og får varselet
-      # i «Varsel om forbedringer i poengvarianten for førstegangsvitnemål når
-      # jeg <handling>». Dette scenarioet er et eksempel på når
+      # i «Varsel om forbedringer for grunnlaget VOV når jeg <handling>» (L4a,
+      # flyttet 13.11.2026). Dette scenarioet er et eksempel på når
       # saksbehandleren bruker forbedringen likevel. Unntaket for poenggivende
       # fag på yrkesfagsløpet står i L4c
       # (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).

@@ -187,35 +187,10 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       # om poenget er beregnet automatisk eller satt av en saksbehandler» er
       # tatt ut.
 
-    Scenario: Valget av grunnlag låser poenget mot automatisk reberegning
-      Gitt jeg har lagt et vitnemål til grunn
-      Når den automatiske poengberegningen kjøres
-      Så beregnes ikke poenget på nytt
-      Og poenget bygger fortsatt på grunnlaget jeg valgte
-      # AVKLART 21.09.2026: å velge grunnlag låser de berørte poengradene,
-      # slik lagring i kalkulatoren allerede gjør. Skilt ut 08.10.2026: het
-      # «Fagvalget låser poenget mot automatisk reberegning». I L2 er det
-      # valget av vitnemål som låser; fagvalget i L3 låser på samme måte.
-      #
-      # Verifisert i ny stack: LagreVitnemalUtregningService.skrivPoeng setter
-      # LA_STAA = true og STATUS_AUTOMATISK_UTREGNET = false ved innsetting, og
-      # bevarer la_staa ved oppdatering. Javadoc begrunner det slik: «en fersk
-      # kalkulatorverdi er en manuell saksbehandler-handling og skal ikke
-      # overskrives av automatisk poengberegning».
-      #
-      # Begge automatikk-tjenestene respekterer låsen med WHERE-guard:
-      # AutomatiskPoengberegningService filtrerer på SAK_POENG.LA_STAA = false,
-      # og AutomatiskKravelementVurderingService på
-      # SAK_KVALIFISERING_KRAVELEMENT.LA_STAA = false. Schema-teksten
-      # «Eksisterende poeng overskrives med nyberegnet verdi» er upresis på
-      # dette punktet.
-
-    Scenario: Låse opp et poeng
-      Gitt et poeng er låst av grunnlaget jeg valgte
-      Når jeg låser opp poenget
-      Så beregnes poenget av den automatiske poengberegningen igjen
-      # Opplåsing finnes allerede: settPoengV4(laStaa: false). Kalkulatoren
-      # låser ikke raden igjen ved neste lagring — se javadoc-sitatet over.
+    # «Valget av grunnlag låser poenget mot automatisk reberegning» og «Låse
+    # opp et poeng» er flyttet til regelen «Poengene beregnes og lagres når
+    # saksbehandleren bruker dem» 13.11.2026. Det første heter nå «Poengene
+    # låses mot automatisk reberegning når jeg bruker dem».
 
   Regel: Poengene beregnes og lagres når saksbehandleren bruker dem
 
@@ -263,6 +238,57 @@ Egenskap: Velge vitnemål som grunnlag for poengberegningen
       Så er grunnlaget kontrollert av kontrollmotoren
       Og poengene er beregnet fra grunnlaget
       Og grunnlaget og poengene er lagret på poengvariantskombinasjonen
+
+    Scenario: Poengene låses mot automatisk reberegning når jeg bruker dem
+      Gitt jeg har lagt et vitnemål til grunn
+      Og jeg har valgt å bruke poengene
+      Når den automatiske poengberegningen kjøres
+      Så beregnes ikke poengene på nytt
+      Og poengene bygger fortsatt på grunnlaget jeg brukte
+      # AVKLART 13.11.2026: det er å bruke poengene som låser, ikke hvert
+      # valg for seg. Det gjelder alt i grunnlaget: vitnemålet (L2), fagvalget
+      # og poeng saksbehandleren har lagt inn selv (L3), og endrede og manuelt
+      # innlagte fag (L4a, L4b). Alle poengene på poengvariantskombinasjonen
+      # låses. Het «Valget av grunnlag låser poenget mot automatisk
+      # reberegning», under regelen «Poeng beregnes fra det valgte grunnlaget».
+      #
+      # AVKLART 21.09.2026: å bruke poengene låser de berørte poengradene,
+      # slik lagring i kalkulatoren allerede gjør (endret 13.11.2026: sto «å
+      # velge grunnlag»). Skilt ut 08.10.2026: het «Fagvalget låser poenget
+      # mot automatisk reberegning».
+      #
+      # Verifisert i ny stack: LagreVitnemalUtregningService.skrivPoeng setter
+      # LA_STAA = true og STATUS_AUTOMATISK_UTREGNET = false ved innsetting, og
+      # bevarer la_staa ved oppdatering. Javadoc begrunner det slik: «en fersk
+      # kalkulatorverdi er en manuell saksbehandler-handling og skal ikke
+      # overskrives av automatisk poengberegning».
+      #
+      # Begge automatikk-tjenestene respekterer låsen med WHERE-guard:
+      # AutomatiskPoengberegningService filtrerer på SAK_POENG.LA_STAA = false,
+      # og AutomatiskKravelementVurderingService på
+      # SAK_KVALIFISERING_KRAVELEMENT.LA_STAA = false. Schema-teksten
+      # «Eksisterende poeng overskrives med nyberegnet verdi» er upresis på
+      # dette punktet.
+
+    Scenario: Låse opp et poeng
+      Gitt jeg har valgt å bruke poengene
+      Når jeg låser opp et poeng
+      Så beregnes poenget av den automatiske poengberegningen igjen
+      # Opplåsing finnes allerede: settPoengV4(laStaa: false). Kalkulatoren
+      # låser ikke raden igjen ved neste lagring — se javadoc-sitatet i
+      # «Poengene låses mot automatisk reberegning når jeg bruker dem».
+
+    Scenario: Å bruke poengene overskriver poeng som er låst
+      Gitt poengene på en poengvariantskombinasjon er låst
+      Og jeg har endret grunnlaget for poengvariantskombinasjonen
+      Når jeg velger å bruke poengene
+      Så er de låste poengene erstattet av poengene beregnet fra grunnlaget
+      Og poengene er fortsatt låst mot automatisk reberegning
+      # AVKLART 13.11.2026: å bruke poengene er noe saksbehandleren gjør
+      # selv, og erstatter også poeng som er låst, for eksempel av en annen
+      # saksbehandler eller i en tidligere behandling. Låsen stopper bare den
+      # automatiske poengberegningen. Koden gjør det allerede
+      # (verify-rapporten 12.11.2026, «Regler uten scenario»).
 
     Scenario: Advarsel om endringer som ikke er lagret
       Gitt jeg har endret grunnlaget for en poengvariantskombinasjon
