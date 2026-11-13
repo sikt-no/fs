@@ -1,16 +1,33 @@
 # Designnotater: Forvalte organisasjonssamlinger
 
-**Relaterte features:**
-[`forvalte_organisasjonssamlinger.feature`](./forvalte_organisasjonssamlinger.feature) (BRU-TIL-SAM-001) og
-[`tildele_tilgang_via_organisasjonssamling.feature`](./tildele_tilgang_via_organisasjonssamling.feature) (BRU-TIL-SAM-002).
+**Relatert feature:**
+[`forvalte_organisasjonssamlinger.feature`](./forvalte_organisasjonssamlinger.feature) (BRU-TIL-SAM-001).
 
-Notatet er skrevet som utgangspunkt for en designdiskusjon. Begge features står som `@could @draft`:
-kravene er ikke besluttet, og flere av valgene under er åpne.
+Notatet er skrevet som utgangspunkt for en designdiskusjon. Featuren står som `@could @draft`:
+kravet er ikke besluttet, og flere av valgene under er åpne.
+
+Å tildele en tilgang mot en samling er skilt ut i BRU-TIL-SAM-002,
+`tildele_tilgang_mot_organisasjonssamling.feature` (sikt-no/fs#548). Den delen er besluttet, står
+som `@must @planned`, og har et eget designnotat. Utkastets egen fil for tildeling er fjernet fra
+denne PR-en, så ID-en BRU-TIL-SAM-002 bare finnes ett sted.
+
+## Status 13.11.2026
+
+Sjekket mot tilgangsstyringen på fs-plattform main og fs-admin main.
+
+| Område | Finnes i dag |
+|---|---|
+| Katalog og medlemsliste | Kan leses i API-et av alle innloggede: `Query.organisasjonssamlinger`, sortert på navn, og `medlemskap` med filter på miljø, organisasjon, aktive og tidspunkt. FS Admin har ingen side for samlinger. |
+| Opprette og endre samlinger, melde inn og ut | Finnes ikke. Databasen har bare leseregler for katalogen og medlemskapene, og API-et har ingen handlinger for dem. Bare databaseforvaltningen kan skrive dem, gjennom migreringer. |
+| Global forvaltningsrettighet | Finnes ikke. Ingen rolle gir den. |
+| Tildeling mot samling | Bygget i API-et for applikasjoner, med full dekning i stedet for den globale rettigheten. Se BRU-TIL-SAM-002. |
+| Proveniens i listene | Tilgangslisten på applikasjonen, rollelistene for personbrukere og siden for en rolle viser en tilgang gitt gjennom en samling med «Via samling». Se avsnittet om proveniens. |
+| Skalavakt | Håndheves ikke, verken i API-et eller i databasen. |
 
 ## Utgangspunktet: modellen finnes, flaten gjør ikke
 
-Datamodellen for organisasjonssamlinger er merget og ligger i produksjonsløypa (fs-plattform
-MR 5262). Den består av tre deler:
+Datamodellen for organisasjonssamlinger er merget og i produksjon (fs-plattform MR 5262,
+migrering 0029). Den består av tre deler:
 
 | Del | Hva den holder | Temporal |
 |-----|----------------|----------|
@@ -23,11 +40,15 @@ organisasjonene som er aktive medlemmer av samlingen **i det samme miljøet**, s
 direkte tildelingene, og resultatet rolleekspanderes og dedupliseres. Utvidelsen krysser aldri
 miljø.
 
-Det som ikke finnes er forvaltningen. I dag kan bare databaseforvaltningen skrive samlinger,
-medlemskap og tildelinger mot samling — standardposisjonen er lukket, fordi det å skrive her er å
-dele ut tilgang bredt. Én samling er opprettet, «FS-læresteder», med 37 medlemsorganisasjoner
-(36 læresteder og Sikt) i produksjonsmiljøet. Det er ikke opprettet noen tildeling mot den, så
-modellen gir foreløpig ingen tilgang gjennom samlinger.
+Det som ikke finnes er forvaltningen. I dag kan bare databaseforvaltningen skrive samlinger og
+medlemskap. Standardposisjonen er lukket, fordi det å skrive her er å dele ut tilgang bredt.
+Tildelinger mot en samling kan siden migrering 0045 gis til applikasjoner gjennom API-et, av den
+som har rettighet til å tildele i hver medlemsorganisasjon (BRU-TIL-SAM-002). Migrering 0029
+oppretter samlingen «FS-læresteder» og melder inn 37 organisasjoner (36 læresteder og Sikt) i
+produksjonsmiljøet. Hvilke tildelinger som er gitt mot den i produksjon, er ikke sjekket her.
+
+Delegeringstaket til en Feide-applikasjon har fått en egen samlingsform (migrering 0080), som
+leses i applikasjonens delegeringstak. Den kan heller ikke skrives fra API-et.
 
 Katalogen og medlemskapene er lesbare for alle som er innlogget — hvilke samlinger som finnes og
 hvilke organisasjoner de består av trenger ingen skjerming. Tildelingene er ikke lesbare på samme
@@ -39,8 +60,10 @@ katalog og medlemsliste er åpen lesning, tildelingslisten er det ikke.
 
 1. **Katalog** — liste og detaljside: navn, beskrivelse, antall medlemmer, medlemsliste per miljø.
 2. **Medlemskap** — melde en organisasjon inn og ut, per miljø, med historikk.
-3. **Tildeling via samling** — tildele og trekke tilbake en tilgang mot en samling i ett miljø.
-4. **Proveniens og synlighet** — det skal fremgå hvorfor en bruker har en tilgang. Åpent, se under.
+3. **Tildeling mot samling** — tildele og trekke tilbake en tilgang mot en samling i ett miljø.
+   Skilt ut i BRU-TIL-SAM-002 (#548), og bygget i API-et for applikasjoner.
+4. **Proveniens og synlighet** — det skal fremgå hvorfor en bruker har en tilgang. Avklart for
+   listene i FS Admin, åpent for visningen av mine tilganger. Se under.
 5. **Skalavakt** — samlinger over 500 medlemmer krever ytelsesmåling først. Se under.
 
 ## Overordnet UI-mønster
@@ -69,7 +92,8 @@ Knappen *Opprett samling* vises bare for forvalter med den globale rettigheten.
 - Historikkvisning: avsluttede medlemskap med start- og sluttidspunkt, og hvem som gjorde hva. Kan
   ligge bak en fane eller et «vis historikk»-valg.
 - Tildelingsseksjon: hvilke tilganger som er tildelt mot samlingen, i hvilket miljø, til hvem.
-  Skjermet, jf. avsnittet over.
+  Skjermet, jf. avsnittet over. Reglene for den står i BRU-TIL-SAM-002. På applikasjonens side
+  har FS Admin valgt rader i den vanlige tilgangslisten, ikke en egen seksjon.
 
 ## Interaksjonsmønstre
 
@@ -80,8 +104,10 @@ Knappen *Opprett samling* vises bare for forvalter med den globale rettigheten.
 *Endre navn/beskrivelse*, *Fjern medlem*, *Fjern tildeling*, *Vis historikk*.
 
 ### Manglende rettighet skjuler handlingen
-Uten den globale forvaltningsrettigheten vises ingen av handlingene — ikke som deaktiverte knapper,
-men skjult. Dette følger prosjektmønsteret for manglende tilgang.
+Uten den globale forvaltningsrettigheten vises ingen av handlingene for samlingen og medlemskapene
+— ikke som deaktiverte knapper, men skjult. Dette følger prosjektmønsteret for manglende tilgang.
+*Tildel tilgang mot samling* er gatet på noe annet: rettigheten til å tildele i hver
+medlemsorganisasjon (BRU-TIL-SAM-002).
 
 ### Bekreftelse på inngripende handlinger
 Å fjerne et medlem eller en tildeling tar tilgang fra virkelige brukere i virkelige organisasjoner.
@@ -132,7 +158,7 @@ Gjeninnmelding gir en ny periode ved siden av den gamle, ikke en overskriving. U
 som en tidslinje per organisasjon framfor én rad med siste status — ellers går nettopp det
 historikken er god for tapt.
 
-## Åpent spørsmål: proveniens
+## Proveniens: avklart i listene, åpent i mine tilganger
 
 En bruker kan ha en tilgang i en organisasjon av tre grunner:
 
@@ -140,7 +166,15 @@ En bruker kan ha en tilgang i en organisasjon av tre grunner:
 2. en sterkere tilgang brukeren har omfatter den, eller
 3. organisasjonen er medlem av en samling det er tildelt en tilgang mot.
 
-Visningen av mine tilganger skiller i dag ikke på dette. Spørsmålet er hvordan 3 skal uttrykkes:
+**AVKLART 13.11.2026 (fra implementasjonen) for listene i FS Admin:** samling er en egen
+tilknytningsverdi ved siden av «direkte» og «arvet» (`Tilknytning.SAMLING`). Tilgangslisten på
+applikasjonen, rollelistene for personbrukere og siden for en rolle viser raden med «Via samling» og
+navnet på samlingen. Raden kan ikke fjernes for én organisasjon, og API-et avviser det
+(`SamlingstildelingKanIkkeFjernes`). Har tilgangen flere kilder, står den første av direkte,
+samling og arvet. Se BRU-TIL-SAM-002 og BRU-PER-ROL-001/-002.
+
+Visningen av mine tilganger skiller fortsatt ikke på dette. Der er spørsmålet åpent, og
+alternativene var:
 
 - **Egen tilknytningsverdi** for samling — ærligst, men utvider en verdimengde flere flater leser.
 - **Undertype av «arvet»** — mindre inngripende, men slår sammen to ganske ulike årsaker: at en
@@ -153,8 +187,11 @@ trekkes tilbake på organisasjonen den vises på — den fjernes ved å fjerne t
 samlingen, eller ved å melde organisasjonen ut. Det bør ikke kunne forveksles med en direkte
 tildeling man kan fjerne der og da.
 
-Spørsmålet er ikke løst her. Scenarioene som avhenger av svaret er merket `@openquestion` i
-[`tildele_tilgang_via_organisasjonssamling.feature`](./tildele_tilgang_via_organisasjonssamling.feature).
+For listene i FS Admin er dette løst slik: tilgangen merkes «Via samling» og kan ikke fjernes der.
+For mine tilganger er spørsmålet ikke løst. Det henger sammen med om personer skal kunne få en
+tilgang mot en samling, som er et åpent spørsmål i BRU-TIL-SAM-002. Scenarioene om mine tilganger
+og om rollenekt sto i utkastets fil for tildeling, som er fjernet, og er tatt med som åpent
+spørsmål i BRU-TIL-SAM-002.
 
 ## Ikke-funksjonelt: skalavakt
 
@@ -167,10 +204,20 @@ trygt og at 5 000 ikke er det — ikke hvor grensen går.
 
 Kravet er derfor formulert som en vakt, ikke som et tak: **samlinger med over 500 medlemmer skal
 måles før de tas i bruk.** Det er en grense satt der kunnskapen slutter, og den bør flyttes når
-noen måler videre. Til sammenligning har den eneste samlingen som finnes i dag 37 medlemmer, så
-grensen er ikke i veien for noe kjent behov.
+noen måler videre. Til sammenligning melder migreringen som oppretter «FS-læresteder», inn 37
+organisasjoner i produksjon, så grensen er ikke i veien for noe kjent behov.
+
+Grensen håndheves ikke i dag, verken av tildelingen mot samlingen i API-et eller i databasen.
 
 Åpent: om 500 skal være en hard grense i flaten eller et varsel forvalteren kan gå videre fra.
+
+## Revalidering ved innmelding (fra BRU-TIL-SAM-002)
+
+Dekningskravet for tildeling mot en samling vurderes når tildelingen gis. Meldes en organisasjon
+inn i en samling som alt har tildelinger, utvides tildelingene til den nye organisasjonen uten at
+dekningskravet ser det. Det som kan fange det, er en revalidering i medlemskapsflaten (avvis en
+innmelding som ville utvidet en tildeling utover innmelderens egen rett) eller en varsling. Det er
+en av grunnene til at forvaltningen av medlemskap er strengere gatet enn tildelingen.
 
 ## Avklarte valg
 
@@ -178,15 +225,23 @@ grensen er ikke i veien for noe kjent behov.
 - Miljø velges eksplisitt på detaljsiden; det finnes ikke et «alle miljøer»-syn over medlemskap.
 - Katalog og medlemsliste er åpen lesning; tildelinger mot samling er skjermet.
 - Historikk vises som perioder, ikke som siste status.
+- AVKLART 13.11.2026 (fra implementasjonen): navnet er obligatorisk og unikt, og beskrivelsen er
+  valgfri (datamodellen).
+- AVKLART 13.11.2026 (fra implementasjonen): tildeling mot samling krever ikke den globale
+  rettigheten, men rettighet til å tildele i hver medlemsorganisasjon (BRU-TIL-SAM-002).
+- AVKLART 13.11.2026 (fra implementasjonen): i listene i FS Admin er samling en egen tilknytning,
+  «Via samling», og en slik tilgang kan ikke fjernes for én organisasjon.
 
 ## Åpne designspørsmål
 
 - [ ] Hva heter den globale forvaltningsrettigheten, og hvilken rolle i forretningsrollesettet
       bærer den?
 - [ ] Hvordan skal proveniens vises i mine tilganger — egen verdi, undertype av arvet, eller ikke
-      skilles?
+      skilles? Listene i FS Admin har valgt egen verdi.
 - [ ] Er 500 medlemmer en hard grense i flaten, eller et varsel?
-- [ ] Skal tildeling mot samling gjelde både brukere og applikasjoner?
-- [ ] Skal delegering til en applikasjon senere kunne uttrykkes mot en samling?
+- [ ] Skal en innmelding revalideres mot innmelderens egen tildelingsrett, eller varsles?
 - [ ] Skal en samling kunne avvikles, og hva skjer i så fall med tildelingene mot den?
 - [ ] Hører forvaltningen i FS Admin, eller i en egen flate for Sikt-interne oppgaver?
+
+Spørsmålene om brukere som mottaker av en tildeling mot samling, og om delegeringstak mot en
+samling, er flyttet til BRU-TIL-SAM-002.

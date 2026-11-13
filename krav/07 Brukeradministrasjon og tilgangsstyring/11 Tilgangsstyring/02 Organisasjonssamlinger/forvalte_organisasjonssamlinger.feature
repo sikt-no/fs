@@ -11,11 +11,22 @@ Egenskap: Forvalte organisasjonssamlinger
   miljø: samme samling kan ha ulike medlemmer i test og i produksjon.
 
   Datamodellen for samlinger, medlemskap og tildeling mot samling er på plass (fs-plattform
-  MR 5262), og autorisasjonen utvider allerede en tildeling mot en samling til samlingens
-  aktive medlemmer. Det som mangler, og som denne egenskapen beskriver, er forvaltningsflaten:
-  i dag kan bare databaseforvaltningen opprette samlinger og skrive medlemskap.
+  MR 5262), og autorisasjonen utvider en tildeling mot en samling til samlingens aktive
+  medlemmer. Katalogen og medlemslistene kan leses i API-et. Det som mangler, og som denne
+  egenskapen beskriver, er forvaltningsflaten: i dag kan bare databaseforvaltningen opprette
+  samlinger og skrive medlemskap (sjekket mot fs-plattform main 13.11.2026).
 
+  Å tildele en tilgang mot en samling er skilt ut i BRU-TIL-SAM-002 (sikt-no/fs#548). Den
+  tildelingen krever ikke forvaltningsrettigheten i denne egenskapen, men rettighet til å
+  tildele i hver av samlingens medlemsorganisasjoner.
+
+  # Kravet er en designdiskusjon og er ikke besluttet. Kommentarene «AVKLART … (fra
+  # implementasjonen)» sier bare hva datamodellen alt håndhever.
+  #
   # ÅPNE SPØRSMÅL:
+  # - Skal en innmelding i en samling som alt har tildelinger, revalideres mot innmelderens
+  #   egen tildelingsrett, eller varsles? Innmeldingen utvider tildelingene til den nye
+  #   organisasjonen uten at dekningskravet i BRU-TIL-SAM-002 ser det.
   # - Hva skal den globale forvaltningsrettigheten hete, og hvilken rolle bærer den? Rollen
   #   hører hjemme i forretningsrollesettet som er under arbeid, og finnes ikke i dag.
   # - Skal forvaltningen ligge i FS Admin sammen med den øvrige tilgangsstyringen, eller i en
@@ -27,6 +38,9 @@ Egenskap: Forvalte organisasjonssamlinger
     Gitt jeg er innlogget i løsningen
 
   Regel: Katalogen over organisasjonssamlinger kan listes og åpnes
+
+    # Status 13.11.2026: API-et har katalogen (sortert på navn), medlemslisten per miljø og
+    # medlemstallet, og alle innloggede kan lese dem. FS Admin har ingen side for samlinger.
 
     Scenario: Se liste over organisasjonssamlinger
       Når jeg åpner oversikten over organisasjonssamlinger
@@ -61,6 +75,9 @@ Egenskap: Forvalte organisasjonssamlinger
     # En samling går på tvers av organisasjoner og har ingen eierorganisasjon. Rettigheten kan
     # derfor ikke skopes til en organisasjon slik resten av tilgangsstyringen er skopet, og må
     # være global — på Sikt-nivå.
+    #
+    # Status 13.11.2026: ingen rettighet gir skrivetilgang til katalogen eller medlemskapene, og
+    # API-et har ingen handlinger for dem. Bare databaseforvaltningen kan skrive dem.
 
     Scenario: Forvalter med global forvaltningsrettighet oppretter en samling
       Gitt jeg har global forvaltningsrettighet for organisasjonssamlinger
@@ -73,7 +90,7 @@ Egenskap: Forvalte organisasjonssamlinger
       Når jeg åpner oversikten over organisasjonssamlinger
       Så kan jeg forvalte hver samling i oversikten
 
-    Scenario: Administrator med rettighet i egne organisasjoner kan ikke forvalte samlinger
+    Scenario: Å administrere organisasjoner gir ikke rett til å forvalte samlinger
       Gitt jeg administrerer én eller flere organisasjoner
       Og jeg ikke har global forvaltningsrettighet for organisasjonssamlinger
       Når jeg åpner oversikten over organisasjonssamlinger
@@ -84,9 +101,13 @@ Egenskap: Forvalte organisasjonssamlinger
       Gitt jeg administrerer en organisasjon
       Og jeg ikke har global forvaltningsrettighet for organisasjonssamlinger
       Når jeg åpner detaljsiden for en organisasjonssamling
-      Så ser jeg ingen handling for å melde min organisasjon inn i samlingen
+      Så ser jeg ingen handling for å melde organisasjonen jeg administrerer inn i samlingen
 
   Regel: Navnet identifiserer samlingen
+
+    # AVKLART 13.11.2026 (fra implementasjonen): Datamodellen krever et navn, krever at navnet er
+    # unikt, og lar beskrivelsen være tom. Navnet er det brukeren kjenner samlingen ved, og
+    # løpenummeret brukes i henvendelser til Sikt.
 
     Scenario: Navn må fylles inn for å opprette en samling
       Gitt jeg har global forvaltningsrettighet for organisasjonssamlinger
@@ -155,6 +176,11 @@ Egenskap: Forvalte organisasjonssamlinger
 
   Regel: Medlemskapshistorikken er sporbar
 
+    # AVKLART 13.11.2026 (fra implementasjonen): Medlemskapene er temporale i datamodellen. Et
+    # medlemskap avsluttes ved at perioden lukkes, og en gjeninnmelding gir en ny periode ved
+    # siden av den gamle. API-et kan vise medlemskapene som gjaldt på et gitt tidspunkt, og
+    # hvem som meldte inn og ut, både personen og applikasjonen det ble gjort gjennom.
+
     Scenario: Se når en organisasjon ble medlem
       Gitt en organisasjon er medlem av en samling i et miljø
       Når jeg åpner detaljsiden for samlingen
@@ -183,7 +209,9 @@ Egenskap: Forvalte organisasjonssamlinger
     # Ikke-funksjonelt krav. Teamet målte 2026-08-17 at autorisasjonsoppslag holder seg innenfor
     # rammene for en samling med 500 medlemmer, og at knekkpunktet ligger et sted mellom 500 og
     # 5 000 medlemmer. Grensen er derfor satt der målingen rekker, ikke der modellen slutter å
-    # virke. Den største samlingen i dag har 37 medlemmer.
+    # virke. Migreringen som oppretter samlingen «FS-læresteder», melder inn 37 organisasjoner i
+    # produksjon.
+    # Grensen håndheves ikke i API-et eller i databasen (13.11.2026).
 
     Scenario: Forvaltning av en samling med inntil 500 medlemmer
       Gitt jeg har global forvaltningsrettighet for organisasjonssamlinger
@@ -194,9 +222,10 @@ Egenskap: Forvalte organisasjonssamlinger
 
     @openquestion
     Scenario: Forsøk på å utvide en samling forbi 500 medlemmer
-      # ÅPNE SPØRSMÅL: Skal 500 være en hard grense i flaten, eller et varsel forvalteren kan
-      # gå videre fra? Grensen bør flyttes når ytelsen er målt over 500 medlemmer, og valget
-      # avhenger av hvem som eier den målingen.
+      # ÅPNE SPØRSMÅL:
+      # - Skal 500 være en hard grense i flaten, eller et varsel forvalteren kan gå videre fra?
+      #   Grensen bør flyttes når ytelsen er målt over 500 medlemmer, og valget avhenger av hvem
+      #   som eier den målingen.
       Gitt jeg har global forvaltningsrettighet for organisasjonssamlinger
       Og en samling har 500 medlemmer i et miljø
       Når jeg forsøker å legge til et nytt medlem i det miljøet
