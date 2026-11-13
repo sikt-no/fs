@@ -167,8 +167,30 @@ const regler = rows(section('Regler uten scenario')).map(r => ({ id: stripId(r[0
 const andre = rows(section('Andre funn')).map(r => ({ type: r[0], id: r[1], gjelder: r[2], hva: r[3] || '' }));
 const mr = rows(section('Åpne MR-er og brancher')).map(r => ({ repo: r[0], mr: r[1], status: r[2], krav: r[3], funnet: r[4], merknad: r[5] || '' }));
 
+// —— Flyter: fasene som er levert, og kravene fasene bygger på ——
+const fSec = section('Fremdrift for flyter');
+const frac = s => { const m = (s || '').match(/^(\d+)\/(\d+)$/); return m ? [+m[1], +m[2]] : null; };
+const splitList = s => (!s || s.trim() === '–') ? [] : s.split(/;\s+(?=«)/).map(x => x.trim());
+const flyter = [];
+if (fSec) {
+  const byId = {};
+  const flyt = id => byId[id] || (byId[id] = (flyter.push({ id, title: feature(id)?.title || id, faser: null, krav: [] }), flyter[flyter.length - 1]));
+  for (const l of fSec) {
+    const m = l.match(/^`@(FLY-[A-ZÆØÅ]{3}-[A-ZÆØÅ]{3}-\d{3})`: (\d+) av (\d+) faser levert/);
+    if (m) flyt(m[1]).faser = [+m[2], +m[3]];
+  }
+  for (const r of rows(sub(fSec, 'Kravene flytene bygger på'))) {
+    const levert = frac(r[4]);
+    if (!levert) continue;
+    flyt(stripId(r[0])).krav.push({
+      id: stripId(r[1]), title: r[2], status: r[3].replace(/[`]/g, ''),
+      levert, funnet: frac(r[5]), ikkeLevert: splitList(r[6]), ikkeFunnet: splitList(r[7]),
+    });
+  }
+}
+
 const data = {
-  title, meta, abbr, repos, krav, scenarioer, tilgang, regler, andre, mr,
+  title, meta, abbr, repos, krav, scenarioer, tilgang, regler, andre, mr, flyter,
   rapport: relative(root, reportPath),
   laget: new Date().toISOString().slice(0, 16).replace('T', ' '),
 };

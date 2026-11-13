@@ -181,6 +181,29 @@ details.more .in { padding: 0 16px 14px; display: grid; gap: 8px; }
 .rmeta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; font-size: 13px; color: var(--muted); }
 .rbev { min-width: 0; overflow-wrap: anywhere; }
 
+/* Flyter: hvor mye av kravene fasene bygger på som er levert */
+.flyter { display: grid; gap: 10px; }
+.flyter > h2 { font-size: 15px; font-weight: 700; }
+.flyt { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); }
+.flyt > summary { cursor: pointer; list-style: none; padding: 12px 16px; display: grid; gap: 8px; }
+.flyt > summary::-webkit-details-marker { display: none; }
+.flyt .fh { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; justify-content: space-between; }
+.flyt .fh h3 { font-size: 16px; font-weight: 700; display: flex; gap: 8px; align-items: baseline; }
+.flyt .fh h3::before { content: "▸"; color: var(--muted); font-size: 13px; transition: transform .15s; }
+.flyt[open] .fh h3::before { transform: rotate(90deg); }
+.flyt .nums { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 13.5px; align-items: center; }
+.flyt .nums b { font-size: 17px; font-variant-numeric: tabular-nums; }
+.flyt .nums .bar { width: 120px; }
+.flyt .in { padding: 0 16px 14px; display: grid; gap: 6px; }
+.fk { border-top: 1px solid var(--line); padding-top: 8px; display: grid; gap: 4px; }
+.fk .fkh { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; justify-content: space-between; font-size: 14px; }
+.fk .fkh .t { font-weight: 600; }
+.fk .fkn { font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.fk ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.fk li { display: grid; grid-template-columns: auto 1fr; gap: 8px; font-size: 13.5px; align-items: start; }
+.fk li .g { width: 20px; height: 20px; font-size: 11px; }
+.fk.done .fkh .t { color: var(--muted); font-weight: 500; }
+
 footer { border-top: 1px solid var(--line); background: var(--surface); }
 footer .wrap { padding-block: 22px 32px; display: grid; gap: 10px; font-size: 13px; color: var(--muted); }
 footer dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
@@ -203,6 +226,7 @@ footer dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
     <div class="metaline" id="metaline"></div>
     <div class="verdict" id="verdict"></div>
     <div class="stats" id="stats"></div>
+    <div class="flyter" id="flyter" hidden></div>
   </div>
 </header>
 
@@ -341,6 +365,36 @@ footer dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
   stats.push(['Regler uten scenario', D.regler.length, D.regler.length ? 'warn' : '']);
   if (D.mr.length) stats.push(['Åpne MR-er', D.mr.length, '']);
   document.getElementById('stats').innerHTML = stats.map(function (x) { return '<div class="stat ' + x[2] + '"><span class="n">' + x[1] + '</span><span class="l">' + x[0] + '</span></div>'; }).join('');
+
+  // Flyter: kravene fasene bygger på, levert (taggene) og funnet i koden
+  (function renderFlyter() {
+    var F = (D.flyter || []).filter(function (f) { return f.krav.length; });
+    if (!F.length) return;
+    var el = document.getElementById('flyter');
+    function sum(list, key) { return list.reduce(function (a, k) { return k[key] ? [a[0] + k[key][0], a[1] + k[key][1]] : a; }, [0, 0]); }
+    function pct(x) { return x[1] ? Math.round(100 * x[0] / x[1]) : 0; }
+    function item(text, g, label) { return '<li>' + glyph(g, label) + '<span>' + md(text) + '</span></li>'; }
+    el.innerHTML = '<h2>Kravene flytene bygger på</h2>' + F.map(function (f) {
+      var lev = sum(f.krav, 'levert'), fun = sum(f.krav, 'funnet');
+      var ukjent = lev[1] - fun[1];
+      var krav = f.krav.slice().sort(function (a, b) {
+        var x = a.ikkeLevert.length + a.ikkeFunnet.length ? 0 : 1, y = b.ikkeLevert.length + b.ikkeFunnet.length ? 0 : 1; return x - y;
+      });
+      var body = krav.map(function (k) {
+        var done = !k.ikkeLevert.length && !k.ikkeFunnet.length;
+        return '<div class="fk' + (done ? ' done' : '') + '"><div class="fkh"><span class="t" title="@' + esc(k.id) + '">' + esc(k.title) + ' <span class="kid">@' + esc(k.id) + ' · ' + esc(k.status) + '</span></span>' +
+          '<span class="fkn">' + k.levert[0] + '/' + k.levert[1] + ' levert' + (k.funnet ? ' · ' + k.funnet[0] + '/' + k.funnet[1] + ' funnet i koden' : ' · ikke sjekket i koden') + '</span></div>' +
+          (done ? '' : '<ul>' + k.ikkeLevert.map(function (s) { return item(s, '✗', 'ikke levert'); }).join('') +
+            k.ikkeFunnet.map(function (s) { return item(s + ' <span class="chip part">levert, men ikke funnet i koden</span>', '~', 'levert, men ikke funnet i koden'); }).join('') + '</ul>') + '</div>';
+      }).join('');
+      return '<details class="flyt"><summary><div class="fh"><h3>' + esc(f.title) + ' <span class="kid">@' + esc(f.id) + '</span></h3>' +
+        (f.faser ? '<span class="chip ' + (f.faser[0] === f.faser[1] ? 'ok' : 'part') + '">' + f.faser[0] + ' av ' + f.faser[1] + ' faser levert</span>' : '') + '</div>' +
+        '<div class="nums"><span><b>' + lev[0] + '</b> av ' + lev[1] + ' scenarioer levert</span><span class="bar" aria-hidden="true"><i style="width:' + pct(lev) + '%"></i></span>' +
+        '<span><b>' + fun[0] + '</b> av ' + fun[1] + ' funnet i koden' + (ukjent > 0 ? ' <span class="kid">(' + ukjent + ' bare status)</span>' : '') + '</span><span class="bar" aria-hidden="true"><i style="width:' + pct(fun) + '%"></i></span>' +
+        '<span class="kid">' + f.krav.length + ' krav</span></div></summary><div class="in">' + body + '</div></details>';
+    }).join('');
+    el.hidden = false;
+  })();
 
   // Filters
   var fr = document.getElementById('f-repo');

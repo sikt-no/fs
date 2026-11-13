@@ -126,6 +126,16 @@ Hvilke faser i flyten som er levert, ut fra statusen på delene av kravene fasen
 
 `@FLY-PRO-FLY-NNN`: <n> av <N> faser levert.
 
+### Kravene flytene bygger på                                         [flyt]
+
+Scenarioene i kravene fasene bygger på (delene ankeret peker på), per flyt og krav. `Levert` er statusen fra taggene, og `Funnet i koden` er resultatet av verifiseringen. Fasene med `@wont` er ikke med.
+
+| Flyt | Krav | Egenskap | Status | Levert | Funnet i koden | Ikke levert | Levert, men ikke funnet i koden |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `@FLY-PRO-FLY-NNN` | `@DOM-SUB-KAP-NNN` | <tittel> | `@<status>` | <n>/<N> | <n>/<N> \| – | «<scenario>» (`:<linje>`, <funnet \| ikke funnet \| usikker \| ikke sjekket i koden>); … \| – | «<scenario>» (`:<linje>`, <ikke funnet \| usikker>); … \| – |
+
+`@FLY-PRO-FLY-NNN`: <n> av <N> scenarioer i <N> krav er levert, og <n> av <N> er funnet i koden (<n> har bare status fra taggene).
+
 ## Avhengigheter                                                       [avhengigheter]
 
 Kravene som kravene i scope bygger på (`@depends-on-`), med statusen deres. Avhengighetene får aldri ny status i denne kjøringen.
@@ -231,6 +241,7 @@ Det som må følges opp, og som ikke står i de andre tabellene: det kravet ikke
 - **`## Endringer`**: det som ble gjort i kravfilene og i resultatet: i kjøringen (de sikre, `Avklart` er «ja i kjøringen»), og i gjennomgangen, i rekkefølgen spørsmålene ble stilt. Seksjonen er med når det var noe å sette eller avklare.
 - **`## Oversikt per krav`** `[per repo]`: én rad per krav, og én `Mangler i`-kolonne per repo som er med i kjøringen. Tallene regnes ut fra merkene i `Bevis` i `## Scenarioer`: ✗ og ~ i repoet. Summeringslinja under tabellen og linja `Mangler` i `## Oppsummering` regnes ut fra de samme merkene. I tekst skrives repoene med navn (fs-plattform, fs-admin, min-kompetanse). Skriv aldri «backend», «frontend» eller «begge».
 - **`## Fremdrift for flyter`** `[flyt]`: én rad per fase, i rekkefølgen i flyten. En fase er levert når delen av hvert krav den bygger på, er levert (*To statuser* i `krav/README.md`). `mangler krav` når fasen ikke har `@depends-on-`.
+- **`### Kravene flytene bygger på`** `[flyt]`: én rad per flyt og krav, med scenarioene i delen fasene bygger på (lest som i *Anker*, et scenario tas med én gang per flyt). `Levert` regnes ut fra taggene, som fremdriften. `Funnet i koden` regnes ut fra `### Scenarioer i avhengighetene` og `## Scenarioer`, og er `–` for krav som bare har status fra taggene. `Ikke levert` lister scenarioene som ikke er levert, med resultatet i koden, og `Levert, men ikke funnet i koden` scenarioene som er tagget som levert, men ikke er funnet. Teamvisningen viser tabellen øverst, med tallene per flyt og en liste per krav.
 - **`## Avhengigheter`** `[avhengigheter]`: én rad per par (krav i scope, avhengighet). Avhengighetene teller ikke i `## Oppsummering`, og radene deres står aldri i `## Scenarioer`, fordi tavla «Scopes», `fs-testplan` og `fs-testrapport` leser den tabellen.
 - **`## Tilgang og datakonsistens`**: én rad per sjekk (rolle × handling × organisasjon), også de som stemmer, fordi `fs-testplan` lager testbrukerne fra radene. Radene deles i to tabeller: `### Avvik` først (`avviker`, `ikke beskrevet`, `ikke funnet` og `usikker`), så `### Stemmer`. Begge har de samme kolonnene, og rekkefølgen på kravene er den samme i begge. `organisasjon` gjelder at data fra en annen organisasjon verken kan ses eller endres, og `konsistens` at sletting og endring ikke gir foreldreløse eller motstridende data.
 - **`## Regler uten scenario`** og **`## Åpne spørsmål`**: leses av `fs-testplan`. `Regler` og `Scenarioer` i `## Åpne spørsmål` er antall med åpne spørsmål av totalt i gating-settet (`<n> av <N>`).
