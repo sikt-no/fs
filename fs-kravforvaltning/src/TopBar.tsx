@@ -176,11 +176,10 @@ export function TopBar({ path, connected, theme, onTheme, treeHidden, onToggleTr
           <button
             class="tocbtn"
             title={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
-            aria-label={tocHidden ? 'Vis innhold' : 'Skjul innhold'}
             aria-pressed={!tocHidden}
             onClick={onToggleToc}
           >
-            <span class="tocicon"><span><span /><span /><span /></span></span>
+            <span class="tocicon"><span><span /><span /><span /></span></span>Innhold
           </button>
         )}
         {claude !== null && (
