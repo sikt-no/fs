@@ -7,7 +7,7 @@ import { reportName, VERIFY_ROOTS, type VerifyReport, type VerifySnapshot } from
 import { parseMd } from './markdown';
 import { MarkdownView } from './MarkdownView';
 import { ResizeHandle } from './ResizeHandle';
-import { TREE_WIDTH } from './Sidebar';
+import { TREE_MIN, TREE_WIDTH, treeMax } from './Sidebar';
 import { reportHtml } from './transport';
 
 /** Hvordan rapporten vises: rapportvisningen (HTML), eller markdown formatert eller som tekst */
@@ -201,7 +201,7 @@ export function Verifisering({ verify, sel, onSelect, view, onView, has, onNavig
     <div class={'vgrid' + (treeHidden ? ' notree' : '')} style={{ '--tree-w': `min(${width}px, 50vw)` }}>
       {!treeHidden && (
         <aside class="sidebar">
-          <ResizeHandle width={width} onWidth={onWidth} edge="right" min={200} max={() => Math.max(200, Math.min(640, Math.round(innerWidth * 0.5)))} fallback={TREE_WIDTH} label="Endre bredden på treet" />
+          <ResizeHandle width={width} onWidth={onWidth} edge="right" min={TREE_MIN} max={treeMax} fallback={TREE_WIDTH} label="Endre bredden på treet" />
           <div class="filter vfilter">
             <input
               type="search"
