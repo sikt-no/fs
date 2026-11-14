@@ -1,5 +1,11 @@
 # krav-viewer
 
+## 1.15.2
+
+### Patch Changes
+
+- 94f6eca: Treet i Flyter kan gjøres bredere eller smalere ved å dra i høyre kant, som filtreet i Krav. Bredden er den samme i begge.
+
 ## 1.15.1
 
 ### Patch Changes
