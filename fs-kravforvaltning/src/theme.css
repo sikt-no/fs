@@ -664,8 +664,8 @@ pre.docstring { margin: 4px 0 6px; padding: 8px 12px; background: var(--sunken);
 .claudeicon, .tocicon { display: flex; justify-content: flex-end; width: 14px; height: 11px; border: 1.5px solid var(--ink2); border-radius: 2px; overflow: hidden; box-sizing: content-box; flex-shrink: 0; }
 .claudeicon span { width: 4px; border-left: 1.5px solid var(--ink2); box-sizing: content-box; }
 .claudebtn[aria-pressed="true"] .claudeicon span { background: oklch(0.64 0.15 40); }
-.tocbtn { display: flex; align-items: center; justify-content: center; width: 28px; height: 26px; padding: 0; border: 1px solid var(--line2); border-radius: 5px; background: transparent; cursor: pointer; flex-shrink: 0; }
-.tocbtn:hover, .tocbtn[aria-pressed="true"] { background: var(--surface); }
+.tocbtn { display: flex; align-items: center; gap: 6px; border: 1px solid var(--line2); border-radius: 5px; background: transparent; padding: 3px 10px; font-size: 12px; cursor: pointer; color: var(--ink2); flex-shrink: 0; }
+.tocbtn:hover, .tocbtn[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
 .tocicon > span { width: 5px; border-left: 1.5px solid var(--ink2); display: flex; flex-direction: column; justify-content: center; gap: 1.5px; padding: 0 1px; }
 .tocicon > span > span { height: 1px; background: var(--ink2); }
 .tocbtn[aria-pressed="true"] .tocicon > span { background: var(--ink2); }
