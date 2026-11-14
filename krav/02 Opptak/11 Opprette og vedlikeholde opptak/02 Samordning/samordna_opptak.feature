@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen», «forvaltende organisasjon» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-OVO-SAM-001 @must @in-progress @scope-opprette-opptak-2027
 Egenskap: Samordna opptak
   Som opptaksforvalter ved forvaltende organisasjon

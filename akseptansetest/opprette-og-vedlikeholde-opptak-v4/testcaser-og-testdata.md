@@ -10,11 +10,11 @@ Testcasene som skal lages, testbrukerne og testdataene for «Opprette og vedlike
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
-Testene finnes fra før i [`cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../cdp-tester/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), oppdatert med `fs-testcaser-cdp` 29.10.2026. Alle fem testene stemmer med kravene på `origin/main` (blob-hashen i headeren): Opprette et opptak og Samordna opptak fra commit `0f010d4`, Listevisning fra `bd5f00b`, Innstillinger fra `270d681` og Frister fra `0ec4b48`. Testdataene lages av [oppsettet](../../cdp-tester/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature), som kjøres først.
+Testene finnes fra før i [`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/`](../../tester-agent/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/), oppdatert med `fs-testcaser-agent` 29.10.2026. Alle fem testene stemmer med kravene på `origin/main` (blob-hashen i headeren): Opprette et opptak og Samordna opptak fra commit `0f010d4`, Listevisning fra `bd5f00b`, Innstillinger fra `270d681` og Frister fra `0ec4b48`. Testdataene lages av [oppsettet](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature), som kjøres først.
 
 | Krav | Regel | Scenarioer | Utledede testcaser | Teknikk |
 |---|---|---|---|---|
@@ -76,11 +76,11 @@ I tillegg til flytene og oppgavene har den interne testen tre deler. Testansvarl
 
 ## Testbrukere
 
-Fra [test.md](../../cdp-tester/_Miljøer/test.md), personaer sist sjekket 2026-10-28.
+Fra [test.md](../../tester-agent/_Miljøer/test.md), personaer sist sjekket 2026-10-28.
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
-| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | `OPPTAK_FORVALTER` og `OPPTAK_SAKSBEHANDLER` ved organisasjonen som forvalter samordna opptak | Direktoratet for høyere utdanning og kompetanse (HK-DIR, 20827) | «Overstyrt bruker»: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER_OG_OPPTAK_SAKSBEHANDLER (HK-dir) | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
+| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | `OPPTAK_FORVALTER` ved organisasjonen som forvalter samordna opptak | Direktoratet for høyere utdanning og kompetanse (HK-DIR, 20827) | «Overstyrt bruker»: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
 | 2 | `opptak-forvalter-deltakende` | Ansvarsfull Fotkrem | `OPPTAK_FORVALTER` ved et universitet som deltar i opptaket | Norges teknisk-naturvitenskapelige universitet (NTNU, 194) | «Overstyrt bruker»: ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU) | https://test-fsadmin.sikt.no/opptak | Samordna opptak: deltaker som legger til utdanningstilbud, og som ser, men ikke endrer, innstillingene. Trenger `MEDLEM_OPPTAK` (ikke bekreftet) |
 | 3 | `opptak-forvalter-ikke-deltakende` | Talefør Elv | `OPPTAK_FORVALTER` ved en organisasjon som ikke deltar | Fagskolen i Vestfold og Telemark (FVT, 20418) | «Overstyrt bruker»: TALEFØR ELV • OPPTAK_FORVALTER (Fagskolen Vestfold og Telemark) | https://test-fsadmin.sikt.no/opptak | Samordna opptak: organisasjon som ikke deltar |
 | 4 | `opptak-forvalter-lokalt` | Ru Brødskive | `OPPTAK_FORVALTER` ved et lærested med lokalt opptak | Høgskulen på Vestlandet (HVL, 203) | «Overstyrt bruker»: RU BRØDSKIVE • OPPTAK_FORVALTER (HVL) | https://test-fsadmin.sikt.no/opptak | Opprette lokalt opptak, lokalt opptak i Samordna opptak |
@@ -105,7 +105,7 @@ Fra tilgangsradene i [verify-2026-10-28-1238.md](../opprette-opptak-2027/verify-
 
 ## Testdata
 
-Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager testdataene sine selv. Oppsettet ([`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../../cdp-tester/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature)) kjøres først i hver kjøring, og lager opptakene gjennom FS Admin, med kjøringen i navnet og fristene i forhold til testdagen. Navnene står i «Kjøringens testdata» i resultatet. Bare grunndataene og det testene ikke kan lage, må finnes i TEST. Verdiene for dem er fra [test.md](../../cdp-tester/_Miljøer/test.md), 2026-10-29. Testdata er syntetiske.
+Data i testmiljøet kan slettes eller nullstilles når som helst, så testene lager testdataene sine selv. Oppsettet ([`_Oppsett/02 Opptak/11 Opprette og vedlikeholde opptak/oppsett.feature`](../../tester-agent/_Oppsett/02%20Opptak/11%20Opprette%20og%20vedlikeholde%20opptak/oppsett.feature)) kjøres først i hver kjøring, og lager opptakene gjennom FS Admin, med kjøringen i navnet og fristene i forhold til testdagen. Navnene står i «Kjøringens testdata» i resultatet. Bare grunndataene og det testene ikke kan lage, må finnes i TEST. Verdiene for dem er fra [test.md](../../tester-agent/_Miljøer/test.md), 2026-10-29. Testdata er syntetiske.
 
 **Lages av oppsettet**
 

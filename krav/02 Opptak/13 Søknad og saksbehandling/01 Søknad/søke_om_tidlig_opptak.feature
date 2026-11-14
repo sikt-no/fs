@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptakseier» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #456, #525
 #
 # KILDER
@@ -73,9 +74,9 @@
 #   kan velge».
 # - Fjerner søkeren alle søknadsalternativene som tilbyr tidlig opptak etter å ha
 #   søkt, blir ønsket om tidlig opptak stående. Det får så være: søkeren kan ikke
-#   få tilbudsgaranti fra tidligopptaket, og svaret viser at søknadsalternativene
-#   ikke tilbyr tidlig opptak (se_svar_på_tidlig_opptak.feature). Det er ingen
-#   egen regel for det.
+#   få tilbudsgaranti fra tidlig opptak, og søkeren ser at søknadsalternativene
+#   ikke tilbyr tidlig opptak (scenarioet «Se hvilke søknadsalternativer som tilbyr
+#   tidlig opptak»). Det er ingen egen regel for det.
 #
 @OPT-SØK-SØK-011 @must @implemented @scope-tidlig-opptak
 Egenskap: Søke om tidlig opptak

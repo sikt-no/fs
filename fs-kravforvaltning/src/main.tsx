@@ -10,7 +10,7 @@ import { Editor, type EditorFlush } from './Editor';
 import { fixed, NO_FILTER, type Filter } from './health';
 import { FeatureView, scenKey, stepKey } from './FeatureView';
 import { findGroups, findHits } from './find';
-import { buildFlows, flyterHash, FLOW_ROOT, parseFlyterHash, phasesOfParts, type Depth } from './flows';
+import { buildFlows, DEFAULT_TAB, flyterHash, FLOW_ROOT, parseFlyterHash, phasesOfParts, TAB_SLUG, tabOf, type Depth, type FlowTab } from './flows';
 import { Flyter } from './Flyter';
 import { headings, parseMd } from './markdown';
 import { MainBanner } from './MainBanner';
@@ -27,6 +27,8 @@ import { verifyKravPrompt, type VerifyScope } from './verifyPrompt';
 import { whenClaudeReady } from './claudeBridge';
 import { codeDirPaths, useCodeDirs } from './CodeDirs';
 import { isSpecPath } from '../shared/paths';
+import { isVerifyReport, type VerifySnapshot } from '../shared/verify';
+import { Verifisering, type ReportView } from './Verifisering';
 import { Outline } from './Outline';
 import { PrDialog, proposeDraft } from './PrDialog';
 import type { PrProposal } from './prProposal';
@@ -43,6 +45,7 @@ const boot = await transport.boot();
 const initial = boot.entries;
 const initialGit = boot.git;
 const initialTasks = boot.tasks;
+const initialVerify = boot.verify ?? {};
 /**
  * Skillene Claude kan bruke i hver visning. Krav: fs-krav (standard), fs-krav-avvik, fs-implementasjonsdetaljer og fs-verify.
  * Avvik: fs-krav (standard) og fs-krav-avvik. fs-specify og fs-specify-delta kjører fs-implementasjonsdetaljer, så den er
@@ -57,8 +60,10 @@ const CLAUDE_SKILLS_BY_MODE: Record<Mode, { allowed: string[]; preselect: boolea
   scopes: { allowed: ['fs-scope', 'fs-krav', 'fs-specify', 'fs-specify-delta', 'fs-implementasjonsdetaljer', 'fs-verify'], preselect: false, codeDirs: true },
   // Flyter: fs-krav skriver flytene, fs-krav-avvik finner faser uten krav, og fs-verify verifiserer overleveringene
   flyter: { allowed: ['fs-krav', 'fs-scope', 'fs-krav-avvik', 'fs-verify'], preselect: true, codeDirs: true },
+  // Verifisering: fs-verify går gjennom en rapport med brukeren, og fs-krav endrer kravene etterpå
+  verifisering: { allowed: ['fs-verify', 'fs-krav'], preselect: true, codeDirs: true },
 };
-const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', scopes: 'Scopes', flyter: 'Flyter' };
+const MODE_LABEL: Record<Mode, string> = { krav: 'Krav', avvik: 'Avvik', scopes: 'Scopes', flyter: 'Flyter', verifisering: 'Verifisering' };
 /** Hvorfor en skill ikke kan velges i `mode`: «brukes i Krav og Scopes, ikke i Avvik» */
 const skillHint = (mode: Mode) => (skill: string) => {
   const where = (Object.keys(CLAUDE_SKILLS_BY_MODE) as Mode[]).filter(m => CLAUDE_SKILLS_BY_MODE[m].allowed.includes(skill)).map(m => MODE_LABEL[m]);
@@ -88,6 +93,12 @@ function save(key: string, value: unknown) {
 document.documentElement.dataset.theme = load<Theme | null>('theme', null) ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
 const fromHash = () => decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+
+/** Verifisering: `#/verifisering`, og `#/verifisering/<sti til rapporten>` når en rapport er valgt */
+const VERIFY_HASH = 'verifisering';
+const parseVerifyHash = (p: string): { sel: string | null } | null =>
+  p === VERIFY_HASH ? { sel: null } : p.startsWith(VERIFY_HASH + '/') ? { sel: p.slice(VERIFY_HASH.length + 1) } : null;
+const verifyHash = (sel: string | null) => '#/' + VERIFY_HASH + (sel ? '/' + encodeURI(sel) : '');
 
 // Uten hash (desktop-appen starter alltid slik, og en ny fane i nettleseren) går vieweren tilbake dit
 // brukeren var sist: fila, avviksdashbordet eller oppgaven. En fil som er borte, gir forsiden som før.
@@ -128,6 +139,8 @@ const savedDepth = (): Depth => {
   const v = load<number | 'alle'>('flowDepth', 1);
   return v === 'alle' ? Infinity : typeof v === 'number' && v >= 1 ? v : 1;
 };
+/** Fanen i Flyter brukeren valgte sist, ellers «Detaljer» */
+const savedTab = (): FlowTab => tabOf(load<string>('flowTab', TAB_SLUG[DEFAULT_TAB])) ?? DEFAULT_TAB;
 
 /** Forsiden: krav/README.md */
 const README = 'krav/README.md';
@@ -170,13 +183,20 @@ function App() {
   const [current, setCurrent] = useState(() => startFlowPath ?? (initial[fromHash()] ? fromHash() : defaultPath(initial)));
   // #/avvik er avviksdashbordet, #/scopes… er scopene, #/flyter… er flytene; alle andre hasher er en fil
   const [mode, setMode] = useState<Mode>(() =>
-    fromHash() === 'avvik' ? 'avvik' : parseScopesHash(fromHash()) ? 'scopes' : startFlow ? 'flyter' : 'krav',
+    fromHash() === 'avvik' ? 'avvik' : parseScopesHash(fromHash()) ? 'scopes' : startFlow ? 'flyter' : parseVerifyHash(fromHash()) ? 'verifisering' : 'krav',
   );
+  // Verify-rapportene (Verifisering), rapporten som er valgt, og om den vises som rapportvisning eller markdown
+  const [reports, setReports] = useState<VerifySnapshot>(initialVerify);
+  const [reportSel, setReportSel] = useState<string | null>(() => parseVerifyHash(fromHash())?.sel ?? null);
+  const [reportView, setReportView] = useState<ReportView>(() => load('reportView', 'html'));
+  useEffect(() => save('reportView', reportView), [reportView]);
   // Flyten som er valgt i Flyter (null: startsiden), og hvor mange nivåer med @depends-on- som vises
   const [flowPath, setFlowPath] = useState<string | null>(startFlowPath);
   // Fasen Flyter skal vise når flyten åpnes fra en regel eller et scenario i Krav
   const [flowPhase, setFlowPhase] = useState<{ n: number; seq: number } | null>(null);
   const [flowDepth, setFlowDepth] = useState<Depth>(() => startFlow?.depth ?? savedDepth());
+  // Fanen i Flyter: fra ruta (`fane=…`) når en flyt er valgt, ellers den brukeren valgte sist. Den følger med til neste flyt
+  const [flowTab, setFlowTab] = useState<FlowTab>(() => (startFlow?.path ? startFlow.tab : savedTab()));
   // Hvilke av Avvik og Scopes som vises i menyen (tannhjulet etter menyen)
   const [menu, setMenu] = useState<MenuShow>(() => migrateMenu(load<Record<string, boolean>>('menu', {})));
   const [tavleSel, setTavleSel] = useState<string | null>(() => parseScopesHash(fromHash())?.sel ?? null);
@@ -208,9 +228,16 @@ function App() {
   useEffect(() => save('claudeWidth', claudeWidth), [claudeWidth]);
   const [treeWidth, setTreeWidth] = useState(() => load('treeWidth', TREE_WIDTH));
   useEffect(() => save('treeWidth', treeWidth), [treeWidth]);
-  useEffect(() => {
+  const refreshClaude = () => {
     if (EDITABLE) transport.call('claudeStatus').then(setClaude, () => setClaude(null));
-  }, []);
+  };
+  useEffect(refreshClaude, []);
+  // Ikke logget inn: statusen leses på nytt når vinduet får fokus, i tilfelle brukeren logget inn i en annen terminal
+  useEffect(() => {
+    if (claude?.loggedIn !== false) return;
+    window.addEventListener('focus', refreshClaude);
+    return () => window.removeEventListener('focus', refreshClaude);
+  }, [claude?.loggedIn]);
   const [treeMode, setTreeMode] = useState<TreeMode>(() => load('treeMode', 'files'));
   const [mdMode, setMdMode] = useState<MdMode>(() => load('mdMode', 'pretty'));
   const [git, setGit] = useState<GitInfo | null>(initialGit);
@@ -226,8 +253,8 @@ function App() {
   const [focus, setFocus] = useState<(FocusEvent & { seq: number }) | null>(null);
   const focusedKey = useRef<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const state = useRef({ entries, current, mode });
-  state.current = { entries, current, mode };
+  const state = useRef({ entries, current, mode, reports });
+  state.current = { entries, current, mode, reports };
 
   const entry = entries[current];
   const tree = useMemo(() => buildTree(entries), [entries]);
@@ -268,7 +295,8 @@ function App() {
     setFind({ q: '', cur: 0, closed: {} });
   }, [current]);
   // Husk hvor brukeren er, til neste gang vieweren åpnes uten hash
-  useEffect(() => save('hash', location.hash), [current, mode, tavleSel, flowPath, flowDepth]);
+  useEffect(() => save('hash', location.hash), [current, mode, tavleSel, flowPath, flowDepth, flowTab, reportSel]);
+  useEffect(() => save('flowTab', TAB_SLUG[flowTab]), [flowTab]);
   useEffect(() => save('flowDepth', flowDepth === Infinity ? 'alle' : flowDepth), [flowDepth]);
   // Tilbake på tavla trengs ikke båndet lenger
   useEffect(() => {
@@ -386,12 +414,17 @@ function App() {
       const p = fromHash();
       const o = parseScopesHash(p);
       const fl = parseFlyterHash(p);
-      if (fl) {
+      const vr = parseVerifyHash(p);
+      if (vr) {
+        setMode('verifisering');
+        setReportSel(vr.sel);
+      } else if (fl) {
         setMode('flyter');
         const fp = fl.path && state.current.entries[fl.path] ? fl.path : null;
         setFlowPath(fp);
         if (fp) setCurrent(fp);
         setFlowDepth(fl.depth ?? 1);
+        if (fp) setFlowTab(fl.tab);
       } else if (p === 'avvik') setMode('avvik');
       else if (o) {
         setMode('scopes');
@@ -464,6 +497,7 @@ function App() {
       transport.on('krav:update', onUpdate),
       transport.on('krav:git', setGit),
       transport.on('krav:tasks', setTasksSnap),
+      transport.on('krav:verify', setReports),
       transport.on('krav:focus', onFocus),
       transport.on('krav:blur', onBlur),
       transport.on('krav:connect', onConnect),
@@ -518,6 +552,7 @@ function App() {
       setEntries(res.entries);
       setGit(res.git);
       if (res.tasks) setTasksSnap(res.tasks);
+      if (res.verify) setReports(res.verify);
       if (!res.entries[state.current.current]) setCurrent(defaultPath(res.entries));
       setMainStatus({ behind: false });
       transport.call('mainStatus').then(setMainStatus, () => {});
@@ -548,7 +583,17 @@ function App() {
     if (await leaveEditor()) void window.krav?.installUpdate();
   };
   const updateToast = updateToastShown(appUpdate, updateLater);
+  /** Velger en rapport i Verifisering (null: ingen) */
+  const selectReport = async (path: string | null) => {
+    if (!(await leaveEditor())) return;
+    setPrFor(false);
+    setMode('verifisering');
+    setReportSel(path);
+    history.pushState(null, '', verifyHash(path));
+  };
   const select = async (path: string, line?: number) => {
+    // Verify-rapportene er ikke i Krav, men i Verifisering (lenker, Claude-panelet og «Endringer»)
+    if (isVerifyReport(path) && state.current.reports[path]) return selectReport(path);
     if (path !== state.current.current && !(await leaveEditor())) return;
     setPrFor(false);
     setMode('krav');
@@ -618,7 +663,10 @@ function App() {
       const fp = current.startsWith(FLOW_ROOT) && entries[current]?.kind === 'feature' ? current : flowPath && entries[flowPath] ? flowPath : null;
       setMode('flyter');
       setFlowPath(fp);
-      history.pushState(null, '', flyterHash(fp, flowDepth));
+      history.pushState(null, '', flyterHash(fp, flowDepth, flowTab));
+    } else if (m === 'verifisering') {
+      setMode('verifisering');
+      history.pushState(null, '', verifyHash(reportSel));
     } else if (mode === 'avvik' && avvikFilter.file && entries[avvikFilter.file]) select(avvikFilter.file); // fila som er valgt i dashbordet
     else {
       setMode('krav');
@@ -647,12 +695,20 @@ function App() {
     setMode('flyter');
     setFlowPath(p);
     setFlowPhase(phase ? { n: phase, seq: Date.now() } : null);
+    // Fanen følger med til neste flyt. En fase («Fase N i <flyt>» i Krav) vises i «Fasene»
+    const tab = phase ? 'phases' : flowTab;
+    setFlowTab(tab);
     if (p) setCurrent(p);
-    history.pushState(null, '', flyterHash(p, flowDepth));
+    history.pushState(null, '', flyterHash(p, flowDepth, tab));
   };
   const selectDepth = (d: Depth) => {
     setFlowDepth(d);
-    history.replaceState(null, '', flyterHash(flowPath, d));
+    history.replaceState(null, '', flyterHash(flowPath, d, flowTab));
+  };
+  const selectTab = (t: FlowTab) => {
+    if (t === flowTab) return;
+    setFlowTab(t);
+    history.replaceState(null, '', flyterHash(flowPath, flowDepth, t));
   };
   // «Vis flyten» og «Med i N flyter» i metalinja i Krav
   const flowLink = (() => {
@@ -756,6 +812,7 @@ function App() {
     mode === 'krav' ? (entry ? current : null)
     : mode === 'avvik' ? (avvikFilter.file ?? null)
     : mode === 'flyter' ? flowPath
+    : mode === 'verifisering' ? reportSel
     : specCard ? specCard.path
     : shownTask ? shownTask.dir : null;
 
@@ -785,12 +842,14 @@ function App() {
         oCrumbs={oCrumbs}
         flowPath={flowPath}
         nFlows={flows.flows.length}
+        reportPath={reportSel}
+        nReports={Object.keys(reports).length}
         menu={menu}
         onMenu={m => {
           setMenu(m);
           save('menu', m);
           // Skjules visningen brukeren står i, går visningen til Krav
-          if ((mode === 'avvik' || mode === 'scopes') && !m[mode]) void changeMode('krav');
+          if ((mode === 'avvik' || mode === 'scopes' || mode === 'verifisering') && !m[mode]) void changeMode('krav');
         }}
         specState={{ ro: !EDITABLE, dirty: specDirty.length, onPr: EDITABLE && git ? specPr : null }}
         claude={claude ? claudeOpen : null}
@@ -832,12 +891,29 @@ function App() {
             ix={flows}
             path={flowPath}
             depth={flowDepth}
-            onSelect={p => void selectFlow(p)}
+            onSelect={(p, phase) => void selectFlow(p, phase)}
             goPhase={flowPhase}
             onDepth={selectDepth}
+            tab={flowTab}
+            onTab={selectTab}
             onOpen={(p, ln) => void select(p, ln)}
             sideHidden={treeHidden}
             outlineHidden={tocHidden}
+            width={treeWidth}
+            onWidth={setTreeWidth}
+          />
+        ) : mode === 'verifisering' ? (
+          <Verifisering
+            verify={reports}
+            sel={reportSel}
+            onSelect={p => void selectReport(p)}
+            view={reportView}
+            onView={setReportView}
+            has={p => !!entries[p] || !!reports[p]}
+            onNavigate={p => void select(p)}
+            treeHidden={treeHidden}
+            width={treeWidth}
+            onWidth={setTreeWidth}
           />
         ) : mode === 'avvik' ? (
           <Avvik entries={entries} filter={avvikFilter} onFilter={setAvvikFilter} onOpen={select} onReadRule={readRule} panelHidden={treeHidden} />
@@ -863,6 +939,7 @@ function App() {
                 onPr={EDITABLE && git ? () => setPrFor(null) : undefined}
                 onPull={transport.kind === 'electron' ? pull : undefined}
                 pulling={pulling}
+                canOpen={p => isVerifyReport(p) && !!reports[p]}
                 width={treeWidth}
                 onWidth={setTreeWidth}
               />
@@ -970,6 +1047,7 @@ function App() {
           // Panelet ligger utenfor visningene, så samtalen følger med mellom Krav, Avvik og Scopes
           <ClaudePanel
             status={claude}
+            onStatus={refreshClaude}
             width={claudeWidth}
             onWidth={setClaudeWidth}
             allowedSkills={claudeSkills.allowed}
@@ -978,7 +1056,7 @@ function App() {
             codeDirs={claudeSkills.codeDirs}
             path={claudePath}
             entries={entries}
-            has={p => !!entries[p]}
+            has={p => !!entries[p] || !!reports[p]}
             onOpen={p => select(p)}
             onReveal={reveal}
             onPr={EDITABLE && git ? proposePr : undefined}

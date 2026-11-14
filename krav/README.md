@@ -114,6 +114,9 @@ Gherkin er et språk som alle andre, og må skrives godt for å være nyttig og 
   - **Så**: forventet resultat
 - Det er lov med flere av hvert nøkkelord etter hverandre (med `Og`/`Men`), men aldri i en annen rekkefølge. *(sjekkes automatisk)*
 - Bruk datatabeller og `Scenariomal:` med `Eksempler:` for datadrevne scenarioer.
+- Ta med konkrete verdier (navn på organisasjoner og opptak, datoer, tall, statuser) når de avgjør utfallet, altså når en annen verdi ville gitt et annet resultat. Ellers skrives rollen eller relasjonen: `saksbehandleren ved den saksbehandlende organisasjonen`, ikke `saksbehandleren ved Universitetet i Oslo`. En verdi som ikke betyr noe for regelen, får leseren til å lete etter hvorfor den står der, og knytter stegene til ett tilfelle.
+  - I `behandlingsstatus.feature` er statusene («Ikke behandlet», «Behandlet») det som skiller eksemplene, mens det er likegyldig hvilken organisasjon saken ligger hos. Statusene står konkret, og organisasjonen som en relasjon.
+  - I flyten `saksbehandlertildeling.feature` gir organisasjonene ulike utfall (hvem som får hvilket søknadsalternativ), og der står navnene.
 - Bruk for det meste bestemt form på roller når handlinger utføres: «personen», «administratoren».
 
 ### Krav fra kode, skisser eller FS-klienten
@@ -210,6 +213,37 @@ Ved ny feature: sjekk eksisterende features i samme mappe for å finne neste led
 - `@must` / `@should` / `@could` / `@wont`
 
 En feature har høyst én prioritet. *(sjekkes automatisk)*
+
+### Roller
+
+Hvem som får gjøre hva, skal kunne leses ut av kravene. Det gjelder alle krav, ikke bare krav om tilgang.
+
+- Kravet sier hvilken rolle som gjør handlingen, med begrepet for rollen: «Bare opptaksforvalter kan trekke en søknad på søkerens vegne». Rollekoden (OPPTAK_FORVALTER) står ikke i stegene, men i tabellen over brukerroller i domenets begrepsliste (se *Gode scenarioer*). Står rollen i `Som …`-linja eller i regeltittelen, gjelder den for alt under.
+- Har organisasjonen betydning, skrives organisasjonens rolle med ord: **forvalter**, **tilbyder** eller **behandler**, ikke F, T og B. «Bare opptaksforvalter hos forvalteren …», «saksbehandler hos behandleren …».
+- Den som ikke er nevnt i en regel, får ikke gjøre det ([`@FEL-TIL-GRU-001`](10%20Felleskrav/12%20Tilgang/01%20Grunnregler/ingen_tilgang_uten_regel.feature)). Kravet trenger derfor ikke liste opp alle som ikke får lov. Ta med den som ikke får lov, i samme regel bare når grensen er uventet: samme brukerrolle hos en annen organisasjonsrolle, en annen brukerrolle hos den samme organisasjonen, eller en rolle som ser, men ikke endrer. Lag ikke egne tilgangsscenarioer eller tilgangsfiler.
+- Skriv relasjonen, ikke organisasjonsnavnet, når det er relasjonen som avgjør utfallet (se *Gode scenarioer*): «forvalteren», «tilbyderen», «behandleren», «en organisasjon uten rolle i opptaket». Ett steg, «Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket», dekker alle rollene.
+- Regelen gjelder i API-et også, ikke bare i skjermbildene. Det står i felleskravet, og trenger ikke gjentas i hvert krav.
+- Hvem som har tilgang til hva i opptak, ut fra kravene, står i [`krav/02 Opptak/tilgangsmatrise.md`](02%20Opptak/tilgangsmatrise.md). Tilgangsreglene er ikke et eget scope. De tas inn når et team jobber med funksjonaliteten som bruker dem.
+
+Eksempel:
+
+```gherkin
+  Regel: Bare opptaksforvalter hos forvalteren kan trekke en søknad på søkerens vegne
+
+    Scenariomal: Trekke søknaden på søkerens vegne
+      Gitt jeg er <rolle> hos <organisasjonens rolle> i opptaket
+      Når jeg trekker søknaden på søkerens vegne
+      Så <utfall>
+
+      Eksempler:
+        | rolle            | organisasjonens rolle      | utfall              |
+        | opptaksforvalter | forvalteren                | er søknaden trukket |
+        | opptaksforvalter | tilbyderen                 | avvises det         |
+        | opptaksforvalter | behandleren                | avvises det         |
+        | saksbehandler    | forvalteren                | avvises det         |
+```
+
+**Ikke avklart: taggen `@rolle-<slug>`.** Skal rollebruken kunne leses maskinelt, for eksempel for å finne alle krav en rolle trengs i, eller hvilken rolle en test må logge inn med? I så fall får kravene `@rolle-<slug>`, for eksempel `@rolle-opptak-forvalter`. Tagger arves, så taggen settes på det høyeste nivået der den gjelder for alt under (`Egenskap:`, `Regel:`, `Scenario:` eller `Eksempler:`). Trengs det ikke, holder det at rollen står i teksten.
 
 ### Kravstatus
 
@@ -435,11 +469,11 @@ Eksempel (ankeret finnes ikke i repoet):
 ```gherkin
 # A: OPT-OPT-UTD-004
   @depends-on-OPT-BEH-BEH-011
-  Regel: Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud
+  Regel: Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud
 
 # B: OPT-BEH-BEH-011
   @ref-OPT-OPT-UTD-004
-  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket
+  Regel: Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket
 ```
 
 - Ankeret er en vanlig `@ref-`, og leses også som en henvisning: «A bygger på denne delen». Den som endrer delen, ser hvilke krav som må sjekkes, rett over delen.
@@ -468,9 +502,9 @@ Referansene i begge retninger:
 | Hva henger sammen med kravet? | `grep -rnE "@(depends-on\|ref)-OPT-BEH-BEH-011" krav/` |
 | Hvilke deler av kravet bygger andre krav på? | `@ref-` på `Regel:`/`Scenario:`-linjene i kravet (ankrene) |
 | Hvilke tester bygger på kravet? | `npx playwright test --grep @depends-on-OPT-BEH-BEH-011` |
-| Hvilke CDP-tester må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" cdp-tester/` |
+| Hvilke agenttester må sjekkes når kravet endres? | `grep -rn "@depends-on-OPT-BEH-BEH-011" tester-agent/` |
 
-CDP-testene i [`cdp-tester/`](../cdp-tester/README.md) bruker de samme taggene, med de samme betydningene: `@depends-on-<Feature-ID>` på en test som må sjekkes når kravet endres, og `@ref-<Feature-ID>` på et krav testen bare bruker som forutsetning. Kravene peker ikke tilbake til testene.
+Agenttestene i [`tester-agent/`](../tester-agent/README.md) bruker de samme taggene, med de samme betydningene: `@depends-on-<Feature-ID>` på en test som må sjekkes når kravet endres, og `@ref-<Feature-ID>` på et krav testen bare bruker som forutsetning. Kravene peker ikke tilbake til testene.
 
 Referansene settes av `fs-krav`. Når et krav endres, slettes eller får ny ID, lister `fs-krav` kravene som refererer til det. `fs-specify` og `fs-specify-delta` tar med kravene det bygges på, og sier fra når et av dem ikke er `@planned` eller lenger.
 
@@ -592,7 +626,11 @@ Bruk ikke `# TODO:` for åpne spørsmål. *(sjekkes automatisk)* FS Kravforvaltn
 
 ## Aktører
 
-- administrator, søker, student, saksbehandler
+- søker, student, administrator
+- I opptak: opptaksforvalter, saksbehandler, dokumentforvalter, opptaksinformatør (rollekodene står i `krav/02 Opptak/begreper.md`)
+- Organisasjonens rolle i et opptak: forvalter, tilbyder, behandler
+
+Se `krav/02 Opptak/begreper.md`.
 
 ## Terminologi
 

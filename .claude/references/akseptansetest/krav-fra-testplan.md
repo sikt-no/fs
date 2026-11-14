@@ -1,6 +1,6 @@
 # Kravene i en testplan
 
-Felles for skillene i testflyten. Planen (fase 1) starter med verifiseringen (`fs-verify` eller `fs-verify-agent-teams`), som kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene (`fs-testcaser-cdp` for fase 2, `fs-testcaser-intern` for fase 3, `fs-testcaser-ekstern` for fase 4 og `fs-testrapport`) leser kravene derfra, med Feature-ID, så alle fasene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
+Felles for skillene i testflyten. Planen (fase 1) starter med verifiseringen (`fs-verify` eller `fs-verify-agent-teams`), som kjøres først, på kilden, og setter `@implemented` på kravene der koden er funnet. `fs-testplan` finner så kravene fra den samme kilden, og skriver dem i «Omfang» i testplanen. De andre skillene (`fs-testcaser-agent` for fase 2, `fs-testcaser-intern` for fase 3, `fs-testcaser-ekstern` for fase 4 og `fs-testrapport`) leser kravene derfra, med Feature-ID, så alle fasene tester de samme kravene, også om det kommer nye krav i mappa eller scopet etterpå.
 
 **Hvor seksjonene står.** Testplanen er delt i hovedsiden og tre undersider (*Hovedsiden og undersidene* i `mal-testplan.md` i `fs-testplan`). «Omfang», «Flyter», «Venter på verifisering», «Regler uten scenario» og «Ikke med i denne testen» står i `omfang.md` (undersiden «Omfang – <leveranse>»). «Testcaser som skal lages», «Testbrukere» og «Testdata» står i `testcaser-og-testdata.md` («Testcaser og testdata – <leveranse>»). Sporbarheten står i `sporbarhet.md`. Resten, også «Status i flyten», «Forutsetninger» og «Vedlegg», står i `testplan.md`. Når en skill sier «Omfang» i testplanen, er det seksjonen i `omfang.md`. En eldre testplan har alt i `testplan.md`: les seksjonen der, og foreslå å dele den med `fs-testplan`.
 
@@ -65,7 +65,7 @@ Filene brukeren oppga, i den rekkefølgen brukeren oppga dem. Én gruppe.
 
 **Åpne spørsmål.** `@openquestion` er ingen gating: verken verifiseringen eller testene stopper på den. En del med bare `@openquestion` (uten `@draft`) er klar til implementasjon (*Oppfølging* i `krav/README.md`), og er i gating-settet. Er den levert, testes den som det står, og spørsmålet står som merknad: i «Omfang» i testplanen, og under tabellen for regelen i testcasene. En del med `@draft @openquestion` er utkast, og er ikke med.
 
-Tallene skal frem, så åpne spørsmål ikke blir glemt. Verify-rapporten har dem per krav (`## Oppfølging`), og testplanen har en oversikt, per krav og til sammen:
+Tallene skal frem, så åpne spørsmål ikke blir glemt. Verify-rapporten har dem per krav (`## Andre funn`), og testplanen har en oversikt, per krav og til sammen:
 
 | Krav | Regler med åpne spørsmål | Scenarioer med åpne spørsmål | Av dem i testen | Utkast (`@draft @openquestion`, ikke med) |
 |---|---|---|---|---|
@@ -123,11 +123,11 @@ Overleveringen står i scenarioet i fasen: tilstanden i `Gitt` lages ett sted, o
 
 ### Kravene i de andre fasene
 
-Kravene en fase bygger på som ikke er i «Omfang», står bare i kolonnen «Bygger på» i «Flyter» i testplanen, med status. De blir aldri testcaser selv. `fs-testcaser-intern` og `fs-testcaser-ekstern` kan lese dem for å skrive stegene som lager tilstanden i `Gitt`. `fs-testcaser-cdp` kan lese dem for å se hva som lager testdataene.
+Kravene en fase bygger på som ikke er i «Omfang», står bare i kolonnen «Bygger på» i «Flyter» i testplanen, med status. De blir aldri testcaser selv. `fs-testcaser-intern` og `fs-testcaser-ekstern` kan lese dem for å skrive stegene som lager tilstanden i `Gitt`. `fs-testcaser-agent` kan lese dem for å se hva som lager testdataene.
 
 ## Kravene i de andre skillene
 
-`fs-testcaser-cdp`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport`, og `fs-verify` når den kjøres på nytt med testplanen, bruker Feature-ID-ene i «Omfang» og «Venter på verifisering» i testplanen, og flyt-ID-ene i «Flyter», og slår dem opp under `krav/`. De finner ikke kravene og flytene på nytt fra kilden. Unntaket er kravene i de andre fasene i en flyt, som leses for å sette opp tilstanden (se *Flyter*). Har et krav eller en flyt fått ny status siden testplanen ble laget (for eksempel `@implemented` etter `fs-verify`), gjelder statusen i kravfila. Er det kommet nye krav i kilden, si fra, og foreslå å kjøre `fs-testplan` på nytt.
+`fs-testcaser-agent`, `fs-testcaser-intern`, `fs-testcaser-ekstern`, `fs-testrapport`, og `fs-verify` når den kjøres på nytt med testplanen, bruker Feature-ID-ene i «Omfang» og «Venter på verifisering» i testplanen, og flyt-ID-ene i «Flyter», og slår dem opp under `krav/`. De finner ikke kravene og flytene på nytt fra kilden. Unntaket er kravene i de andre fasene i en flyt, som leses for å sette opp tilstanden (se *Flyter*). Har et krav eller en flyt fått ny status siden testplanen ble laget (for eksempel `@implemented` etter `fs-verify`), gjelder statusen i kravfila. Er det kommet nye krav i kilden, si fra, og foreslå å kjøre `fs-testplan` på nytt.
 
 ## Commit
 

@@ -152,7 +152,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 2. Testplan | (denne siden) | Laget | 2026-10-27 |
 | 3. Testrapport – verifisering | [testrapport-verifisering-2026-10-27.md](testrapport-verifisering-2026-10-27.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5148803102) | Klar | 2026-10-27 |
 | 4. Intern akseptansetest | [testcaser-intern.md](testcaser-intern.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5149065264) | Gjennomført: 10 av 10 bestått | 2026-10-30 |
-| 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
+| 4b. Kjøring av agenttestene (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | [testrapport-intern-2026-10-30.md](testrapport-intern-2026-10-30.md) · [Confluence](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5158928698) | Venter på beslutning (forslag: Godkjent) | 2026-10-30 |
 | 6. Ekstern akseptansetest | – | Venter | |
 | 7. Testrapport – ekstern | – | Venter | |

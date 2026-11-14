@@ -1,4 +1,6 @@
 import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { isVerifyHtml } from '../shared/verify.ts';
 import type { Api, ApiMethod, Boot } from '../shared/api.ts';
 import { API_METHODS } from '../shared/api.ts';
 import type { Auth } from './auth.ts';
@@ -17,8 +19,12 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner, pty: 
     return ws.vcs;
   };
   return {
-    boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, editable: true, repoRoot: ws.repoRoot }),
+    boot: () => ({ entries: ws.entries, git: ws.git, tasks: ws.tasks, verify: ws.verify, editable: true, repoRoot: ws.repoRoot }),
     read: path => readFile(kravPath(ws.repoRoot, path), 'utf8'),
+    async readReport(path) {
+      if (!isVerifyHtml(path)) throw new Error(`Ikke en rapportvisning: ${path}`);
+      return readFile(join(ws.repoRoot, path), 'utf8');
+    },
     save: req => saveFile(ws.repoRoot, req.path, req.text),
     remove: path => deleteFile(ws.repoRoot, path),
     async publish(req) {
@@ -35,7 +41,7 @@ export function createApi(ws: Workspace, auth: Auth, claude: ClaudeRunner, pty: 
       if (!v.pull) throw new Error('Henting gjøres med git i dev-serveren');
       await v.pull(await auth.token());
       await ws.readAll();
-      return { entries: ws.entries, git: ws.git, tasks: ws.tasks };
+      return { entries: ws.entries, git: ws.git, tasks: ws.tasks, verify: ws.verify };
     },
     async mainStatus() {
       const v = ws.vcs;

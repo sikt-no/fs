@@ -11,9 +11,7 @@
 # vitnemålet gir GSK når den er ja (@OPT-BEH-BEH-015). Beregningen her er en kontroll av
 # skolens påstand, og gir grunnlagskoden. Er den uenig med skolen, får saksbehandleren et
 # varsel, men den automatiske behandlingen stopper ikke. KREG har ingen egen påstand om GSK.
-# Koden stopper i dag automatikken når kontrollmotoren er uenig med skolen. Det er et avvik
-# fra kravet.
-@OPT-BEH-BEH-027 @must @in-progress @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
+@OPT-BEH-BEH-027 @must @implemented @scope-automatisk-gsk-konklusjon @ref-OPT-BEH-BEH-015
 Egenskap: Beregne GSK fra vitnemål
   Som saksbehandler
   ønsker jeg at opptakssystemet beregner sin egen påstand om generell studiekompetanse for et vitnemål
@@ -32,22 +30,7 @@ Egenskap: Beregne GSK fra vitnemål
   står i @OPT-BEH-BEH-015. Det gjelder også annullerte vitnemål, vitnemål uten
   utstedelsesdato og kompetansebevis.
 
-  @draft @openquestion
-  Regel: Fag som saksbehandleren har tatt ut av kontrollene, telles ikke med
-    # Fagresultatene på vitnemålet har en fagstatus. Saksbehandleren bruker den til å
-    # angi om et fag skal være med i kontrollene av vitnemålet. Avklart 2026-10-27 at
-    # fagstatusen hører til et annet krav, og at kontrollene må følge den.
-    # ÅPNE SPØRSMÅL:
-    # - Hva fagstatusen er, og hvem som setter den, er uklart (30.10.2026). Regelen holdes
-    #   utenfor til det er forklart. Den gjelder ikke den helautomatiske flyten.
-    # - Kravet for fagstatusen er ikke skrevet. Når det finnes, får regelen
-    #   @depends-on- til det.
-
-    Scenario: Fag som er tatt ut av kontrollene, oppfyller ikke et delkrav
-      Gitt at vitnemålet har samfunnsfag (SAF1001)
-      Og at saksbehandleren har tatt faget ut av kontrollene
-      Når GSK-vitnemålsberegningen kjører for vitnemålet
-      Så er delkravet for samfunnsfag ikke oppfylt
+  Hvilke fag saksbehandleren velger at skal telle, står i @OPT-BEH-BEH-022.
 
   Regel: Reformen på vitnemålet avgjør hvilke delkrav som gjelder
 
@@ -396,8 +379,9 @@ Egenskap: Beregne GSK fra vitnemål
     # FS: KLY for Kunnskapsløftet og RFA for Reform 94, uansett om løpet er studieforberedende
     # eller yrkesfaglig. KLS gis ikke. Opptaksforvalteren får et varsel om løpet, så
     # grunnlagskoden kan legges inn senere (@OPT-BEH-BEH-015).
-    # Et løp som ikke finnes i listen, gir ingen automatisk konklusjon, og saksbehandleren
-    # vurderer GSK (innspill i PR #878, se «Ukjent løp»).
+    # Et løp som ikke finnes i listen, gir påstanden «ikke GSK» (se «Ukjent løp»). Søknaden får
+    # likevel KLY eller RFA når vitnemålet har «GSK OK» fra KREG (avklart 2026-11-04, se
+    # @OPT-BEH-BEH-015).
     # Avklart 30.10.2026: grunnlagskoden gis når vitnemålet importeres (@OPT-BEH-BEH-015), ikke
     # bare når saksbehandleren starter kontrollen. Kode i dag: bare når saksbehandleren starter
     # kontrollen, som i det gamle FS (FS158001).

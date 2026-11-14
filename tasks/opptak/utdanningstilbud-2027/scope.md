@@ -5,7 +5,7 @@
 - **Initiativ**: [#398](https://github.com/sikt-no/fs/issues/398)
 - **Jira**: [sikt-no/fs#597](https://github.com/sikt-no/fs/issues/597), [sikt-no/fs#398](https://github.com/sikt-no/fs/issues/398)
 - **Eier**: –
-- **Siste oppdatering**: 2026-11-02
+- **Siste oppdatering**: 2026-11-13
 
 ## Mål
 
@@ -32,7 +32,7 @@
 | Krav | MoSCoW | Skisse | Jira | Kommentar |
 |---|---|---|---|---|
 | `@OPT-OPT-UTD-003` [trekke_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/02%20Utdanningstilbud%20i%20opptak/trekke_utdanningstilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#595](https://github.com/sikt-no/fs/issues/595) | Jira SHI-709. «Trekk studiet fra opptaket» |
-| `@OPT-OPT-UTD-004` [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#597](https://github.com/sikt-no/fs/issues/597) | «Regelverk og kvoter», «Tidlig opptak», «Saksbehandlertildelingsregel» (overtatt fra 028) |
+| `@OPT-OPT-UTD-004` [opptaksinnstillinger_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/opptaksinnstillinger_utdanningstilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#597](https://github.com/sikt-no/fs/issues/597) | «Regelverk og kvoter», «Tidlig opptak», «Behandlertildelingsregel» (overtatt fra 028) |
 | `@OPT-OPT-UTD-007` [sette_studieplasser_og_antall_tilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/sette_studieplasser_og_antall_tilbud.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | [#596](https://github.com/sikt-no/fs/issues/596) | Se åpent spørsmål om antall studieplasser |
 | `@OPT-OPT-UTD-032` [sette_antall_studieplasser_per_kvote.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/03%20Opptaksinnstillinger/sette_antall_studieplasser_per_kvote.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skrevet fra koden («Ant. kvoteplasser» i fs-admin) |
 | `@OPT-OPT-UTD-009` [vise_beskrivelses_url.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/vise_beskrivelses_url.feature) | Must | – | – | Jira SHI-687. Usikkert om det finnes skisse |
@@ -48,7 +48,7 @@
 | `@OPT-OPT-UTD-022` [angi_studieavgift.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/angi_studieavgift.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Jira SHI-701 |
 | `@OPT-OPT-UTD-025` [sette_tidlig_søknadsfrist.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/sette_tidlig_s%C3%B8knadsfrist.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Jira SHI-708 |
 | `@OPT-OPT-UTD-027` [sette_kjønnspoeng.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/sette_kj%C3%B8nnspoeng.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
-| `@OPT-OPT-UTD-029` [vise_poenggrense_og_ventelistenummer_for_søker.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/vise_poenggrense_og_ventelistenummer_for_s%C3%B8ker.feature) | Should | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
+| `@OPT-OPT-UTD-029` [vise_poenggrense_og_ventelistenummer_for_søker.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/vise_poenggrense_og_ventelistenummer_for_s%C3%B8ker.feature) | Must | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
 | `@OPT-OPT-UTD-030` [eksportere_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/eksportere_utdanningstilbud.feature) | Could | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
 | `@OPT-OPT-UTD-031` [sammenligne_med_tidligere_utdanningstilbud.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/sammenligne_med_tidligere_utdanningstilbud.feature) | Could | [Detaljside](https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=18797-108875) | – | Skjelett fra skissen |
 | `@OPT-OPT-UTD-033` [angi_alternativt_visningsnavn.feature](../../../krav/02%20Opptak/12%20Utdanningstilbud/04%20Behandle%20et%20utdanningstilbud/angi_alternativt_visningsnavn.feature) | Must | – | – | Jira SHI-780. Usikkert om det finnes skisse |
@@ -65,12 +65,13 @@
 - [ ] Finnes det skisse for alternativt visningsnavn (033)? Det er ikke i rammen.
 - [ ] Finnes det skisse for å overstyre regler for poenglikhet (015)? Den er ikke i rammen.
 - [ ] Det ryktes at overstyring av regler for poenglikhet (015) er levert. Stemmer det? I så fall kan kravet verifiseres med `fs-verify`.
+- [ ] Fasen «Utdanningstilbudet får behandlertildelingsregel» i flyten Saksbehandlertildeling (`@FLY-OPT-SAK-001`, `@planned`) bygger på regelen «Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud» i `@OPT-OPT-UTD-004`. Fasen kan ikke leveres før regelen er levert, og kravet er `@draft`.
 - [ ] Skal oppgavene ha hver sin GitHub-issue? opptaksinnstillinger dekker #596 og #597, og behandle-utdanningstilbud har bare Jira SHI-686 og #595 (003).
 
 ## Behandle et utdanningstilbud (fra oppgaven behandle-utdanningstilbud)
 
 
-Detaljsiden for ett utdanningstilbud i FS Admin: opplysninger fra utdanningsregisteret, opplysningene opptaksforvalter registrerer (attester, poengopplysninger, beskrivelse og søkeord til Min kompetanse, kjønnspoeng, saksbehandlertildelingsregel og mer), endringslogg og tidligere utdanningstilbud, og å trekke utdanningstilbudet fra opptaket (#595). Jira: [SHI-686](https://sikt.atlassian.net/browse/SHI-686).
+Detaljsiden for ett utdanningstilbud i FS Admin: opplysninger fra utdanningsregisteret, opplysningene opptaksforvalter registrerer (attester, poengopplysninger, beskrivelse og søkeord til Min kompetanse, kjønnspoeng, behandlertildelingsregel og mer), endringslogg og tidligere utdanningstilbud, og å trekke utdanningstilbudet fra opptaket (#595). Jira: [SHI-686](https://sikt.atlassian.net/browse/SHI-686).
 
 ### Åpne punkter
 
@@ -134,6 +135,8 @@ Append-only. Ny linje på toppen ved hver hendelse.
 
 | Dato       | Hendelse | Av | Lenke til review |
 |------------|----------|----|------------------|
+| 2026-11-13 | `@OPT-OPT-UTD-029` er endret fra Should til Must, fordi tilgangsregelen i kravet (poenggrensen er skjult til publisering) er Must. Se *Prioritet* i `krav/02 Opptak/tilgangsmatrise.md` | @karen.sikkeland | – |
+| 2026-11-05 | Åpent spørsmål: fasen i flyten Saksbehandlertildeling venter på `@OPT-OPT-UTD-004`. Fra gjennomgangen av flyten automatisk saksbehandling | @JøranIndseth | – |
 | 2026-11-02 | Oppgave og scope slått sammen til scope.md (fra behandle-utdanningstilbud, opptaksinnstillinger, utdanningstilbud) | – | – |
 | 2026-10-12 | [behandle-utdanningstilbud] Opprettet i scope-utdanningstilbud-2027 | – | – |
 | 2026-10-12 | [opptaksinnstillinger] Opprettet i scope-utdanningstilbud-2027 | – | – |

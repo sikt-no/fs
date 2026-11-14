@@ -1,6 +1,6 @@
 # Roller og testdata
 
-Felles for skillene som trenger testbrukere og testdata: `fs-testplan` (som planlegger dem i testplanen) og `fs-testcaser-cdp` (som slår dem opp, og spør når de mangler). Spørsmålene står bare her, så de to ikke kommer ut av takt. `fs-testcaser-intern` og `fs-testcaser-ekstern` leser tabellene i testplanen, og stiller ikke spørsmålene selv.
+Felles for skillene som trenger testbrukere og testdata: `fs-testplan` (som planlegger dem i testplanen) og `fs-testcaser-agent` (som slår dem opp, og spør når de mangler). Spørsmålene står bare her, så de to ikke kommer ut av takt. `fs-testcaser-intern` og `fs-testcaser-ekstern` leser tabellene i testplanen, og stiller ikke spørsmålene selv.
 
 ## Hvor svarene står
 
@@ -9,17 +9,17 @@ Testplanen (`akseptansetest/<slug>/testplan.md`) har to tabeller (se `fs-testpla
 - **Testbrukere:** `Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til`
 - **Testdata:** `Hva | Nøkkel | Navn | Hvor | Søk/URL | Utgangstilstand | Brukes av`
 
-**Miljøfila** for testmiljøet (`cdp-tester/_Miljøer/<miljø>.md`, se *Miljøfila* i `cdp-tester/README.md`) er den autoritative oversikten over personaene og rollene i FS Admin, og over verdiene til nøklene. Testene i `cdp-tester/` slår bare opp der, og kjenner ikke testplanen. Har miljøfila svaret, vis det og spør om det fortsatt gjelder, i stedet for å spørre på nytt. Nye nøkler og verdier legges inn i miljøfila når brukeren sier ja.
+**Miljøfila** for testmiljøet (`tester-agent/_Miljøer/<miljø>.md`, se *Miljøfila* i `tester-agent/README.md`) er den autoritative oversikten over personaene og rollene i FS Admin, og over verdiene til nøklene. Testene i `tester-agent/` slår bare opp der, og kjenner ikke testplanen. Har miljøfila svaret, vis det og spør om det fortsatt gjelder, i stedet for å spørre på nytt. Nye nøkler og verdier legges inn i miljøfila når brukeren sier ja.
 
 `Nr`, `Navn`, `Hva` og `Brukes til` er for menneskene og for testcasene. `Nøkkel`, `Innlogging`, `Start-URL`, `Søk/URL`, `Utgangstilstand` og `Brukes av` er for den agentiske funksjonstesten (fase 2), og er alltid med: fase 2 er en del av flyten, ikke et valg.
 
-**Nøkkelen** er et stabilt navn i kebab-case, uten æ, ø og å, som beskriver det scenarioet trenger, og ikke det miljøet eller testplanen velger. Testene i `cdp-tester/` bruker nøkler, aldri «testbruker 1» eller et navn, siden nummer og navn hører til én testplan. En nøkkel endres ikke når testbrukeren eller organisasjonen byttes.
+**Nøkkelen** er et stabilt navn i kebab-case, uten æ, ø og å, som beskriver det scenarioet trenger, og ikke det miljøet eller testplanen velger. Testene i `tester-agent/` bruker nøkler, aldri «testbruker 1» eller et navn, siden nummer og navn hører til én testplan. En nøkkel endres ikke når testbrukeren eller organisasjonen byttes.
 
 - **Testbruker:** `<rolle>-<relasjon>`. Rollen er forretningsrollen i kebab-case (`opptak-forvalter`, `opptak-saksbehandler`, `brukeradministrator`). Relasjonen er det scenarioet sier om organisasjonen: `forvaltende`, `deltakende`, `ikke-deltakende`, `lokalt`, `annen-organisasjon`. Trenger bare ett scenario rollen, holder rollen alene. Eksempler: `opptak-forvalter-forvaltende`, `brukeradministrator-annen-organisasjon`.
 - **Testdata:** tilstanden, ikke verdien: `opptak-samordna-uten-utdanningstilbud`, `regelverkssamling-samordna`, ikke `regelverkssamling-uhg-2027`.
 - **Aldri** navnet på en organisasjon, en person, et år eller et nummer i nøkkelen (ikke `-hkdir`, `-ntnu`, `-2027`). Krever scenarioet noe av organisasjonen (for eksempel at den er en fagskole), står det som en egenskap i beskrivelsen i «Krever», ikke i nøkkelen.
 
-**Aldri passord eller hemmeligheter** i testplanen eller miljøfila. `Innlogging` er raden testbrukeren har i «Overstyrt bruker» (nedtrekksmenyen øverst til høyre i FS Admin, normalen i TEST), skrevet nøyaktig som i menyen: `<NAVN> • <rolle> (<organisasjon>)`, for eksempel `ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU)`. Navnet alene er ikke nok: samme person kan ha flere roller og organisasjoner. Logger testbrukeren inn for seg, er `Innlogging` navnet på Chrome-profilen eller Feide-ID-en.
+**Aldri passord eller hemmeligheter** i testplanen eller miljøfila. `Innlogging` er raden testbrukeren har i «Overstyrt bruker» (nedtrekksmenyen øverst til høyre i FS Admin, normalen i TEST), skrevet nøyaktig som i menyen: `<NAVN> • <rolle> (<organisasjon>)`, for eksempel `ANSVARSFULL FOTKREM • OPPTAK_FORVALTER (NTNU)`. Navnet alene er ikke nok: samme person kan ha flere roller og organisasjoner. Logger testbrukeren inn for seg, er `Innlogging` Feide-ID-en, eller «TestID» for en søker i Min kompetanse.
 
 ## Finne rollene og foreslå testbrukere
 
@@ -29,14 +29,14 @@ Rollene og organisasjonene foreslås fra koden og miljøet, ikke fra en tidliger
 2. **Hva API-et krever.** Tilgangene mutasjonene og spørringene sjekker i fs-plattform: `Handling.java` (for eksempel `MODIFISERE_OPPTAK`, `MEDLEM_OPPTAK`) og radnivåsikkerheten i migreringene (`har_tilgang`, `har_deltakertilgang`). Vis `fil:linje`.
 3. **Forretningsrollen som gir dem.** Testbrukeren har forretningsroller (`forretningsrolle.*`, for eksempel `OPPTAK_FORVALTER`), som gir tilgangene over gjennom rollekatalogen. Katalogen hentes med spørringen `tilgangsroller` (som `GET_ROLLEHIERARKI` i fs-admin, `src/common/lib/persona/services/rollehierarki.ts`). Kan den ikke hentes, skriv hvilken tilgang som ikke er bekreftet, som `[Fylles ut: …]`.
 4. **Relasjonene i scenarioene.** Hvilke organisasjoner scenarioene skiller mellom (forvaltende, deltakende, ikke deltakende, lokalt, annen organisasjon), og hva de krever av dem (type lærested, at organisasjonen ikke er deltaker). Én nøkkel per kombinasjon av rolle og relasjon.
-5. **Personaene som finnes.** Personaene i «Overstyrt bruker» står i «Personaer» i miljøfila, med rollene og organisasjonen (fra `TEST_PERSONAS` i fs-admin). Foreslå én persona per nøkkel derfra, med en egen organisasjon per relasjon, og som oppfyller kravene i punkt 4. Er katalogen gammel, eller finnes ingen som passer, følg *Vedlikehold av miljøfila* i `cdp-tester/README.md` først. Finnes det fortsatt ingen, si det: personaen må legges til i fs-admin, og tildelingen i tilgangsstyring.
-6. **Bekreft i miljøet.** Tildelingene bekreftes med spørringen `testpersoner`, etter *Vedlikehold av miljøfila* i `cdp-tester/README.md`, og står i «Tildelinger» og «Bekreftet» på personaen i miljøfila. Er personaen ikke bekreftet, si det. Testene kan lages likevel.
+5. **Personaene som finnes.** Personaene i «Overstyrt bruker» står i «Personaer» i miljøfila, med rollen og organisasjonen (én rad per tildeling i `testpersoner`). Foreslå én persona per nøkkel derfra, med en egen organisasjon per relasjon, og som oppfyller kravene i punkt 4. Er katalogen gammel, eller finnes ingen som passer, følg *Vedlikehold av miljøfila* i `tester-agent/README.md` først. Finnes det fortsatt ingen, si det: personaen må legges til i fs-admin, og tildelingen i tilgangsstyring.
+6. **Bekreft i miljøet.** Tildelingene bekreftes med spørringen `testpersoner`, etter *Vedlikehold av miljøfila* i `tester-agent/README.md`, og står i «Tildelinger» og «Bekreftet» på personaen i miljøfila. Er personaen ikke bekreftet, si det. Testene kan lages likevel.
 
 Skriv koblingen fra nøkkel til persona i «Testbrukere» i miljøfila når brukeren sier ja, og i testplanen («Testbrukere» i `testcaser-og-testdata.md`) når skillen er `fs-testplan`. Fødselsnummeret skrives ikke i miljøfila eller testplanen: personaen velges i menyen.
 
 ## Testdata
 
-Data i testmiljøet kan slettes eller nullstilles når som helst. Derfor lager de automatiserte testene dataene sine selv, i hver kjøring, og bygger aldri på data fra en tidligere kjøring. I fase 2 gjør oppsettet det (`cdp-tester/_Oppsett/<sti>/oppsett.feature`, se *Oppsettet* i `cdp-tester/README.md`): ett scenario per testdata-nøkkel, gjennom løsningen. Testplanen sier hvilke testdata testene trenger, og at oppsettet lager dem.
+Data i testmiljøet kan slettes eller nullstilles når som helst. Derfor lager de automatiserte testene dataene sine selv, i hver kjøring, og bygger aldri på data fra en tidligere kjøring. I fase 2 gjør oppsettet det (`tester-agent/_Oppsett/<sti>/oppsett.feature`, se *Oppsettet* i `tester-agent/README.md`): ett scenario per testdata-nøkkel, gjennom løsningen. Testplanen sier hvilke testdata testene trenger, og at oppsettet lager dem.
 
 Bare dette står i miljøfila, og må finnes i testmiljøet før kjøringen: personaene, grunndata (kodeverk, organisasjoner, regelverkssamlinger) og data testene ikke kan lage gjennom løsningen (for eksempel en søker med søknad, når testen går i FS Admin). Det siste får en nøkkel med `[Fylles ut]`, og en kommentar i oppsettet om hvorfor oppsettet ikke lager det.
 

@@ -47,7 +47,7 @@ Testplanen følger den nye teststrategien med fire faser: verifisering, agentisk
 
 | Nr | Nøkkel | Navn | Rolle | Organisasjon | Innlogging | Start-URL | Brukes til |
 |---|---|---|---|---|---|---|---|
-| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | Opptaksforvalter og saksbehandler ved forvaltende organisasjon | HK-dir | «Overstyrt bruker»: Ordentlig rundskriv | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
+| 1 | `opptak-forvalter-forvaltende` | Ordentlig rundskriv | Opptaksforvalter ved forvaltende organisasjon | HK-dir | «Overstyrt bruker»: ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | https://test-fsadmin.sikt.no/opptak | Opprette samordna opptak, innstillinger, frister, samordning (forvaltende organisasjon), oversikten over opptak |
 | 2 | `opptak-forvalter-deltakende` | Ansvarsfull Fotkrem | Opptaksforvalter ved deltakende organisasjon | NTNU | «Overstyrt bruker»: Ansvarsfull Fotkrem | https://test-fsadmin.sikt.no/opptak | Samordna opptak: deltaker som legger til utdanningstilbud, og som ser, men ikke endrer, innstillingene. Trenger rollen `MEDLEM_OPPTAK` når TAKE-423 er merget |
 | 3 | `opptak-forvalter-ikke-deltakende` | Talefør Elv | Opptaksforvalter ved organisasjon som ikke deltar | Fagskolen Vestfold og Telemark | «Overstyrt bruker»: Talefør Elv | https://test-fsadmin.sikt.no/opptak | Samordna opptak: organisasjon som ikke deltar |
 | 4 | `opptak-forvalter-lokalt` | Ru Brødskive | Opptaksforvalter ved lærested med lokalt opptak | HVL | «Overstyrt bruker»: Ru Brødskive | https://test-fsadmin.sikt.no/opptak | Opprette lokalt opptak, lokalt opptak i Samordna opptak |
@@ -204,7 +204,7 @@ Verify-rapportene for leveransen er laget før `fs-verify` rapporterte regler i 
 
 ## Testcaser som skal lages
 
-Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
+Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-agent` lager testcasene for fase 2 ut fra tabellen, og `fs-testcaser-intern` testcasene for fase 3. Teamet og testansvarlig går gjennom omfanget før testcasene lages.
 
 ### Fase 2: agentisk funksjonstest
 
@@ -247,7 +247,7 @@ Omfanget av testcasene, ikke testcasene selv. `fs-testcaser-cdp` lager testcasen
 | `@OPT-OVO-OVE-001` | Søk og filtrering av opptak | 4 | Søk på navn med små og store bokstaver, på nynorsk og engelsk, og del av navnet. Søk uten treff | ekvivalensklasser |
 | | Regler uten scenario som testes (se over) | – | 7 regler: navnelengde, bare mellomrom, tall større enn 0, URL, unntak fra poenglikhet, delvis dato, søket i «Inviter» | grenseverdianalyse, ekvivalensklasser |
 
-Testcasene står i `cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget. Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
+Testcasene står i `tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget. Utledede testcaser lages bare der regelen har verdier eller betingelser å teste.
 
 ### Fase 3: intern akseptansetest
 
@@ -303,9 +303,9 @@ Klart når testansvarlig har logget inn som testbruker og ser testdataene.
 | 3 | Testdataene kan settes tilbake før hver kjøring | Nei: opptak kan ikke slettes. Opptakene testene oppretter, blir liggende, og får kjøringen i navnet |
 | 4 | Testbrukerne finnes i rollene ved organisasjonene kravene gjelder (tilgangsmatrisen) | [Fylles ut av teamet]. Testbruker 2 trenger `MEDLEM_OPPTAK` når TAKE-423 er merget |
 | 5 | `fs-verify` har funnet alle scenarioene, og en annen person har kontrollert rapporten. Åpne spørsmål stopper ikke, og står i «Åpne spørsmål» | Nei (avvik, se over): 3 av 5 krav er `@implemented`. Samordna opptak 10 av 15 og Frister 23 av 25 (22.10), regelen i Opprette et opptak 0 av 1 (21.10), og regelen om trekkfrist er ikke verifisert. Kontrollert av `fs-verify-kontroll`. Venter på kontroll av en person |
-| 6 | De agentiske testcasene (`fs-testcaser-cdp`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
+| 6 | De agentiske testcasene (`fs-testcaser-agent`) er laget, og testansvarlig og teamet har gått gjennom dem før kjøringen | Venter |
 | 7 | Testcasene for den interne akseptansetesten (`fs-testcaser-intern`) er laget og gått gjennom av testansvarlig | Venter |
-| 8 | Testansvarlig er logget inn i FS Admin i en egen Chrome-profil til testingen, CDP-agenten kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Verdiene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: nøklene i testdata] |
+| 8 | Agenten er logget inn i FS Admin med Feide-testbrukeren (`tester-agent/.env`), i nettleseren Vibium starter, i en egen sesjon til testingen, kan bytte til hver testbruker i «Overstyrt bruker», og nøklene i testbrukere og testdata er utfylt | Verdiene i «Overstyrt bruker» er utfylt for alle fire testbrukerne. [Fylles ut av teamet: nøklene i testdata] |
 | 9 | Testansvarlig har logget inn som testbruker og ser testdataene | [Fylles ut av testansvarlig] |
 
 ## Kriterier for godkjent
@@ -359,7 +359,7 @@ Testrapportene (verifisering, agentisk, intern og ekstern) står som undersider,
 |---|---|
 | Verifiseringsrapporten (fase 1) | Se «Status i flyten» |
 | Agentisk testrapport (fase 2) | – |
-| Testcasene for fase 2 | – (`cdp-tester/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget). CDP-kjøringene av de interne testcasene 26.10 (Opus og Sonnet) er forsøk, ikke fase 2: [sammenligning](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5144346655) |
+| Testcasene for fase 2 | – (`tester-agent/02 Opptak/11 Opprette og vedlikeholde opptak/` når de er laget). CDP-kjøringene av de interne testcasene 26.10 (Opus og Sonnet) er forsøk, ikke fase 2: [sammenligning](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5144346655) |
 | Testcasene for fase 3 | – |
 | Forrige testløp (versjon 1) | [Testplan](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5128028165), [intern akseptansetest 22.10](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5127209099), [ekstern akseptansetest](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5137334279) |
 

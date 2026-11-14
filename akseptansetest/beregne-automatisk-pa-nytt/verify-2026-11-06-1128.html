@@ -1,0 +1,516 @@
+<title>Verifisering · Beregne automatisk på nytt</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: verdict first, then the requirements as a scenario × repo matrix, then work split per repo, then decisions for the team. */
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --sunk: #eaeef2;
+  --ink: #141c25;
+  --muted: #5a6776;
+  --line: #d8dee6;
+  --accent: #1f4fb8;
+  --accent-soft: #e3ebfa;
+  --ok: #17784a;      --ok-soft: #dff2e8;
+  --miss: #b42318;    --miss-soft: #fbe4e1;
+  --part: #a8620a;    --part-soft: #fbefd9;
+  --na: #8a96a3;      --na-soft: #eef1f4;
+  --font: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f141a; --surface: #161d25; --sunk: #1d2630; --ink: #e6ebf0; --muted: #98a5b3; --line: #2a3542;
+    --accent: #7fa6ff; --accent-soft: #1c2a47;
+    --ok: #4cc38a; --ok-soft: #12301f; --miss: #ff7b6b; --miss-soft: #3a1714; --part: #f0b25a; --part-soft: #36270f; --na: #6f7b88; --na-soft: #1d2630;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f141a; --surface: #161d25; --sunk: #1d2630; --ink: #e6ebf0; --muted: #98a5b3; --line: #2a3542;
+  --accent: #7fa6ff; --accent-soft: #1c2a47;
+  --ok: #4cc38a; --ok-soft: #12301f; --miss: #ff7b6b; --miss-soft: #3a1714; --part: #f0b25a; --part-soft: #36270f; --na: #6f7b88; --na-soft: #1d2630;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+code, .mono { font-family: var(--mono); font-size: 0.86em; }
+code { background: var(--sunk); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Header */
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { padding-block: 28px 24px; display: grid; gap: 18px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.metaline { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 13.5px; }
+.metaline b { color: var(--ink); font-weight: 600; }
+.verdict { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 16px 18px; border-radius: var(--r); background: var(--miss-soft); border: 1px solid color-mix(in srgb, var(--miss) 30%, transparent); }
+.verdict.good { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+.verdict .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--miss); margin-top: 6px; }
+.verdict.good .dot { background: var(--ok); }
+.verdict h2 { font-size: 19px; font-weight: 700; }
+.verdict p { margin: 4px 0 0; max-width: 72ch; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg); display: grid; gap: 2px; }
+.stat .n { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.stat .n small { font-size: 15px; color: var(--muted); font-weight: 600; }
+.stat .l { font-size: 13px; color: var(--muted); }
+.stat.bad .n { color: var(--miss); }
+.stat.warn .n { color: var(--part); }
+
+/* Sticky nav + filters */
+nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+nav.bar .wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding-block: 10px; }
+.links { display: flex; flex-wrap: wrap; gap: 4px; }
+.links a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: 13.5px; padding: 5px 10px; border-radius: 999px; }
+.links a:hover { color: var(--ink); background: var(--sunk); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; background: var(--sunk); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: transparent; color: var(--muted); padding: 4px 11px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
+
+/* Sections */
+main .wrap { display: grid; gap: 44px; padding-block: 32px 64px; }
+section { display: grid; gap: 14px; scroll-margin-top: 70px; min-width: 0; }
+.sechead { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.sechead h2 { font-size: 22px; font-weight: 750; letter-spacing: -0.01em; }
+.sechead .count { color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+.lede { margin: 0; color: var(--muted); max-width: 75ch; }
+
+/* Status glyphs */
+.g { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; font-weight: 700; font-size: 14px; font-family: var(--mono); }
+.g.ok { background: var(--ok-soft); color: var(--ok); }
+.g.miss { background: var(--miss-soft); color: var(--miss); }
+.g.part { background: var(--part-soft); color: var(--part); }
+.g.na { background: var(--na-soft); color: var(--na); }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.miss { background: var(--miss-soft); color: var(--miss); }
+.chip.part { background: var(--part-soft); color: var(--part); }
+.chip.info { background: var(--accent-soft); color: var(--accent); }
+.chip.na { background: var(--na-soft); color: var(--muted); }
+
+/* Krav cards */
+.krav { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.kravhead { padding: 16px 18px; display: grid; gap: 10px; border-bottom: 1px solid var(--line); }
+.kravhead .row1 { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between; }
+.kravhead h3 { font-size: 18px; font-weight: 700; }
+.kid { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.progress { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 13.5px; }
+.bar { width: 160px; height: 8px; border-radius: 99px; background: var(--miss-soft); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ok); }
+.repomiss { display: inline-flex; gap: 6px; align-items: center; }
+.repomiss b { font-variant-numeric: tabular-nums; }
+.gjen { margin: 0; color: var(--muted); font-size: 14px; }
+.matrix { width: 100%; border-collapse: collapse; }
+.matrix th { text-align: left; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 10px; background: var(--sunk); }
+.matrix th.c, .matrix td.c { text-align: center; width: 64px; }
+.matrix td { padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: middle; }
+.matrix tr.rule td { background: var(--bg); font-size: 13px; color: var(--muted); font-weight: 600; padding-block: 6px; }
+.matrix tr.sc { cursor: pointer; }
+.matrix tr.sc:hover td { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.sctitle { font-weight: 500; }
+.scline { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: 6px; }
+.mrtag { margin-left: 6px; }
+.matrix tr.detail td { background: var(--bg); border-top: 0; padding: 4px 10px 14px 34px; font-size: 13.5px; color: var(--ink); }
+.caret { display: inline-block; width: 14px; color: var(--muted); transition: transform .15s; }
+tr.sc[aria-expanded="true"] .caret { transform: rotate(90deg); }
+.scroll { overflow-x: auto; }
+
+/* Per repo */
+.repos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.repo { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.repo h3 { font-size: 17px; font-weight: 700; display: flex; gap: 10px; align-items: center; }
+.letter { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 7px; background: var(--ink); color: var(--surface); font-family: var(--mono); font-weight: 600; font-size: 14px; }
+.repo .sub { color: var(--muted); font-size: 13.5px; margin: -6px 0 0; }
+.repo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.repo li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; font-size: 14px; }
+.repo li .g { width: 22px; height: 22px; font-size: 12px; }
+.repo .grp { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-top: 6px; }
+.empty { color: var(--muted); font-size: 14px; }
+
+/* Lists of findings */
+.cards { display: grid; gap: 10px; }
+.find { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 16px; display: grid; gap: 6px; min-width: 0; }
+.find .h { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.find .h strong { font-weight: 600; }
+.find .b { font-size: 13.5px; color: var(--muted); }
+.find .b code { color: var(--ink); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: start; }
+.col { display: grid; gap: 10px; min-width: 0; }
+.colhead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; border-bottom: 2px solid var(--line); padding-bottom: 6px; }
+.colhead h3 { font-size: 15px; font-weight: 700; }
+.colhead.decide { border-color: var(--part); }
+.colhead.krav { border-color: var(--accent); }
+.colhead.test { border-color: var(--ok); }
+details.more { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+details.more summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; gap: 8px; align-items: center; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary::before { content: "▸"; color: var(--muted); transition: transform .15s; }
+details.more[open] summary::before { transform: rotate(90deg); }
+details.more .in { padding: 0 16px 14px; display: grid; gap: 8px; }
+.okrow { display: grid; grid-template-columns: auto 1fr; gap: 10px; font-size: 14px; align-items: start; }
+.okrow .g { width: 22px; height: 22px; font-size: 12px; }
+
+/* Regler uten scenario: stacked groups, one per decision */
+#regler-cols, #funn-cols { display: grid; gap: 14px; grid-template-columns: none; }
+.rgroup.info { --tone: var(--muted); --tone-soft: var(--sunk); }
+.rgroup.bad { --tone: var(--miss); --tone-soft: var(--miss-soft); }
+.rtext { font-size: 14px; color: var(--ink); max-width: 85ch; overflow-wrap: anywhere; }
+.rgroup { --tone: var(--muted); --tone-soft: var(--sunk); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.rgroup.decide { --tone: var(--part); --tone-soft: var(--part-soft); }
+.rgroup.krav { --tone: var(--accent); --tone-soft: var(--accent-soft); }
+.rgroup.test { --tone: var(--ok); --tone-soft: var(--ok-soft); }
+.rghead { padding: 12px 18px; background: var(--tone-soft); display: grid; gap: 2px; }
+.rghead h3 { font-size: 16px; font-weight: 700; color: var(--tone); display: flex; align-items: center; gap: 8px; }
+.rgn { font-family: var(--mono); font-size: 12.5px; background: var(--surface); color: var(--tone); border-radius: 999px; padding: 1px 8px; }
+.rghead p { margin: 0; font-size: 13.5px; color: var(--ink); max-width: 80ch; }
+.rlist { list-style: none; margin: 0; padding: 0; }
+.rlist li { padding: 12px 18px; border-top: 1px solid var(--line); display: grid; gap: 6px; min-width: 0; }
+.rlist li:first-child { border-top: 0; }
+.rmain { font-weight: 500; max-width: 85ch; }
+.rmeta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; font-size: 13px; color: var(--muted); }
+.rbev { min-width: 0; overflow-wrap: anywhere; }
+
+footer { border-top: 1px solid var(--line); background: var(--surface); }
+footer .wrap { padding-block: 22px 32px; display: grid; gap: 10px; font-size: 13px; color: var(--muted); }
+footer dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+footer dt { font-weight: 600; color: var(--ink); }
+footer dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.warnbox { color: var(--part); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .matrix th.c, .matrix td.c { width: 44px; padding-inline: 4px; }
+  .scline { display: block; margin-left: 0; }
+  .bar { width: 110px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow" id="eyebrow">Verifisering mot koden · fase 1</div>
+    <h1 id="title"></h1>
+    <div class="metaline" id="metaline"></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Seksjoner og filter">
+  <div class="wrap">
+    <div class="links">
+      <a href="#krav" data-sec="krav">Krav</a>
+      <a href="#repo" data-sec="repo">Per repo</a>
+      <a href="#tilgang" data-sec="tilgang">Tilgang</a>
+      <a href="#regler" data-sec="regler">Regler uten scenario</a>
+      <a href="#funn" data-sec="funn">Andre funn</a>
+      <a href="#mr" data-sec="mr">MR-er</a>
+    </div>
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Repo" id="f-repo"></div>
+      <div class="seg" role="group" aria-label="Vis" id="f-vis">
+        <button id="vis-alt" data-v="alt" aria-pressed="true">Alle scenarioer</button>
+        <button id="vis-mangler" data-v="mangler" aria-pressed="false">Bare det som mangler</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <section id="krav">
+      <div class="sechead"><h2>Kravene</h2><span class="count" id="krav-count"></span></div>
+      <p class="lede">Hvert scenario i kravene, med resultatet i hvert repo. Klikk på et scenario for å se beviset i koden.</p>
+      <div class="cards" id="krav-list"></div>
+    </section>
+
+    <section id="repo">
+      <div class="sechead"><h2>Det som mangler, per repo</h2></div>
+      <p class="lede">Scenarioene som må bygges eller endres i hvert repo. Et scenario som mangler i begge, står i begge listene.</p>
+      <div class="repos" id="repo-list"></div>
+    </section>
+
+    <section id="tilgang">
+      <div class="sechead"><h2>Tilgang og datakonsistens</h2><span class="count" id="tilgang-count"></span></div>
+      <p class="lede">Om koden gir rollene tilgang slik kravet sier, holder data fra andre organisasjoner utenfor, og ikke gir foreldreløse eller motstridende data. Sjekket i koden, ikke testet.</p>
+      <div class="cards" id="tilgang-avvik"></div>
+      <details class="more" id="tilgang-ok"></details>
+    </section>
+
+    <section id="regler">
+      <div class="sechead"><h2>Regler i koden uten scenario</h2><span class="count" id="regler-count"></span></div>
+      <p class="lede">Regler koden har, som ingen scenarioer i kravene dekker, gruppert etter hva teamet bør gjøre med dem. Det som må avklares, står først.</p>
+      <div class="cols" id="regler-cols"></div>
+    </section>
+
+    <section id="funn">
+      <div class="sechead"><h2>Andre funn</h2><span class="count" id="funn-count"></span></div>
+      <p class="lede">Det som må følges opp, og som ikke står over, gruppert etter type. Det teamet må avgjøre, står først.</p>
+      <div class="cols" id="funn-cols"></div>
+    </section>
+
+    <section id="mr">
+      <div class="sechead"><h2>Åpne MR-er og brancher</h2></div>
+      <p class="lede">Koden i disse er ikke merget, og regnes ikke som levert.</p>
+      <div class="cards" id="mr-list"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <dl id="meta"></dl>
+  </div>
+</footer>
+
+<script id="data" type="application/json">{"title":"Beregne automatisk på nytt","meta":{"Dato":"2026-11-06 11:28","Krav":"`@scope-beregne-automatisk-pa-nytt` (1 feature-filer, og 1 flyt som går gjennom kravene)","Kode":"`fs-plattform` (main, 9d81a01a52, oppdatert), `fs-admin` (main, b50755d4a, oppdatert), `min-kompetanse` (main, 0d7219e6, oppdatert). Kravrepoet: `krav/gjennomgang-runde-3-okt-fagfolk` fast-forwardet til origin/main (c657857a)","Repoer":"P = fs-plattform, A = fs-admin, M = min-kompetanse · ✓ funnet, ✗ mangler, ~ delvis eller usikker, – ikke relevant","Åpne MR-er":"ikke sjekket (glab er ikke installert); bare brancher med navn som peker på kravene, 7 brancher i fs-plattform og fs-admin med kode for kravene, ingen merget","Omfang":"`@in-progress`, `@deprecated`, flyter, alle krav uansett status (valgt)","Avhengigheter":"1 nivå, bare status","Kontroll":"`fs-verify-kontroll`","Menneskelig kontroll":"[Fylles ut: navn og dato for personen som har kontrollert rapporten]","Team":"5 finnere (`fs-verify-krav`), 18 kontrollører (`fs-verify-kontroll`), felles for de seks scopene i automatisk saksbehandling","Skjermbilder":"nei"},"abbr":{"P/…":"fs-plattform/opptak/opptak-service/src/main/java/no/sikt/fs/opptak/…","opptak-subgraph/…":"fs-plattform/opptak/opptak-subgraph/src/main/…","opptak-migrations/…":"fs-plattform/opptak/opptak-migrations/src/main/resources/db/migration/…","A/…":"fs-admin/src/domains/soknadsbehandling/features/…"},"repos":[{"k":"P","name":"fs-plattform","what":"API, tjenestene og databasen"},{"k":"A","name":"fs-admin","what":"Det saksbehandlere og forvaltere ser og gjør"},{"k":"M","name":"min-kompetanse","what":"Det søkeren ser og gjør"}],"krav":[{"id":"OPT-BEH-BEH-026","title":"Beregne automatisk på nytt","file":"beregne_automatisk_på_nytt.feature","gjenstar":"publisering, sperrer mot plasstildeling, sakslogg","found":20,"total":24},{"id":"FLY-OPT-AUT-001","title":"Automatisk saksbehandling","file":"automatisk_saksbehandling.feature","gjenstar":"14 faser ikke levert (og 2 `@wont` uten krav)","found":4,"total":22}],"scenarioer":[{"id":"OPT-BEH-BEH-026","title":"Søkeren ser den nye mangelteksten i en sak som er ferdig behandlet","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"✓"},"bevis":"ny tekst får status_kan_publiseres=false (`P/regelverk/kvalifisering/KvalifiseringOppdateringService.java:206-209`), viewet krever publisert (`opptak-migrations/…/V512__behandlingsstatus_behandlet.sql:173`)","line":165,"rule":"Bare saker som er ferdig behandlet, beregnes på nytt"},{"id":"OPT-BEH-BEH-026","title":"Opptaksforvalteren kan ikke beregne på nytt mens en plasstildeling kjører","result":"ikke funnet","marks":{"P":"✗","A":"✗","M":"–"},"bevis":"`RegelverksoppdateringService.java:105-151` sjekker ikke plasstildeling; søkt «plasstildeling», «opptaksrunde», «publiser» i R og «regelverksoppdatering» i plasstildeling/","line":207,"rule":"Bare én beregning eller plasstildeling i opptaket om gangen"},{"id":"OPT-BEH-BEH-026","title":"Saksloggen viser at den automatiske behandlingen endret saken, og hvem som startet beregningen","result":"ikke funnet","marks":{"P":"✗","A":"✗","M":"–"},"bevis":"`opptak-subgraph/…/saksbehandling/sak.graphqls:188-205` (BAT-324); `opptak-migrations/…/V509__regelverksoppdatering.sql` har ingen brukerkolonne (søkt «bruker», «ident», «opprettet_av»)","line":217,"rule":"Saksloggen viser at den automatiske behandlingen endret saken"},{"id":"OPT-BEH-BEH-026","title":"Opptaksforvalteren kan ikke beregne på nytt etter at resultatet av siste plasstildelingsrunde er publisert","result":"ikke funnet","marks":{"P":"✗","A":"✗","M":"–"},"bevis":"ingen sjekk i `RegelverksoppdateringService.java:105-151`","line":241,"rule":"Beregningen gjelder fra neste plasstildeling"},{"id":"FLY-OPT-AUT-001","title":"Vitnemålet fra KREG er klart for behandlingen når saken er opprettet","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":50,"rule":"Søkerens resultater importeres fra KREG når saken er opprettet"},{"id":"FLY-OPT-AUT-001","title":"Saken behandles automatisk når vitnemålet er importert","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":60,"rule":"Den automatiske behandlingen starter når søkerens resultater er importert"},{"id":"FLY-OPT-AUT-001","title":"Søknaden får GSK-konklusjonen fra vitnemålet som er importert fra KREG","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":70,"rule":"Søknaden får GSK-konklusjonen når vitnemålet importeres fra KREG"},{"id":"FLY-OPT-AUT-001","title":"Søknaden uten GSK-konklusjon får konklusjonen i kjøringen","result":"usikker","marks":{"P":"~","A":"–","M":"–"},"bevis":"fasen var ikke levert da kjøringen startet, og ble levert ved retaggingen; overleveringen er ikke lett etter i koden","line":82,"rule":"Den automatiske behandlingen setter GSK-konklusjonen der den mangler"},{"id":"FLY-OPT-AUT-001","title":"Saken behandles helautomatisk på vitnemålet som gir GSK","result":"usikker","marks":{"P":"~","A":"–","M":"–"},"bevis":"fasen var ikke levert da kjøringen startet, og ble levert ved retaggingen; overleveringen er ikke lett etter i koden","line":93,"rule":"Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk"},{"id":"FLY-OPT-AUT-001","title":"Søkeren hoppes over når ingen vitnemål gir GSK","result":"usikker","marks":{"P":"~","A":"–","M":"–"},"bevis":"fasen var ikke levert da kjøringen startet, og ble levert ved retaggingen; overleveringen er ikke lett etter i koden","line":98,"rule":"Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk"},{"id":"FLY-OPT-AUT-001","title":"Saken behandles helautomatisk når søkeren har to identiske vitnemål","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen mangler krav (`@wont`, uten `@depends-on-`)","line":110,"rule":"To identiske vitnemål reknes som ett vitnemål"},{"id":"FLY-OPT-AUT-001","title":"Saken får grunnlag","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":119,"rule":"Saken får grunnlag fra vitnemålet"},{"id":"FLY-OPT-AUT-001","title":"Søknadsalternativet får poengsum","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":131,"rule":"Poengene beregnes fra grunnlaget og rangeringsregelverket"},{"id":"FLY-OPT-AUT-001","title":"Søknaden får tilleggspoengene for grunnlaget","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":140,"rule":"Søknaden får tilleggspoeng når grunnlaget er satt"},{"id":"FLY-OPT-AUT-001","title":"Kravelementet er vurdert mot vitnemålet","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":159,"rule":"Kravelementene vurderes mot vitnemålet når poengene er beregnet"},{"id":"FLY-OPT-AUT-001","title":"Søkeren har poengsum i kvoten","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":212,"rule":"Søkeren får poengsum per kvote når søkeren er fordelt på kvoter"},{"id":"FLY-OPT-AUT-001","title":"Saken får mangeltekst for kravelementet vitnemålet ikke oppfyller","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":223,"rule":"Saken får mangeltekster når kravelementene er vurdert"},{"id":"FLY-OPT-AUT-001","title":"Saken med mangelen for GSK som fullføres i vår blir ferdig behandlet","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":233,"rule":"Mangelen for GSK som fullføres i vår sjekkes ut før saken blir ferdig behandlet"},{"id":"FLY-OPT-AUT-001","title":"Saken er ferdig behandlet når den automatiske behandlingen har avgjort alt","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":246,"rule":"Saken blir ferdig behandlet og er klar til å være med i plasstildelingen"},{"id":"FLY-OPT-AUT-001","title":"Søkeren ser mangelteksten fra kravelementene når saken er ferdig behandlet","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"✗"},"bevis":"fasen er ikke levert","line":253,"rule":"Saken blir ferdig behandlet og er klar til å være med i plasstildelingen"},{"id":"FLY-OPT-AUT-001","title":"Saken blir ikke ferdig behandlet når poengene ikke kan avgjøres","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":259,"rule":"Saken blir ferdig behandlet og er klar til å være med i plasstildelingen"},{"id":"FLY-OPT-AUT-001","title":"Poengene beregnes på nytt når rangeringsregelverket er rettet","result":"ikke funnet","marks":{"P":"✗","A":"–","M":"–"},"bevis":"fasen er ikke levert","line":268,"rule":"Søknadsalternativene beregnes på nytt når regelverket er rettet"},{"id":"OPT-BEH-BEH-026","title":"Opptaksforvalteren beregner på nytt for søknadsalternativene med \u003cutvalg>","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `R/RegelverksoppdateringUtvalg.java:57-86`, `R/RegelverksoppdateringService.java:42-75`, `R/RegelverksoppdateringKjoringService.java:131-203`; A `RB/RegelverksoppdateringModal.tsx`, `messages/nb/soknadsbehandling.json:18-41` (flagg soknadsbehandling-regelverksoppdatering, `SakOverviewView.tsx:40-51`)","line":47,"rule":"Opptaksforvalteren velger regelverkene feilen gjaldt"},{"id":"OPT-BEH-BEH-026","title":"Saker med søknadsalternativer med andre regelverk, beregnes ikke på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringUtvalg.java:62-83`","line":58,"rule":"Opptaksforvalteren velger regelverkene feilen gjaldt"},{"id":"OPT-BEH-BEH-026","title":"Saker med ett av regelverkene som er valgt, beregnes på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringUtvalg.java:85`, `:39-54`","line":65,"rule":"Opptaksforvalteren velger regelverkene feilen gjaldt"},{"id":"OPT-BEH-BEH-026","title":"Opptaksforvalteren ser hvor mange saker som beregnes på nytt, før beregningen starter","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `RegelverksoppdateringService.java:81-91`; A `RB/RegelverksoppdateringModal.tsx:94-95, 178-179`","line":71,"rule":"Opptaksforvalteren velger regelverkene feilen gjaldt"},{"id":"OPT-BEH-BEH-026","title":"Regelverkene opptaksforvalteren kan velge, er regelverkene i opptaket","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `RegelverksoppdateringService.java:120-159`; A `RB/queries.ts:25-57`","line":75,"rule":"Opptaksforvalteren velger regelverkene feilen gjaldt"},{"id":"OPT-BEH-BEH-026","title":"Kravelementene og poengene beregnes på nytt i en sak den automatiske behandlingen har behandlet","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringKjoringService.java:245-247`; `P/autosak/AutomatiskSaksbehandlingService.java:194-203`, `:189-191`, `:114-119`","line":86,"rule":"I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt"},{"id":"OPT-BEH-BEH-026","title":"Kravelementet saksbehandleren har vurdert, beregnes ikke på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:172-179`; `KvalifiserKravelementV4Service.java:38-47, 196-210`","line":93,"rule":"I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt"},{"id":"OPT-BEH-BEH-026","title":"Poengene saksbehandleren har satt, beregnes ikke på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`P/regelverk/poeng/PoengService.java:52, 68, 154, 203`; `AlgoritmepoengService.java:60`; `SettPoengService.java:104, 135`","line":99,"rule":"I saker den automatiske behandlingen har behandlet, beregnes kravelementene og poengene på nytt"},{"id":"OPT-BEH-BEH-026","title":"Poengsummen regnes ut på nytt i en sak saksbehandleren har behandlet","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringKjoringService.java:249`; `P/saksbehandling/PropageringService.java:99-114`","line":113,"rule":"Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket"},{"id":"OPT-BEH-BEH-026","title":"Kravelementet saksbehandleren har vurdert, er uendret","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`PropageringService.java:99-114` (ingen kravelementvurdering)","line":119,"rule":"Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket"},{"id":"OPT-BEH-BEH-026","title":"Saken saksbehandleren har behandlet, får taggen \"Regelverk endret\"","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `RegelverksoppdateringKjoringService.java:250`, `R/RegelverkEndretTagger.java:15-31`; A `soknadsbehandling.json:21`","line":125,"rule":"Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket"},{"id":"OPT-BEH-BEH-026","title":"Saken den automatiske behandlingen har behandlet, får ikke taggen \"Regelverk endret\"","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringKjoringService.java:245-247`","line":130,"rule":"Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket"},{"id":"OPT-BEH-BEH-026","title":"Saksbehandleren finner sakene med taggen \"Regelverk endret\"","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `RegelverkEndretTagger.java:24-30`, filter taggIder `opptak-subgraph/src/main/resources/schema/features/experimental/saksbehandling/sak.graphqls:377, 412, 559`; A `SakOverviewView/components/SakFilter/SakFilter.tsx:336-337`","line":135,"rule":"Saker saksbehandleren har behandlet, får regnet ut kvalifiseringen, poengsummen og kvoten på nytt og blir merket"},{"id":"OPT-BEH-BEH-026","title":"Saken er fortsatt ferdig behandlet etter at poengene er beregnet på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringKjoringService.java:232-253` skriver ikke statustype_kode","line":146,"rule":"Bare saker som er ferdig behandlet, beregnes på nytt"},{"id":"OPT-BEH-BEH-026","title":"En sak med behandlingsstatusen \"\u003cstatus>\" beregnes ikke på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`RegelverksoppdateringUtvalg.java:38`; `RegelverksoppdateringKjoringService.java:242-244`","line":153,"rule":"Bare saker som er ferdig behandlet, beregnes på nytt"},{"id":"OPT-BEH-BEH-026","title":"Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen","result":"funnet","marks":{"P":"✓","A":"–","M":"✓"},"bevis":"`KvalifiseringOppdateringService.java:102-113`, V512:172 (utvalget må velges via kompetanseregelverket)","line":176,"rule":"Bare saker som er ferdig behandlet, beregnes på nytt"},{"id":"OPT-BEH-BEH-026","title":"Opptaksforvalteren ser når beregningen er ferdig","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `RegelverksoppdateringKjoringService.java:189, 282-303`, `regelverksoppdatering.graphqls:130-143`; A `RB/RegelverksoppdateringButton.tsx:28-37`, `RB/RegelverksoppdateringStatus.tsx:18-36`","line":188,"rule":"Beregningen kjører i bakgrunnen"},{"id":"OPT-BEH-BEH-026","title":"Opptaksforvalteren kan ikke starte en ny beregning før den forrige er ferdig","result":"funnet","marks":{"P":"✓","A":"✓","M":"–"},"bevis":"P `RegelverksoppdateringService.java:65-72`, `:45-48`, `opptak-subgraph/…/experimental/_shared.graphqls:33-43`; A `RB/RegelverksoppdateringModal.tsx:112-114`","line":201,"rule":"Bare én beregning eller plasstildeling i opptaket om gangen"},{"id":"OPT-BEH-BEH-026","title":"En plasstildeling som er kjørt, endres ikke","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`P/plasstildeling/service/PlasstildelingSkriveService.java:39-50`","line":230,"rule":"Beregningen gjelder fra neste plasstildeling"},{"id":"OPT-BEH-BEH-026","title":"Neste plasstildeling bruker det som er beregnet på nytt","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"`P/plasstildeling/service/KvotesumService.java:24, 247-248`; `RangeringService.java:83`","line":236,"rule":"Beregningen gjelder fra neste plasstildeling"},{"id":"FLY-OPT-AUT-001","title":"Kvotespørsmålet er besvart automatisk","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"lages: `P/saksbehandling/SoknadKvoteOppretterService.java:77-91,150-162` (aktive sak_kvote-rader) · brukes: `P/autosak/KvotesporsmalAlgoritmeService.java:68-81`, `:131-150`, `:209,228` (ER_KVINNE i `P/regelverk/kvoteplassering/KvotesporsmalKjonnsAlgoritme.java:17`, seed `opptak-migrations/.../V297__seed_kvotesporsmal_kjonnsalgoritmer.sql:9,14`), upsert `:230-262`; kjører via `P/saksbehandling/PropageringService.java:174` fra steg 0b/3","line":169,"rule":"Kvotespørsmålene med algoritme besvares automatisk"},{"id":"FLY-OPT-AUT-001","title":"Søkeren er kvalifisert når vitnemålet oppfyller kravelementene","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"lages: `P/regelverk/kvalifisering/AutomatiskKravelementVurderingService.java:170-179` (kravet_er_oppfylt) · brukes: `P/regelverk/kvalifisering/KvalifiseringOppdateringService.java:152-157`, `KravelementResultat.java:40-50`, `KvalifiseringOppdateringService.java:97-100`, `:204` er_kvalifisert; rekkefølge `P/autosak/AutomatiskSaksbehandlingService.java:140` → `:146` → `PropageringService.java:75`","line":181,"rule":"Kvalifiseringen oppdateres når kravelementene er vurdert"},{"id":"FLY-OPT-AUT-001","title":"Den kvalifiserte søkeren plasseres i kvoten grunnlaget er koblet til","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"lages: `KvalifiseringOppdateringService.java:204` · brukes: `P/saksbehandling/SoknadKvoteOppretterService.java:91,278`, `P/regelverk/kvoteplassering/KvoteplasseringGrunnlagService.java:301-307` → `:154` → `:169-170` skal_kvoteplasseres; `PropageringService.java:75-76`","line":193,"rule":"Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt"},{"id":"FLY-OPT-AUT-001","title":"Søkeren plasseres i kvoten når kvotespørsmålet er besvart ja automatisk","result":"funnet","marks":{"P":"✓","A":"–","M":"–"},"bevis":"lages: `KvotesporsmalAlgoritmeService.java:238,243-262` svar, `KvalifiseringOppdateringService.java:204` · brukes: `KvotesporsmalAlgoritmeService.java:165` → `P/saksbehandling/KvotesporsmalSvarService.java:329-355`, `:402-413`, `:357-368`, `:375-389`","line":199,"rule":"Søkeren fordeles på kvoter når kvalifiseringen og kvotesvarene er satt"}],"tilgang":[{"id":"OPT-BEH-BEH-026","sjekk":"tilgang","rolle":"opptaksforvalter ved HK-dir oppretter en beregning","resultat":"stemmer","bevis":"`RegelverksoppdateringService.java:111-116`, `regelverksoppdatering.graphqls:30`, `SakOverviewView.tsx:40-51`"},{"id":"OPT-BEH-BEH-026","sjekk":"organisasjon","rolle":"opptaksforvalter leser antall saker","resultat":"stemmer","bevis":"`regelverksoppdatering.graphqls:7-9`"},{"id":"OPT-BEH-BEH-026","sjekk":"organisasjon","rolle":"saksbehandler ved UiO leser taggen","resultat":"stemmer","bevis":"`RegelverkEndretTagger.java:20-23, 38-55`"},{"id":"OPT-BEH-BEH-026","sjekk":"konsistens","rolle":"jobben endrer sakene","resultat":"stemmer","bevis":"`RegelverksoppdateringKjoringService.java:157-177, 232-253`"}],"regler":[{"id":"OPT-BEH-BEH-026","regel":"Jobben er av som standard (intervall=off), på bare i test og review (30 s)","type":"standardverdi","bevis":"`opptak-subgraph/src/main/resources/application.properties:17-18`, `application-platon-test.properties:27`, `application-platon-review.properties:41`","forslag":"uklart om ønsket"},{"id":"OPT-BEH-BEH-026","regel":"I saker saksbehandleren har behandlet, regnes algoritmepoengene på nytt (poeng uten la_staa); kravet sier at poengene ikke beregnes på nytt der","type":"tilstandsovergang","bevis":"`PropageringService.java:109`, `AlgoritmepoengService.java:60`","forslag":"uklart om ønsket"},{"id":"OPT-BEH-BEH-026","regel":"Poeng satt med laStaa=false beregnes på nytt i automatisk behandlede saker","type":"tilstandsovergang","bevis":"`SettPoengService.java:104`, `PoengService.java:52, 68`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Bestilling som har stått som «Kjører» i over 6 timer, tas opp igjen","type":"grense","bevis":"`RegelverksoppdateringKjoringService.java:99-128`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Jobben kan stoppes og settes tilbake til «Venter», og kjører da alle sakene på nytt","type":"tilstandsovergang","bevis":"`RegelverksoppdateringKjoringService.java:146-154, 205-219`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Minst ett regelverk må velges","type":"validering","bevis":"`RegelverksoppdateringService.java:117-119`, `RegelverksoppdateringModal.tsx:186`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Bare aktive regelverk kan velges i fs-admin","type":"validering","bevis":"`RB/queries.ts:28, 47`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Kjøringen viser antall beregnet på nytt, tagget og feilet, og feilmeldingen","type":"annet","bevis":"`regelverksoppdatering.graphqls:136-143`, `soknadsbehandling.json:39-40`","forslag":"legg til scenario med fs-krav"},{"id":"OPT-BEH-BEH-026","regel":"Knappen vises bare når feature-flagget soknadsbehandling-regelverksoppdatering er på","type":"annet","bevis":"`fs-admin/src/domains/soknadsbehandling/features/SakOverviewView/SakOverviewView.tsx:40-45`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Bare aktive saker og søknadsalternativer som ikke er slettet, er med i utvalget","type":"annet","bevis":"`RegelverksoppdateringUtvalg.java:37, 47`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"En sak som ikke lenger er behandlet når jobben kommer til den, hoppes over og telles ikke","type":"tilstandsovergang","bevis":"`RegelverksoppdateringKjoringService.java:166-171, 242-244`","forslag":"testes i fase 2"},{"id":"OPT-BEH-BEH-026","regel":"Ett intervall av jobben kjører høyst 10 bestillinger","type":"grense","bevis":"`opptak-subgraph/…/app/RegelverksoppdateringPoller.java:34, 57-59`","forslag":"testes i fase 2"},{"id":"FLY-OPT-AUT-001","regel":"Kvalifiseringen krever i tillegg gjeldende GSK-vedtak KVALIFISERT","type":"tilstandsovergang","bevis":"`P/regelverk/kvalifisering/KvalifiseringOppdateringService.java:68,126-134`","forslag":"testes i fase 2"},{"id":"FLY-OPT-AUT-001","regel":"Aktiv sak_kvote finnes bare når søkeren er kvalifisert på grunnlag kvotetypen er koblet til (eller tilbudet mangler kompetanseregelverk); kvoter med kvotespørsmål/aldersgrense som ikke er oppfylt fjernes","type":"tilstandsovergang","bevis":"`P/saksbehandling/SoknadKvoteOppretterService.java:77-106`","forslag":"uklart om ønsket"},{"id":"FLY-OPT-AUT-001","regel":"Mangler søkeren kjønn → IllegalStateException, hele autosak-transaksjonen rulles tilbake, GSK-konklusjonen fra steg 0a står","type":"annet","bevis":"`P/autosak/KvotesporsmalAlgoritmeService.java:352-353`, `PropageringService.java:162-176`, `AutomatiskSaksbehandlingService.java:112`","forslag":"uklart om ønsket"},{"id":"FLY-OPT-AUT-001","regel":"Ukjent algoritmekode: hoppes over, tidligere automatisk svar nullstilles, merknad «Ukjent algoritmekode \u003ckode>»","type":"validering","bevis":"`KvotesporsmalAlgoritmeService.java:209-227,298-305,327-332`","forslag":"testes i fase 2"},{"id":"FLY-OPT-AUT-001","regel":"Svar med la_staa = true røres aldri av automatikken","type":"annet","bevis":"`KvotesporsmalAlgoritmeService.java:262,304,331`","forslag":"uklart om ønsket"},{"id":"FLY-OPT-AUT-001","regel":"Ubesvart kvotespørsmål og ingen nei → skal_kvoteplasseres null","type":"standardverdi","bevis":"`KvotesporsmalSvarService.java:402-413,366-368`","forslag":"testes i fase 2"},{"id":"FLY-OPT-AUT-001","regel":"Kravelementvurderingen overskriver ikke la_staa-rader; ugyldig karakter gir kravet_er_oppfylt null med merknad «Ugyldig karakter for … — vurder manuelt»","type":"annet","bevis":"`AutomatiskKravelementVurderingService.java:160-178`","forslag":"testes i fase 2"},{"id":"FLY-OPT-AUT-001","regel":"Mangler søkeren fødselsdato → IllegalStateException når en aktiv kvote har grunnlag; autosak rulles tilbake","type":"annet","bevis":"`P/regelverk/kvoteplassering/KvoteplasseringGrunnlagService.java:310,348-358`","forslag":"uklart om ønsket"},{"id":"FLY-OPT-AUT-001","regel":"Ny mangeltekst nullstiller status_kan_publiseres og status_lest_av_soker","type":"tilstandsovergang","bevis":"`KvalifiseringOppdateringService.java:104-113,199-216`","forslag":"testes i fase 2"},{"id":"FLY-OPT-AUT-001","regel":"Automatisk merknad på kvoten «Plassert/Ikke plassert i \u003ckvote>: grunnlag \u003ckode> kvalifisert …», bare når verdien endres","type":"annet","bevis":"`KvoteplasseringGrunnlagService.java:171-178,195-224`","forslag":"testes i fase 2"}],"andre":[{"type":"Kravet er bak koden","id":"`@OPT-BEH-BEH-026`","gjelder":"`krav/02 Opptak/13 Søknad og saksbehandling/02 Behandling/beregne_automatisk_på_nytt.feature:17-19`","hva":"Kommentaren sier at ingenting kjører beregningen for mange saker; jobben finnes (`P/saksbehandling/regelverksoppdatering/RegelverksoppdateringKjoringService.java`)"},{"type":"Åpent spørsmål","id":"`@FLY-OPT-AUT-001`","gjelder":"«Saken behandles helautomatisk når søkeren har to identiske vitnemål» (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature:110`)","hva":"Utenfor scope i første fase. Fasen er med for å huske den til neste fase. Ingen krav beskriver når to vitnemål er identiske, eller hvilket av dem saken behandles helautomatisk på. Hvilket krav skal eie regelen: OPT-BEH-BEH-025 eller et nytt krav?"},{"type":"Åpent spørsmål","id":"`@FLY-OPT-AUT-001`","gjelder":"«Søknaden dobbeltrangeres automatisk etter 23/5-regelen» (`krav/_Flyter/10 Opptaksløpet/automatisk_saksbehandling.feature:146`)","hva":"Utenfor scope i første fase. Fasen er med for å huske den til neste fase. Det er ikke beskrevet hvordan den automatiske dobbeltrangeringen (poengberegningen) skal gjøres. I opptakssystemet som finnes i dag, er den en manuell operasjon. Hvilket krav skal eie regelen: OPT-BEH-BEH-018 eller et nytt krav? 23/5-regelen heter 23/6-regelen fra 1. januar 2027 (se OPT-BEH-BEH-022). Hvilket navn skal fasen ha?"},{"type":"Bygger på krav som ikke er levert","id":"`@FLY-OPT-AUT-001`","gjelder":"–","hva":"bygger på `@FLY-OPT-SAK-001` (`@planned`)"},{"type":"Ikke sjekket","id":"–","gjelder":"Åpne MR-er","hva":"glab er ikke installert, så åpne MR-er er ikke listet. Det er lett i brancher med navn som peker på kravene (se `## Åpne MR-er og brancher`)"},{"type":"Ikke valgt i denne kjøringen","id":"–","gjelder":"Avhengighetene","hva":"Avhengighetene er fulgt ett nivå, med status fra taggene, ikke verifisert i koden"},{"type":"Merknad","id":"`@OPT-BEH-BEH-026`","gjelder":"Utvalget «med kravelementet»","hva":"Scenarioene «Søkeren ser den nye mangelteksten …» og «Den automatiske mangelteksten slettes …» bruker utvalget «med kravelementet», som regelen «Opptaksforvalteren velger regelverkene feilen gjaldt» ikke har. Foreslå «med kompetanseregelverket …» med `fs-krav`"},{"type":"Merknad","id":"`@OPT-BEH-BEH-026`","gjelder":"Delvis levert uten spesifikasjon","hva":"Kravet er `@planned`, men 20/24 er funnet. Delvis levert, men ikke i en spesifikasjon — hent det inn med `fs-specify`"},{"type":"Merknad","id":"`@OPT-BEH-BEH-026`","gjelder":"«Den automatiske mangelteksten slettes når søkeren blir kvalifisert etter beregningen»","hva":"Virker bare i saker den automatiske behandlingen har behandlet; i saker saksbehandleren har behandlet, beregnes ikke kravelementet på nytt. `Gitt` bør si det (`fs-krav`)"},{"type":"Merknad","id":"`@OPT-BEH-BEH-026`","gjelder":"Jobben er av som standard","hva":"`regelverksoppdatering.kjoring.intervall=off` (`opptak-subgraph/…/resources/application.properties:17-18`), på bare i test og review"},{"type":"Merknad","id":"`@FLY-OPT-AUT-001`","gjelder":"Fremdriften etter retaggingen","hva":"Fremdriften er oppdatert etter retaggingen i denne kjøringen: fasene «Den automatiske behandlingen setter GSK-konklusjonen der den mangler» og «Vitnemålet som gir GSK, avgjør om saken behandles helautomatisk» er nå levert. Overleveringene i dem er ikke verifisert, fordi fasene ikke var levert da finnerne lette. Verifiser flyten på nytt"},{"type":"Merknad","id":"`@FLY-OPT-AUT-001`","gjelder":"Fasene med `@wont`","hva":"`@wont` holder ikke en del utenfor gating-settet (bare `@draft`, `@deprecated`, `@demo`), så «Saken behandles helautomatisk når søkeren har to identiske vitnemål» er med, som `ikke funnet` (fasen mangler krav)"},{"type":"Merknad","id":"`@FLY-OPT-AUT-001`","gjelder":"«Kvotespørsmålet er besvart automatisk»","hva":"`Gitt` sier bare «saken har grunnlag», men koden svarer bare når søkeren er kvalifisert på grunnlaget (`P/saksbehandling/SoknadKvoteOppretterService.java:90-94,106`). Foreslå at `Gitt` får med kvalifiseringen, med `fs-krav`"},{"type":"Merknad","id":"–","gjelder":"Seks rapporter fra samme kjøring","hva":"De seks scopene i automatisk saksbehandling er verifisert i én kjøring med samme team. Flytene står i rapporten til hvert scope de går gjennom"}],"mr":[],"rapport":"akseptansetest/beregne-automatisk-pa-nytt/verify-2026-11-06-1128.md","laget":"2026-11-06 11:42"}</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('data').textContent);
+  var REPOS = D.repos || [];
+  var state = { repo: 'alle', vis: 'alt' };
+  try { var saved = JSON.parse(localStorage.getItem('verify-view') || '{}'); if (saved.repo) state.repo = saved.repo; if (saved.vis) state.vis = saved.vis; } catch (e) {}
+  if (state.repo !== 'alle' && !REPOS.some(function (r) { return r.k === state.repo; })) state.repo = 'alle';
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var ABBR = Object.keys(D.abbr || {}).sort(function (a, b) { return b.length - a.length; });
+  function full(code) {
+    for (var i = 0; i < ABBR.length; i++) if (code.indexOf(ABBR[i]) === 0) return D.abbr[ABBR[i]] + code.slice(ABBR[i].length);
+    return null;
+  }
+  function md(s) {
+    return esc(s || '').replace(/`([^`]+)`/g, function (_, c) { var f = full(c); return '<code' + (f ? ' title="' + esc(f) + '"' : '') + '>' + c + '</code>'; })
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  var G = { '✓': ['ok', '✓', 'funnet'], '✗': ['miss', '✗', 'mangler'], '~': ['part', '~', 'delvis eller usikker'], '–': ['na', '–', 'ikke relevant'] };
+  function glyph(m, repo) { var g = G[m] || G['–']; return '<span class="g ' + g[0] + '" title="' + esc(repo + ': ' + g[2]) + '" aria-label="' + esc(repo + ': ' + g[2]) + '">' + g[1] + '</span>'; }
+  var RES = { 'funnet': 'ok', 'ikke funnet': 'miss', 'usikker': 'part' };
+  function missing(s, k) { return s.marks && (s.marks[k] === '✗' || s.marks[k] === '~'); }
+  function notFound(s) { return s.result !== 'funnet'; }
+  function inMR(s) { var m = s.bevis.match(/finnes i MR !(\d+)/); return m ? m[1] : null; }
+  function shownRepos() { return state.repo === 'alle' ? REPOS : REPOS.filter(function (r) { return r.k === state.repo; }); }
+  function visible(s) {
+    if (state.vis === 'alt') return true;
+    if (!REPOS.length) return notFound(s);
+    return shownRepos().some(function (r) { return missing(s, r.k); });
+  }
+  function hideSection(id) {
+    var sec = document.getElementById(id); if (sec) sec.hidden = true;
+    var a = document.querySelector('.links a[data-sec="' + id + '"]'); if (a) a.hidden = true;
+  }
+  var kravTitle = {}; D.krav.forEach(function (k) { kravTitle[k.id] = k.title; });
+
+  // Header
+  var sc = D.scenarioer, total = sc.length;
+  var found = sc.filter(function (s) { return s.result === 'funnet'; }).length;
+  var missBy = {}; REPOS.forEach(function (r) { missBy[r.k] = sc.filter(function (s) { return missing(s, r.k); }).length; });
+  var avvik = D.tilgang.filter(function (t) { return t.resultat !== 'stemmer'; });
+  document.title = D.title;
+  document.getElementById('eyebrow').textContent = 'Verifisering mot koden · ' + (D.meta['Dato'] || '');
+  document.getElementById('title').textContent = D.title;
+  document.getElementById('metaline').innerHTML = [['Krav', 'Krav'], ['Kode', 'Kode'], ['Kontroll', 'Kontroll']]
+    .filter(function (x) { return D.meta[x[0]]; })
+    .map(function (x) { return '<span><b>' + x[1] + '</b> ' + md(D.meta[x[0]]) + '</span>'; }).join('');
+  var leveres = D.krav.filter(function (k) { return k.total > 0 && k.found === k.total; }).length;
+  var v = document.getElementById('verdict');
+  if (total > 0 && leveres === D.krav.length) {
+    v.className = 'verdict good';
+    v.innerHTML = '<span class="dot"></span><div><h2>Alle kravene er funnet i koden</h2><p>Alle ' + total + ' scenarioene er funnet' + (REPOS.length > 1 ? ' i alle repoene de gjelder' : '') + '. Se forslaget i rapporten for hva som kan bli <code>@implemented</code>.</p></div>';
+  } else {
+    var text = found + ' av ' + total + ' scenarioer er funnet' + (REPOS.length > 1 ? ' i alle repoene de gjelder' : '') + '.';
+    var ranked = REPOS.filter(function (r) { return missBy[r.k]; }).sort(function (a, b) { return missBy[b.k] - missBy[a.k]; });
+    if (ranked.length) text += ' Mest gjenstår i ' + ranked[0].name + ' (' + missBy[ranked[0].k] + ' scenarioer)' +
+      (ranked.slice(1).length ? ', og ' + ranked.slice(1).map(function (r) { return missBy[r.k] + ' mangler i ' + r.name; }).join(', ') : '') + '.';
+    v.innerHTML = '<span class="dot"></span><div><h2>' + (leveres === 0 ? 'Ingen av kravene er funnet i sin helhet' : leveres + ' av ' + D.krav.length + ' krav er funnet i sin helhet') + '</h2><p>' + text + '</p></div>';
+  }
+  var stats = [['Scenarioer funnet', found + ' <small>/ ' + total + '</small>', found === total ? '' : 'bad']];
+  REPOS.forEach(function (r) { stats.push(['Mangler i ' + r.name, missBy[r.k], missBy[r.k] ? 'bad' : '']); });
+  if (D.tilgang.length) stats.push(['Tilgang og data med avvik', avvik.length + ' <small>/ ' + D.tilgang.length + '</small>', avvik.length ? 'warn' : '']);
+  stats.push(['Regler uten scenario', D.regler.length, D.regler.length ? 'warn' : '']);
+  if (D.mr.length) stats.push(['Åpne MR-er', D.mr.length, '']);
+  document.getElementById('stats').innerHTML = stats.map(function (x) { return '<div class="stat ' + x[2] + '"><span class="n">' + x[1] + '</span><span class="l">' + x[0] + '</span></div>'; }).join('');
+
+  // Filters
+  var fr = document.getElementById('f-repo');
+  if (REPOS.length > 1) {
+    fr.innerHTML = [['alle', REPOS.length === 2 ? 'Begge repoene' : 'Alle repoene']].concat(REPOS.map(function (r) { return [r.k, r.name]; }))
+      .map(function (x) { return '<button id="repo-' + x[0] + '" data-v="' + x[0] + '" aria-pressed="false">' + x[1] + '</button>'; }).join('');
+  } else fr.hidden = true;
+  function bindSeg(id, key) {
+    document.getElementById(id).addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      state[key] = b.dataset.v;
+      try { localStorage.setItem('verify-view', JSON.stringify(state)); } catch (e2) {}
+      render();
+    });
+  }
+  bindSeg('f-repo', 'repo'); bindSeg('f-vis', 'vis');
+
+  var open = {};
+  function renderKrav() {
+    var reps = shownRepos();
+    document.getElementById('krav-count').textContent = D.krav.length + ' krav · ' + total + ' scenarioer';
+    document.getElementById('krav-list').innerHTML = D.krav.map(function (k) {
+      var list = sc.filter(function (s) { return s.id === k.id; });
+      var pct = k.total ? Math.round(100 * k.found / k.total) : 0;
+      var head = '<div class="kravhead"><div class="row1"><h3>' + esc(k.title) + '</h3><span class="kid">@' + esc(k.id) + (k.file ? ' · ' + esc(k.file) : '') + '</span></div>' +
+        '<div class="progress"><span><b>' + k.found + '/' + k.total + '</b> funnet</span><span class="bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span>' +
+        REPOS.map(function (r) {
+          var rel = list.filter(function (s) { return s.marks && s.marks[r.k] && s.marks[r.k] !== '–'; }).length;
+          if (!rel) return '';
+          var n = list.filter(function (s) { return missing(s, r.k); }).length;
+          return '<span class="repomiss"><span class="chip ' + (n ? 'miss' : 'ok') + '">' + r.name + ' mangler <b>' + n + '</b></span></span>';
+        }).join('') +
+        '</div>' + (k.gjenstar ? '<p class="gjen">' + md(k.gjenstar) + '</p>' : '') + '</div>';
+      var rows = '', lastRule = null, shown = 0, cols = 2 + reps.length;
+      list.forEach(function (s) {
+        if (!visible(s)) return;
+        shown++;
+        if (s.rule && s.rule !== lastRule) { rows += '<tr class="rule"><td colspan="' + cols + '">Regel: ' + esc(s.rule) + '</td></tr>'; lastRule = s.rule; }
+        var key = k.id + ':' + (s.line || s.title), mr = inMR(s), isOpen = !!open[key];
+        rows += '<tr class="sc" tabindex="0" data-key="' + esc(key) + '" aria-expanded="' + isOpen + '"><td><span class="caret">▸</span><span class="sctitle">' + esc(s.title) + '</span>' + (s.line ? '<span class="scline">:' + s.line + '</span>' : '') +
+          (mr ? '<span class="chip info mrtag">i MR !' + mr + '</span>' : '') + '</td>' +
+          reps.map(function (r) { return '<td class="c">' + glyph(s.marks ? s.marks[r.k] : '–', r.name) + '</td>'; }).join('') +
+          '<td class="c"><span class="chip ' + (RES[s.result] || 'na') + '">' + esc(s.result) + '</span></td></tr>';
+        if (isOpen) rows += '<tr class="detail"><td colspan="' + cols + '">' + md(s.bevis) + '</td></tr>';
+      });
+      var table = shown ? '<div class="scroll"><table class="matrix"><thead><tr><th>Scenario</th>' + reps.map(function (r) { return '<th class="c" title="' + r.name + '">' + r.k + '</th>'; }).join('') + '<th class="c">Resultat</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+        : '<p class="empty" style="padding:14px 18px;margin:0">Ingenting mangler i dette kravet' + (REPOS.length > 1 ? ' for repoet som er valgt' : '') + '.</p>';
+      return '<article class="krav">' + head + table + '</article>';
+    }).join('');
+  }
+  document.getElementById('krav-list').addEventListener('click', function (e) {
+    var tr = e.target.closest('tr.sc'); if (!tr) return;
+    open[tr.dataset.key] = !open[tr.dataset.key]; renderKrav();
+  });
+  document.getElementById('krav-list').addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr.sc')) {
+      e.preventDefault(); var key = e.target.dataset.key; open[key] = !open[key]; renderKrav();
+      var el = document.querySelector('tr.sc[data-key="' + key.replace(/"/g, '\\"') + '"]'); if (el) el.focus();
+    }
+  });
+
+  function renderRepos() {
+    if (!REPOS.length) return;
+    document.getElementById('repo-list').innerHTML = shownRepos().map(function (r) {
+      var list = sc.filter(function (s) { return missing(s, r.k); });
+      var body = list.length ? D.krav.map(function (k) {
+        var items = list.filter(function (s) { return s.id === k.id; });
+        if (!items.length) return '';
+        return '<div class="grp">' + esc(k.title) + '</div><ul>' + items.map(function (s) {
+          return '<li>' + glyph(s.marks[r.k], r.name) + '<span>' + esc(s.title) + (s.marks[r.k] === '~' ? ' <span class="chip part">delvis</span>' : '') + '</span></li>';
+        }).join('') + '</ul>';
+      }).join('') : '<p class="empty">Ingenting mangler.</p>';
+      return '<div class="repo"><h3><span class="letter">' + r.k + '</span>' + r.name + ' <span class="chip ' + (list.length ? 'miss' : 'ok') + '">' + list.length + ' scenarioer</span></h3><p class="sub">' + esc(r.what) + '</p>' + body + '</div>';
+    }).join('');
+  }
+
+  function renderTilgang() {
+    if (!D.tilgang.length) return hideSection('tilgang');
+    var ok = D.tilgang.filter(function (t) { return t.resultat === 'stemmer'; });
+    document.getElementById('tilgang-count').textContent = avvik.length + ' avvik · ' + ok.length + ' stemmer';
+    var cls = { 'avviker': 'miss', 'ikke funnet': 'miss', 'usikker': 'part', 'ikke beskrevet': 'part' };
+    document.getElementById('tilgang-avvik').innerHTML = avvik.map(function (t) {
+      return '<div class="find"><div class="h"><span class="chip ' + (cls[t.resultat] || 'part') + '">' + esc(t.resultat) + '</span><strong>' + esc(cap(t.rolle)) + '</strong><span class="kid">' + esc(t.sjekk) + ' · ' + esc(kravTitle[t.id] || t.id) + '</span></div><div class="b">' + md(t.bevis) + '</div></div>';
+    }).join('');
+    var det = document.getElementById('tilgang-ok');
+    if (!ok.length) { det.hidden = true; return; }
+    det.innerHTML = '<summary>' + ok.length + ' sjekker stemmer</summary><div class="in">' + ok.map(function (t) {
+      return '<div class="okrow">' + glyph('✓', 'stemmer') + '<span>' + esc(cap(t.rolle)) + ' <span class="kid">' + esc(t.sjekk) + ' · ' + esc(kravTitle[t.id] || t.id) + '</span></span></div>';
+    }).join('') + '</div>';
+  }
+
+  function group(cls, title, text, items, row) {
+    if (!items.length) return '';
+    return '<div class="rgroup ' + cls + '"><div class="rghead"><h3>' + esc(title) + ' <span class="rgn">' + items.length + '</span></h3>' + (text ? '<p>' + text + '</p>' : '') + '</div><ol class="rlist">' + items.map(row).join('') + '</ol></div>';
+  }
+
+  function renderRegler() {
+    if (!D.regler.length) return hideSection('regler');
+    document.getElementById('regler-count').textContent = D.regler.length + ' regler';
+    var groups = [
+      ['decide', 'Må avklares i teamet', 'Er dette ønsket atferd, eller bare slik koden er? Svaret avgjør om kravet eller koden skal endres.', function (f) { return /uklart/.test(f); }],
+      ['krav', 'Bør bli et scenario i kravet', 'Regelen er ønsket, men står ikke i kravet. Legg den til med fs-krav.', function (f) { return /fs-krav/.test(f); }],
+      ['test', 'Testes i fase 2', 'Regelen er grei som den er. Den agentiske testen tar den med.', function (f) { return /fase 2/.test(f); }],
+      ['info', 'Dekkes av et utkast', 'Et scenario som er utkast (@draft), dekker regelen.', function (f) { return /draft/.test(f); }]
+    ];
+    var used = {};
+    var html = groups.map(function (g) {
+      var items = D.regler.filter(function (r, i) { if (!used[i] && g[3](r.forslag)) { used[i] = 1; return true; } return false; });
+      return group(g[0], g[1], g[2], items, reglerRow);
+    }).join('');
+    var rest = D.regler.filter(function (r, i) { return !used[i]; });
+    html += group('info', 'Annet forslag', '', rest, reglerRow);
+    document.getElementById('regler-cols').innerHTML = html;
+  }
+  function reglerRow(r) {
+    return '<li><div class="rmain">' + md(r.regel) + '</div><div class="rmeta"><span class="chip na">' + esc(r.type) + '</span><span title="@' + esc(r.id) + '">' + esc(kravTitle[r.id] || r.id) + '</span><span class="rbev">' + md(r.bevis) + '</span></div></li>';
+  }
+
+  var FUNN = {
+    'Kravet er bak koden': ['decide', 'Koden gjør noe kravet ikke sier. Avgjør om kravet skal si det, eller om koden skal endres.'],
+    'Åpent spørsmål': ['decide', 'Spørsmål i kravene som ikke er besvart. De stopper ikke leveransen.'],
+    'Bygger på krav som ikke er levert': ['decide', 'Kravet kan ikke leveres før kravet det bygger på.'],
+    'Levert, men ikke funnet i koden': ['bad', 'Kravet er levert, men koden ble ikke funnet. Sjekk om noe er fjernet.'],
+    'Ikke sjekket': ['bad', 'Det som ikke kunne sjekkes i denne kjøringen.'],
+    'Kontrollen endret': ['info', 'Det kontrollen rettet i resultatet fra den første letingen. Se over at rettelsene stemmer.'],
+    'Ikke valgt i denne kjøringen': ['info', 'Krav som ikke var med i omfanget.'],
+    'Krav utenfor scope': ['info', 'Krav som ble funnet, men som ikke hører til scopet.'],
+    'Merknad': ['info', 'Andre merknader fra verifiseringen.']
+  };
+  function renderFunn() {
+    if (!D.andre.length) return hideSection('funn');
+    document.getElementById('funn-count').textContent = D.andre.length + ' funn';
+    var order = Object.keys(FUNN);
+    var types = [];
+    D.andre.forEach(function (a) { if (types.indexOf(a.type) < 0) types.push(a.type); });
+    types.sort(function (a, b) { var x = order.indexOf(a), y = order.indexOf(b); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y); });
+    document.getElementById('funn-cols').innerHTML = types.map(function (t) {
+      var ty = FUNN[t] || ['info', ''];
+      return group(ty[0], t, ty[1], D.andre.filter(function (a) { return a.type === t; }), function (a) {
+        var ids = (a.id.match(/@[A-ZÆØÅ0-9-]+/g) || []).map(function (i) { var id = i.slice(1); return '<span title="' + esc(i) + '">' + esc(kravTitle[id] || id) + '</span>'; }).join('<span aria-hidden="true">·</span>');
+        return '<li><div class="rmain">' + md(cap(a.gjelder)) + '</div><div class="rtext">' + md(a.hva) + '</div>' + (ids ? '<div class="rmeta">' + ids + '</div>' : '') + '</li>';
+      });
+    }).join('');
+  }
+
+  function renderMR() {
+    if (!D.mr.length) return hideSection('mr');
+    document.getElementById('mr-list').innerHTML = D.mr.map(function (m) {
+      return '<div class="find"><div class="h"><span class="chip info">' + esc(m.status) + '</span><strong>' + md(m.mr) + '</strong><span class="kid">' + md(m.repo) + '</span></div>' +
+        '<div class="b">Ser ut til å levere ' + md(m.krav) + ' · funnet der: ' + md(m.funnet) + '</div>' + (m.merknad ? '<div class="b">' + md(m.merknad) + '</div>' : '') + '</div>';
+    }).join('');
+  }
+
+  function renderMeta() {
+    var keys = ['Dato', 'Krav', 'Spec', 'Kode', 'Repoer', 'Åpne MR-er', 'Omfang', 'Avhengigheter', 'Kontroll', 'Team', 'Skjermbilder', 'Confluence', 'Menneskelig kontroll'];
+    document.getElementById('meta').innerHTML = keys.filter(function (k) { return D.meta[k]; }).map(function (k) {
+      var val = D.meta[k];
+      if (k === 'Menneskelig kontroll' && /Fylles ut/.test(val)) val = '<span class="warnbox">Ikke fylt ut ennå.</span> En annen person enn den som kjørte verifiseringen, skal lese rapporten og bevisene, og skrive navn og dato i rapportfila.';
+      else val = md(val);
+      return '<dt>' + esc(k) + '</dt><dd>' + val + '</dd>';
+    }).join('') + '<dt>Rapport</dt><dd><code>' + esc(D.rapport) + '</code></dd><dt>Laget</dt><dd>' + esc(D.laget) + '</dd>';
+  }
+
+  function render() {
+    [['f-repo', 'repo'], ['f-vis', 'vis']].forEach(function (x) {
+      document.querySelectorAll('#' + x[0] + ' button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === state[x[1]])); });
+    });
+    renderKrav(); renderRepos();
+  }
+  if (!REPOS.length) hideSection('repo');
+  render(); renderTilgang(); renderRegler(); renderFunn(); renderMR(); renderMeta();
+})();
+</script>

@@ -11,10 +11,12 @@
 # (legge_inn_vitnemål_manuelt.feature, @OPT-BEH-BEH-037). Ingen av dem kan
 # kuttes.
 #
-# Bygger på L2 og L3. Reglene for beregning og lagring fra L2 gjelder også
-# her (avklart 03.11.2026): poengene beregnes når saksbehandleren velger det,
-# en endring lagres først når poengene er beregnet uten feil, og endringer
-# hører til vitnemålet de er gjort for. Regelen for leserettighet står i
+# Bygger på L2 og L3. Reglene for beregning og lagring i L2 («Poengene
+# beregnes og lagres når saksbehandleren bruker dem») gjelder også her
+# (avklart 03.11.2026, endret 11.11.2026): saksbehandleren beregner poengene
+# uten å lagre, og grunnlaget kontrolleres, poengene beregnes og alt lagres
+# når saksbehandleren velger å bruke poengene. Endringer hører til
+# vitnemålet de er gjort for. Regelen for leserettighet står i
 # vitnemålsbehandling.md.
 #
 # Feature-ID-en er endret fra @OPT-BEH-BEH-008 til @OPT-BEH-BEH-023, fordi
@@ -27,11 +29,13 @@ Egenskap: Endre fag i grunnlaget
   slik at søkere med kompetansebevis, forbedringer eller fritak blir riktig poengberegnet.
 
   Ikke alt grunnlaget står riktig på det elektroniske vitnemålet. Noen fag
-  står på et kompetansebevis, er forbedret, er ført som fritatt, eller
-  overlapper med fag på et annet dokument. Saksbehandleren kan legge til og
-  endre slike fag, men bare slik en regel tillater. Saksbehandleren kan ikke
-  sette sammen et vitnemål søkeren ikke har. Fag som bare finnes i opplastet
-  dokumentasjon, legges inn i L4b (legge_inn_vitnemål_manuelt.feature).
+  står på et kompetansebevis, er forbedret eller er ført som fritatt.
+  Saksbehandleren kan legge til og endre slike fag, men bare slik en regel
+  tillater. Saksbehandleren kan ikke sette sammen et vitnemål søkeren ikke
+  har. Fag som bare finnes i opplastet dokumentasjon, legges inn i L4b
+  (legge_inn_vitnemål_manuelt.feature). Fag på et yrkesfaglig vitnemål som
+  overlapper med påbygging til generell studiekompetanse, håndteres i L4c
+  (behandle_yrkesfaglig_vitnemål_med_påbygging.feature).
 
   Bakgrunn:
     Gitt jeg er innlogget i løsningen
@@ -55,37 +59,31 @@ Egenskap: Endre fag i grunnlaget
     Bakgrunn:
       Gitt jeg har rettighet til å se og endre søknadsbehandling ved organisasjonen som behandler saken
 
-    Scenario: Stryke et fag som overlapper med påbygging på kompetansebevis
-      Gitt søkeren har et yrkesfaglig vitnemål
-      Og jeg har lagt til fagene fra påbyggingen til generell studiekompetanse under tilleggsfag
-      Og jeg har vurdert at et fag på vitnemålet overlapper med et fag i påbyggingen
-      Når jeg stryker faget på vitnemålet
-      Så inngår faget på vitnemålet ikke i beregningen
-      Og faget fra påbyggingen inngår i stedet
-      # AVKLART 07.10.2026: hvilke fag som overlapper, er saksbehandlerens
-      # vurdering, fordi reglene har mange unntak. Hovedreglene: norsk
-      # strykes på vitnemålet og hentes fra kompetansebeviset. Matematikk og
-      # naturfag strykes fra vitnemålet bare når faget er ført med henholdsvis
-      # 224 og 140 timer samlet på kompetansebeviset.
-      #
-      # AVKLART 03.11.2026: påbyggingen er et opplastet kompetansebevis, og
-      # fagene fra den legges til under tilleggsfag. Scenarioet gjelder fag
-      # med ulik fagkode som overlapper, f.eks. norsk på det yrkesfaglige
-      # vitnemålet og norsk i påbyggingen. Et fag med samme fagkode er en
-      # forbedring («Et tilleggsfag kan ikke ha samme fagkode som et fag på
-      # vitnemålet»).
+    # «Stryke et fag som overlapper med påbygging på kompetansebevis» er flyttet
+    # til L4c (behandle_yrkesfaglig_vitnemål_med_påbygging.feature,
+    # @OPT-BEH-BEH-046) 12.11.2026, i gjennomgangen med domeneekspertene.
+    # Scenarioet ble samme dag endret til «Fag som overlapper med påbygging,
+    # legges inn som forbedring», men det viste seg å være feil, og endringen
+    # er rullet tilbake.
 
     Scenario: Legge inn en forbedring på et fag på vitnemålet
       Gitt jeg har lagt et vitnemål til grunn
       Og søkeren har dokumentert en forbedring av et fag på vitnemålet
       Når jeg legger inn den forbedrede karakteren på faget i vitnemålet
-      Og jeg velger å beregne poengene
       Så teller den forbedrede karakteren i stedet for den tidligere karakteren
       # AVKLART 03.11.2026: forbedringen er ofte dokumentert på et
       # kompetansebevis som søkeren har lastet opp. Saksbehandleren legger den
       # inn på faget i vitnemålet. At forbedringer ikke teller i kvoten for
       # førstegangsvitnemål, står i L3. Erstatter «Legge til en forbedring fra
       # et kompetansebevis».
+
+    Scenario: Forbedringen gjelder selv om den gir lavere poengsum
+      Gitt jeg har lagt et vitnemål til grunn
+      Og søkeren har dokumentert en ny karakter i et fag på vitnemålet som er lavere enn den tidligere karakteren
+      Når jeg legger inn den nye karakteren som forbedring på faget
+      Så teller den nye karakteren i stedet for den tidligere karakteren
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): en forbedring
+      # gjelder alltid, også når den gir søkeren lavere poengsum.
 
     Scenario: Legge til et nytt fag under tilleggsfag
       Gitt jeg har lagt et vitnemål til grunn
@@ -99,6 +97,12 @@ Egenskap: Endre fag i grunnlaget
       #
       # AVKLART 03.11.2026: alle nye fag kan legges til, også når faget verken
       # dekker spesielle opptakskrav eller gir språk- eller realfagspoeng.
+      #
+      # AVKLART 04.11.2026: tilleggsfaget kan være fra en annen reform enn
+      # vitnemålet. FS-klienten krever samme reform («Faget må ha samme
+      # reformkode som vitnemålet», teknisk beskrivelse av
+      # vitnemålsbehandling, G. M. Vangen), men det videreføres ikke.
+      # Saksbehandleren vurderer selv om faget kan brukes.
       # Saksbehandleren avgjør om tilleggsfaget skal være med i beregningen,
       # ved å velge det per poengvariant. Scenarioet «Nytt fag på
       # kompetansebevis som ikke kan legges til» er derfor fjernet.
@@ -115,50 +119,45 @@ Egenskap: Endre fag i grunnlaget
       # forbedring på et fag på vitnemålet»). Teksten på beskjeden hører i
       # endre_fag_i_grunnlaget.design.md.
 
-    @draft @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal saksbehandleren kunne hente et fag fra søkerens andre
-    #   elektroniske vitnemål, i stedet for å legge det inn for hånd?
-    #   FS-klienten kan det (tillegg fra «Vg.dok fag», uten annullerte
-    #   vitnemål, og med et valg for å skjule fag med samme resultat).
-    #   Kilde: teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen, lest
-    #   03.11.2026. Ikke avklart med teamet.
+    @could
     Scenario: Hente et tilleggsfag fra et annet elektronisk vitnemål
       Gitt jeg har lagt et vitnemål til grunn
       Og søkeren har et annet elektronisk vitnemål som ikke er annullert
       Når jeg velger et fag fra det andre vitnemålet som tilleggsfag
       Så er faget et tilleggsfag på vitnemålet med karakterene fra det andre vitnemålet
       Og tilleggsfaget kan velges per poengvariant
+      # AVKLART 04.11.2026: tilleggsfag legges inn manuelt («Legge til et nytt
+      # fag under tilleggsfag»). Å hente faget med karakterene fra søkerens
+      # andre elektroniske vitnemål er et ønske med prioritet could, og ikke
+      # nødvendig for å levere L4a. Forslaget kom fra FS-klienten, som henter
+      # tillegg fra «Vg.dok fag», uten annullerte vitnemål (teknisk beskrivelse
+      # av vitnemålsbehandling, G. M. Vangen).
 
-    @draft @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Må et tilleggsfag være fra samme reform som vitnemålet, slik
-    #   FS-klienten krever («Faget må ha samme reformkode som vitnemålet»)?
-    # - Skal fag fra en tidligere reform kunne konverteres til et fag i
-    #   reformen vitnemålet er fra? FS-klienten har en fagkonverterer for
-    #   dette (R94 til Kunnskapsløftet). Også åpent i den tekniske
-    #   beskrivelsen. Spørsmålet gjelder også L4b («Velge et utgått fag»).
-    #   Kilde: teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen, lest
-    #   03.11.2026.
-    Scenario: Et tilleggsfag må være fra samme reform som vitnemålet
-      Gitt jeg har lagt et vitnemål fra Kunnskapsløftet til grunn
-      Når jeg legger til et fag fra R94 som tilleggsfag
-      Så ser jeg at faget må være fra samme reform som vitnemålet
-      Og tilleggsfaget er ikke lagt til
-
-    @draft @openquestion
-    # ÅPNE SPØRSMÅL:
-    # - Skal saksbehandleren advares når en forbedring legges inn på et
-    #   grunnlag som ikke tillater forbedringer? FS-klienten gir advarselen
-    #   «Søker har ikke grunnlag som tillater forbedringer», men stopper ikke
-    #   (teknisk beskrivelse av vitnemålsbehandling, G. M. Vangen, lest
-    #   03.11.2026). Henger sammen med kvoteregelen i L3 («Tilleggsfag kan
-    #   ikke velges i poengvarianten for førstegangsvitnemål»).
-    Scenario: Advarsel når grunnlaget ikke tillater forbedringer
+    Scenariomal: Advarsel om grunnlag uten forbedringer når jeg <handling>
       Gitt søkeren har bare grunnlag som ikke tillater forbedringer
-      Når jeg legger inn en forbedring på et fag på vitnemålet
+      Og jeg har lagt inn en forbedring på et fag på vitnemålet
+      Når jeg velger å <handling>
       Så ser jeg at søkeren ikke har grunnlag som tillater forbedringer
-      Men forbedringen kan legges inn
+      Men <resultat>
+
+      Eksempler:
+        | handling         | resultat                                           |
+        | beregne poengene | poengene er beregnet med forbedringen              |
+        | bruke poengene   | grunnlaget og poengene er lagret med forbedringen  |
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): advarselen
+      # kommer når saksbehandleren beregner og bruker poengene, ikke når
+      # forbedringen legges inn, som varselet om forbedringer i kvoten for
+      # førstegangsvitnemål i L3. Het «Advarsel når grunnlaget ikke tillater
+      # forbedringer».
+      #
+      # AVKLART 04.11.2026: saksbehandleren advares, men advarselen stopper
+      # ingenting. Den sier at forbedringen ikke får betydning for søkeren.
+      # Forslaget kom fra FS-klienten, som gir advarselen «Søker har ikke
+      # grunnlag som tillater forbedringer» (teknisk beskrivelse av
+      # vitnemålsbehandling, G. M. Vangen). Henger sammen med kvoteregelen i
+      # L3 («Varsel om forbedringer i poengvarianten for førstegangsvitnemål
+      # når jeg <handling>»). Teksten hører i
+      # endre_fag_i_grunnlaget.design.md.
 
     Scenario: Privatisteksamen erstatter både standpunkt- og eksamenskarakter
       Gitt søkeren har tatt et fag på nytt som privatist
@@ -182,30 +181,18 @@ Egenskap: Endre fag i grunnlaget
       # karakteren inn på fritaksfaget, og vurderer selv hva fritaket bygger
       # på. Den opprinnelige karakteren må være dokumentert (Samordna opptaks
       # wiki, «Poengberegning norske søkere»).
+      #
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): bygger fritaket
+      # på et fag tatt i utlandet, skal faget ikke ha karakter og ikke være med
+      # i beregningen. Det er saksbehandlerens vurdering, og løsningen sperrer
+      # ikke. Scenarioet «Fag fritatt på grunnlag av fag tatt i utlandet får
+      # ikke karakter» er fjernet.
 
-    Scenario: Fag fritatt på grunnlag av fag tatt i utlandet får ikke karakter
-      Gitt et fag på vitnemålet er ført som fritatt
-      Og jeg har vurdert at fritaket bygger på et fag tatt i utlandet
-      Når jeg ser faget i grunnlaget
-      Så ser jeg ikke muligheten til å legge inn karakter på faget
-      # Utenlandske karakterer konverteres ikke i disse tilfellene, og faget
-      # skal ikke være med i beregningen (samme kilde).
-
-    Scenario: Markere at et fag med forsøkskode gir realfagspoeng
-      Gitt vitnemålet har et R94-fag med fagkode som begynner på «FS»
-      Og jeg har vurdert at faget gir realfagspoeng
-      Når jeg markerer at faget gir realfagspoeng
-      Og jeg velger å beregne poengene
-      Så gir faget realfagspoeng
-      # AVKLART 07.10.2026: kontrollmotoren gir ikke realfagspoeng for
-      # forsøkskoder i R94 automatisk (Samordna opptaks wiki,
-      # «Realfagspoeng»). Saksbehandleren retter det i vitnemålsbehandleren.
-
-    Scenariomal: Karakter som ikke er et heltall fra 1 til 6, kan ikke legges til
-      Gitt jeg legger til eller endrer en karakter i grunnlaget
+    Scenariomal: Karakter på et fag på vitnemålet som ikke er et heltall fra 1 til 6, kan ikke legges inn
+      Gitt jeg legger inn en forbedring eller en opprinnelig karakter på et fag på vitnemålet
       Når jeg legger inn <karakter> som karakter
       Så ser jeg at karakteren må være et heltall fra 1 til 6
-      Og jeg kan ikke beregne poengene før karakteren er rettet
+      Og jeg kan ikke bruke poengene før karakteren er rettet
 
       Eksempler:
         | karakter |
@@ -214,8 +201,55 @@ Egenskap: Endre fag i grunnlaget
         | 4,5      |
         | B        |
       # AVKLART 03.11.2026: bare heltall fra 1 til 6 kan legges inn, også når
-      # saksbehandleren legger til en forbedring eller et nytt fag fra et
-      # kompetansebevis, en ny karakter fra privatisteksamen, eller den
-      # opprinnelige karakteren på et fag som er fritatt. Saksbehandleren
-      # regner om utenlandske karakterer selv. Samme regel som i L4b
-      # («Karakterer legges inn som heltall fra 1 til 6»).
+      # saksbehandleren legger inn en forbedring, en ny karakter fra
+      # privatisteksamen, eller den opprinnelige karakteren på et fag som er
+      # fritatt. Saksbehandleren regner om utenlandske karakterer selv.
+      #
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): regelen gjelder
+      # fagene på vitnemålet. Tilleggsfag kan ha karakter med desimaler, og kan
+      # legges inn som bestått (scenarioene under). Het «Karakter som ikke er et
+      # heltall fra 1 til 6, kan ikke legges til».
+
+    Scenario: Legge inn en karakter med desimaler på et tilleggsfag
+      Gitt jeg legger til et tilleggsfag
+      Når jeg legger inn 4,57 som karakter
+      Så har tilleggsfaget karakteren 4,57
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): et tilleggsfag
+      # kan ha karakter fra 1,00 til 6,00, med høyst to desimaler.
+
+    Scenariomal: Karakter på et tilleggsfag som ikke er fra 1,00 til 6,00 med høyst to desimaler, kan ikke legges inn
+      Gitt jeg legger til et tilleggsfag
+      Når jeg legger inn <karakter> som karakter
+      Så ser jeg at karakteren må være fra 1,00 til 6,00, med høyst to desimaler
+      Og jeg kan ikke bruke poengene før karakteren er rettet
+
+      Eksempler:
+        | karakter |
+        | 0,99     |
+        | 6,01     |
+        | 4,567    |
+        | B        |
+      # Grenseverdiene 1,00 og 6,00 er gyldige. Teksten på beskjeden hører i
+      # endre_fag_i_grunnlaget.design.md.
+
+    Scenario: Legge inn et tilleggsfag som er bestått uten tallkarakter
+      Gitt søkeren har dokumentert et tilleggsfag som er bestått uten tallkarakter
+      Når jeg legger til tilleggsfaget som bestått
+      Så inngår tilleggsfaget ikke i snittet
+      Men tilleggsfaget teller i omfanget
+      Og tilleggsfaget kan inngå i vurderingen av kravelementene
+      # AVKLART 12.11.2026 (gjennomgang med domeneekspertene): som i L4b
+      # («Legge inn et fag som er bestått uten tallkarakter»).
+
+  # Regelen «Saksbehandleren kan overstyre kontrollmotoren for et fag» (avklart
+  # 04.11.2026) er fjernet 12.11.2026 (gjennomgang med domeneekspertene).
+  # Den handlet om spesielle opptakskrav, som er utenfor vitnemålsbehandleren,
+  # og håndteres på andre måter. Den er ikke flyttet til et annet krav.
+  # Realfagspoeng for forsøkskoder i R94, som kontrollmotoren ikke gir
+  # automatisk, kan saksbehandleren legge inn selv på poengvarianten (L3,
+  # «Legge inn <poengtype> selv på en poengvariant»).
+
+  # Regelen «Saksbehandleren kan ta et fag ut av kontrollene» (flyttet hit fra
+  # @OPT-BEH-BEH-027 10.11.2026, @draft) er fjernet 12.11.2026 (gjennomgang med
+  # domeneekspertene). Den er dekket av fagvalget i L3
+  # (velge_fag_per_poengvariant.feature, @OPT-BEH-BEH-022).

@@ -12,20 +12,20 @@
 # elektroniske vitnemål», 4609146881 «Forretningsregler – Poeng». GitHub #199. I FS-klienten
 # beregner «Godkjenn» i vitnemålsrammen og rutinen FS158.001 poengene, og manuell endring av
 # poeng setter «la stå».
-@OPT-BEH-BEH-018 @must @in-progress @scope-automatisk-grunnlag-og-poeng @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032
+@OPT-BEH-BEH-018 @must @in-progress @scope-automatisk-grunnlag-og-poeng @depends-on-OPT-BEH-BEH-015 @depends-on-OPT-BEH-BEH-019 @ref-OPT-BEH-BEH-008 @ref-OPT-BEH-BEH-032 @ref-OPT-BEH-BEH-035
 Egenskap: Automatisk beregning av vitnemålspoeng
   Som saksbehandler
   ønsker jeg at karakterpoeng, realfagspoeng, språkpoeng og skolepoeng beregnes automatisk fra søkerens vitnemål
   slik at jeg bare trenger å behandle poengene der grunnlaget ikke er entydig.
 
   Beregningen bruker søkerens eneste vitnemål, og er bare mulig når søkeren har ett elektronisk
-  vitnemål. Har søkeren flere vitnemål, velger saksbehandleren vitnemålet i
-  vitnemålsbehandlingen, og den samme beregningen brukes da på vitnemålet saksbehandleren har
-  valgt. Hvilke karakterer som teller, og hvordan de regnes om til poeng, er ikke beskrevet her.
+  vitnemål. Søkere med flere vitnemål behandles manuelt, eller automatisk på vitnemålet
+  saksbehandleren velger (OPT-BEH-BEH-039). Hvilke karakterer som teller, og hvordan de regnes om
+  til poeng, er ikke beskrevet her.
 
-  Poengene ligger på saken, som grunnlaget (OPT-BEH-BEH-019). Automatikken beregner de samme
-  poengene i alle sakene i søknaden, men det saksbehandleren overstyrer eller låser, gjelder bare
-  saken hos organisasjonen saksbehandleren er ved. Avklart 30.10.2026.
+  Poengene ligger på saken, som grunnlaget (OPT-BEH-BEH-019), og beregnes når den automatiske
+  behandlingen kjører for saken. Det saksbehandleren overstyrer eller låser, gjelder bare saken
+  hos organisasjonen saksbehandleren er ved. Avklart 30.10.2026, endret 06.11.2026.
 
   # Avklart 29.10.2026, endret 2026-11-03: opptaksforvalteren kan sette når den automatiske
   # saksbehandlingen starter og avsluttes i opptaket (OPT-BEH-BEH-032, OPT-OVO-FRI-001).
@@ -62,7 +62,7 @@ Egenskap: Automatisk beregning av vitnemålspoeng
       Når vitnemålspoengene beregnes automatisk
       Så har karakterpoenget ett desimal
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Skolepoeng settes sammen av karakterpoeng, realfagspoeng og språkpoeng
     # Skolepoeng er karakterpoeng pluss realfagspoeng og språkpoeng, der de to siste til sammen teller høyst 4.
 
@@ -82,38 +82,25 @@ Egenskap: Automatisk beregning av vitnemålspoeng
   Regel: Ingen automatisk beregning uten ett entydig vitnemål
     Søkere med flere vitnemål behandles i vitnemålsbehandlingen.
 
-    Scenariomal: Ingen automatiske vitnemålspoeng når <grunn>
-      Gitt at <grunn>
-      Når vitnemålspoengene beregnes automatisk
-      Så får saken ingen vitnemålspoeng beregnet automatisk
-      Og det fremgår at søkeren ikke har ett entydig vitnemål
+    # Har søkeren flere vitnemål, eller gir vitnemålet ikke generell studiekompetanse, får saken
+    # ikke grunnlag automatisk, og uten grunnlag beregnes ingen poeng (OPT-BEH-BEH-019,
+    # OPT-BEH-BEH-039). Endret 09.11.2026.
+    # Scenariomalen «Ingen automatiske vitnemålspoeng når <grunn>» er fjernet 11.11.2026. Uten
+    # vitnemål, eller med annullert vitnemål, får saken ikke grunnlag, og dermed ingen poengtyper
+    # å vise en forklaring på (OPT-BEH-BEH-019, OPT-BEH-BEH-034).
 
-      Eksempler:
-        | grunn                                                                                  |
-        | søkeren har flere vitnemål som ikke er annullert, og saksbehandleren har ikke valgt ett |
-        | søkerens eneste dokument er et kompetansebevis                                         |
-        | søkerens eneste vitnemål er annullert                                                  |
-        | søkeren ikke har noe vitnemål                                                          |
-        | vitnemålet ikke gir generell studiekompetanse                                          |
-        | saken ikke har noe grunnlag                                                            |
-
-    Scenario: Kompetansebevis ved siden av ett vitnemål hindrer ikke beregningen
+    @implemented
+    Scenario: Opplastet kompetansebevis hindrer ikke beregningen
+      # Avklart 06.11.2026: kompetansebevis kommer bare som dokumenter søkeren laster opp, ikke
+      # fra KREG. Saksbehandleren finner sakene med filteret «Ubehandlet opplastet dok.» i
+      # saksoversikten. Filteret er ikke beskrevet i et krav ennå.
       Gitt at søkeren har ett vitnemål som ikke er annullert
-      Og at søkeren har et kompetansebevis
+      Og at søkeren har lastet opp et kompetansebevis
       Når vitnemålspoengene beregnes automatisk
       Så har poengtypene fått poeng beregnet fra vitnemålet alene
 
-    # Avklart 30.10.2026: får søkeren et vitnemål til, blir de automatisk beregnede
-    # vitnemålspoengene stående til saksbehandleren har valgt vitnemål og startet behandlingen på
-    # det. Et nytt vitnemål er ny dokumentasjon, og saken behandles ikke automatisk på nytt
-    # (OPT-BEH-BEH-032).
-
-    @ref-OPT-BEH-BEH-025
-    Scenario: Vitnemålspoeng fra vitnemålet saksbehandleren har valgt
-      Gitt at søkeren har to vitnemål som ikke er annullert, ett fra 2024 og ett fra 2025
-      Og at saksbehandleren har valgt vitnemålet fra 2025
-      Når vitnemålspoengene beregnes automatisk
-      Så har poengtypene fått poeng beregnet fra vitnemålet fra 2025
+    # Scenarioet «Vitnemålspoeng fra vitnemålet saksbehandleren har valgt» er flyttet til
+    # OPT-BEH-BEH-039 (06.11.2026). Søkere med flere vitnemål behandles manuelt.
 
   @ref-OPT-BEH-BEH-004 @implemented
   Regel: Poeng som saksbehandleren har låst, beregnes ikke på nytt
@@ -173,11 +160,13 @@ Egenskap: Automatisk beregning av vitnemålspoeng
 
     @openquestion
     Scenario: Finne saker som er behandlet automatisk
+      # Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
+      # automatisk. FS158.001 har «Vis tidligere behandlinger».
+      # Avklart 06.11.2026 (økt med fagfolk): et filter i saksoversikten holder. Det trengs ingen
+      # logg eller rapport i denne flyten.
       # ÅPNE SPØRSMÅL:
-      # - Brukerbehov fra raffineringen (PFS 4392517645): å kunne søke opp hvem som er behandlet
-      #   automatisk, gjerne med skille mellom helautomatisk og halvautomatisk. FS158.001 har «Vis
-      #   tidligere behandlinger». Er det et filter i saksoversikten, en logg, eller begge? Avgjøres
-      #   i designet (30.10.2026).
+      # - Raffineringen ønsket å skille sakene som er behandlet helautomatisk fra dem der
+      #   saksbehandleren har startet den automatiske behandlingen. Skal filteret skille dem?
       Gitt at noen saker i opptaket er behandlet automatisk
-      Når saksbehandleren ser etter sakene som er behandlet automatisk
-      Så finner saksbehandleren sakene som er behandlet automatisk
+      Når saksbehandleren filtrerer på saker som er behandlet automatisk
+      Så ser saksbehandleren bare sakene som er behandlet automatisk

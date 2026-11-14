@@ -12,15 +12,15 @@ Egenskap: Automatiske tilleggspoeng
   poengtypen, og algoritmen regner ut poengene ut fra opplysninger om søkeren, for eksempel alder og kjønn.
   Poengene regnes ut på samme måte når saksbehandleren velger grunnlaget selv som når automatikken gjør det.
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Alderspoeng regnes ut fra søkerens alder
 
-    @depends-on-OPT-BEH-BEH-012 @implemented
+    @depends-on-OPT-BEH-BEH-012
     # Regelen «Søkerens alder beregnes på opptakets dato for aldersberegning».
     Scenariomal: Alderspoeng for søkerens alder
       Gitt at poengtypen for alderspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <alder> år på datoen for aldersberegning
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
       Så har saken <poeng> alderspoeng
 
       Eksempler:
@@ -37,7 +37,7 @@ Egenskap: Automatiske tilleggspoeng
     Scenario: Alderspoengene viser hvilken alder de er regnet ut for
       Gitt at søkeren er 22 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
       Så viser alderspoengene at de er regnet ut for alderen 22 år på datoen for aldersberegning
 
     @depends-on-OPT-OVO-FRI-001
@@ -47,17 +47,16 @@ Egenskap: Automatiske tilleggspoeng
       Og at resultatet publiseres i 2027
       Og at søkeren er 23 år på datoen "2027-12-31"
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saksbehandleren velger grunnlaget "VES" for saken
+      Når saksbehandleren velger et grunnlag for saken
       Så har saken 4 alderspoeng
 
-  @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Kjønnspoeng regnes ut fra søkerens kjønn
 
-    @implemented
     Scenariomal: Kjønnspoeng for søkerens kjønn
       Gitt at poengtypen for kjønnspoeng er knyttet til algoritmen "<algoritme>"
       Og at søkeren er <kjønn>
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
       Så har saken <poeng> kjønnspoeng
 
       Eksempler:
@@ -73,25 +72,24 @@ Egenskap: Automatiske tilleggspoeng
     Scenario: Kjønnspoengene viser hvilket kjønn de er regnet ut for
       Gitt at søkeren er kvinne
       Og at poengtypen for kjønnspoeng er knyttet til algoritmen "KJONN_ALG1"
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
       Så viser kjønnspoengene at de er regnet ut for kvinne
 
-  @openquestion @ref-FLY-OPT-AUT-001
+  @ref-FLY-OPT-AUT-001 @depends-on-OPT-BEH-BEH-038 @implemented
   Regel: Poeng for høyere utdanning regnes ut fra søkerens studiepoeng
-    # ÅPNE SPØRSMÅL:
-    # - Kravet til importen av resultater fra høyere utdanning er ikke skrevet. Når det finnes,
-    #   får regelen @depends-on- til det.
     # Studiepoengene kommer fra tjenesten for resultater fra høyere utdanning. Resultatene hentes og lagres på samme
     # måte som vitnemål fra videregående skole hentes og lagres via KREG.
     # Avklart 30.10.2026: alle beståtte studiepoeng på nivå høyere utdanning teller, også studiepoeng som er
     # brukt i grunnlaget. Fagskolepoeng teller ikke. Studiepoengene telles når poengene regnes ut, uten frist.
     # Studiepoeng fra utenlandsk høyere utdanning teller også, når opptakssystemet har dem som data. Det har
     # det ikke ennå.
+    # Avklart 04.11.2026: resultatene merker et innpasset emne som innpasset, med lærestedet det kommer fra,
+    # så emnet telles bare én gang, med studiepoengene fra lærestedet der det ble tatt.
 
     Scenariomal: Poeng for høyere utdanning
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at tjenesten for resultater fra høyere utdanning gir søkeren <studiepoeng> studiepoeng
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
       Så har saken <poeng> poeng for høyere utdanning
 
       Eksempler:
@@ -103,18 +101,47 @@ Egenskap: Automatiske tilleggspoeng
         | 60          | 2     |
         | 120         | 2     |
 
+    Scenario: Poengene for høyere utdanning viser hvor mange studiepoeng de er regnet ut for
+      Gitt at søkeren har bestått emner på 45 studiepoeng
+      Og at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Når saken får et grunnlag
+      Så viser poengene for høyere utdanning at de er regnet ut for 45 studiepoeng
+
+    Scenario: Søker uten resultater fra høyere utdanning får 0 poeng
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren ikke har resultater fra høyere utdanning
+      Når saken får et grunnlag
+      Så har saken 0 poeng for høyere utdanning
+
     Scenario: Bare beståtte emner teller
+      # Avklart 13.11.2026: tjenesten for resultater fra høyere utdanning gir bare gyldige resultater,
+      # så opptakssystemet trenger ikke å filtrere bort emner som ikke er bestått.
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 50 studiepoeng
       Og at søkeren ikke har bestått et emne på 10 studiepoeng
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
     Scenario: Fagskolepoeng teller ikke
       Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
       Og at søkeren har bestått emner på 30 studiepoeng i høyere utdanning
       Og at søkeren har 30 fagskolepoeng
-      Når saken får grunnlaget "VES"
+      Når saken får et grunnlag
+      Så har saken 1 poeng for høyere utdanning
+
+    Scenario: Innpassede emner telles bare én gang
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren har bestått emner på 40 studiepoeng ved lærestedet der emnene ble tatt
+      Og at emner på 30 studiepoeng fra lærestedet der emnene ble tatt, er innpasset ved et annet lærested
+      Og at resultatene fra høyere utdanning viser emnene på 30 studiepoeng både ved lærestedet der emnene ble tatt, og ved lærestedet der emnene er innpasset
+      Når saken får et grunnlag
+      Så har saken 1 poeng for høyere utdanning
+
+    Scenario: Innpassede emner telles med studiepoengene fra lærestedet der de ble tatt
+      Gitt at poengtypen for poeng for høyere utdanning er knyttet til algoritmen for høyere utdanning
+      Og at søkeren har bestått emner på 30 studiepoeng ved lærestedet der emnene ble tatt
+      Og at et emne på 10 studiepoeng fra lærestedet der emnet ble tatt, er innpasset ved et annet lærested med 7,5 studiepoeng
+      Når saken får et grunnlag
       Så har saken 1 poeng for høyere utdanning
 
     Scenario: Studiepoengene telles når poengene regnes ut
@@ -124,33 +151,67 @@ Egenskap: Automatiske tilleggspoeng
       Når poengene for høyere utdanning regnes ut
       Så har saken 2 poeng for høyere utdanning
 
-  @ref-FLY-OPT-AUT-001
+  @draft @depends-on-OPT-BEH-BEH-038
+  Regel: Poengene for høyere utdanning regnes ut på nytt når søkeren får nye resultater
+    # Avklart 04.11.2026: motsatt av nye vitnemål fra KREG, som ikke gir ny behandling
+    # (OPT-BEH-BEH-032). Resultatene fra høyere utdanning gir bare et tilleggspoeng.
+    # Avklart 04.11.2026: gjelder også saker som er ferdig behandlet, men ikke etter at
+    # opptaket er avsluttet. Hendelsene for den automatiske saksbehandlingen gjelder ikke.
+
+    Scenario: Poengene for høyere utdanning regnes ut på nytt
+      Gitt at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så har saken 2 poeng for høyere utdanning
+
+    Scenario: Poengene regnes ut på nytt i en sak som er ferdig behandlet
+      Gitt at saken er ferdig behandlet
+      Og at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så har saken 2 poeng for høyere utdanning
+
+    Scenario: Poengene regnes ikke ut på nytt etter at opptaket er avsluttet
+      Gitt at opptaket er avsluttet
+      Og at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så har saken fortsatt 1 poeng for høyere utdanning
+
+    @depends-on-OPT-BEH-BEH-031
+    Scenario: Poengsummen regnes ut på nytt når poengene for høyere utdanning endres
+      Gitt at saken har 1 poeng for høyere utdanning, regnet ut for 50 studiepoeng
+      Og at søkeren har en poengsum i en kvotetype
+      Når søkeren får et nytt resultat fra høyere utdanning på 10 studiepoeng
+      Så er poengsummen i kvotetypen regnet ut på nytt
+
+    Scenario: Poengene står når saksbehandleren har endret dem
+      Gitt at saksbehandleren har endret poengene for høyere utdanning til 1
+      Når søkeren får et nytt resultat fra høyere utdanning på 60 studiepoeng
+      Så har saken fortsatt 1 poeng for høyere utdanning
+
+  @ref-FLY-OPT-AUT-001 @implemented
   Regel: Tilleggspoengene settes uansett hvem som velger grunnlaget
 
-    @implemented
     Scenario: Automatikken velger grunnlaget
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når automatikken velger grunnlaget "VES" for saken
+      Når automatikken velger et grunnlag for saken
       Så har saken 4 alderspoeng
 
     Scenario: Saksbehandleren velger grunnlaget
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saksbehandleren velger grunnlaget "VES" for saken
+      Når saksbehandleren velger et grunnlag for saken
       Så har saken 4 alderspoeng
 
     Scenario: Saksbehandleren får kjønnspoengene grunnlaget gir
       Gitt at søkeren er kvinne
       Og at poengtypen for kjønnspoeng er knyttet til algoritmen "KJONN_ALG2"
-      Når saksbehandleren velger grunnlaget "VES" for saken
+      Når saksbehandleren velger et grunnlag for saken
       Så har saken 2 kjønnspoeng
 
-    @implemented
     Scenario: Poengene for grunnlaget som er fjernet, vises ikke lenger
-      Gitt at saken har grunnlaget "VES"
-      Og at poengtypen for alderspoeng bare gjelder grunnlaget "VES"
-      Når saksbehandleren fjerner grunnlaget "VES" fra saken
+      Gitt at saken har et grunnlag
+      Og at poengtypen for alderspoeng bare gjelder grunnlaget
+      Når saksbehandleren fjerner grunnlaget fra saken
       Så ser ikke saksbehandleren alderspoengene i saken
 
     Scenario: Poengene regnes ut på nytt når saksbehandleren endrer grunnlaget
@@ -161,9 +222,8 @@ Egenskap: Automatiske tilleggspoeng
       Når saksbehandleren endrer grunnlaget til "PRA"
       Så har saken 4 alderspoeng
 
-    @implemented
     Scenario: Poengene regnes ikke ut på nytt av seg selv når datoen for aldersberegning endres
-      Gitt at saken har grunnlaget "VES"
+      Gitt at saken har et grunnlag
       Og at saken har alderspoeng utregnet på datoen "2027-04-15"
       Når opptaksforvalteren endrer datoen for aldersberegning til "2027-12-31"
       Så har saken fortsatt alderspoeng utregnet på datoen "2027-04-15"
@@ -172,30 +232,32 @@ Egenskap: Automatiske tilleggspoeng
       Gitt at søkeren ikke har noe elektronisk vitnemål
       Og at søkeren er 23 år på datoen for aldersberegning
       Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Når saksbehandleren velger grunnlaget "VES" for saken
+      Når saksbehandleren velger et grunnlag for saken
       Så er alderspoengene regnet ut til 4
 
     # Avklart 30.10.2026: bare tilleggspoengene saksbehandleren har endret, er låst for
     # automatikken (se «Saksbehandleren kan overstyre poeng automatikken har satt»).
+    #
+    # Fjernet 04.11.2026: scenarioet «Tilleggspoengene regnes ut selv om poengene fra
+    # vitnemålet står tomme». Poengene fra vitnemålet beregnes fortløpende når grunnlaget
+    # endres (OPT-BEH-BEH-022, avklart 04.11.2026), så de står ikke tomme til
+    # saksbehandleren beregner dem. At tilleggspoengene ikke avhenger av poengene fra
+    # vitnemålet, er dekket av «Søker uten elektronisk vitnemål får tilleggspoeng».
+    #
+    # Endret 11.11.2026: avklaringen 04.11.2026 er erstattet. Saksbehandleren beregner
+    # poengene fra vitnemålet med en egen handling (OPT-BEH-BEH-004, «Poengene beregnes og
+    # lagres når saksbehandleren bruker dem»). Poengene står ikke tomme før saksbehandleren
+    # har beregnet: de sist lagrede poengene vises uendret (OPT-BEH-BEH-004, «De lagrede
+    # poengene vises til jeg beregner på nytt»), så scenarioet trengs fortsatt ikke.
 
-    @ref-OPT-BEH-BEH-004
-    # Regelen «Poeng beregnes fra det valgte grunnlaget», scenarioet «Poengene er tomme til jeg beregner dem».
-    Scenario: Tilleggspoengene regnes ut selv om poengene fra vitnemålet står tomme
-      Gitt at søkeren er 23 år på datoen for aldersberegning
-      Og at poengtypen for alderspoeng er knyttet til algoritmen "ALD_ALG1"
-      Og at poengene fra vitnemålet står tomme til saksbehandleren velger å beregne dem
-      Når saksbehandleren velger grunnlaget "VES" for saken
-      Så har saken 4 alderspoeng
-
+  @implemented
   Regel: Saksbehandleren kan overstyre poeng automatikken har satt
 
-    @implemented
     Scenario: Poengene er satt av saksbehandleren og står
       Gitt at saksbehandleren har satt 3 alderspoeng og latt dem stå
       Når automatikken regner ut alderspoeng for saken
       Så har saken fortsatt 3 alderspoeng
 
-    @implemented
     Scenario: Saksbehandleren overstyrer et alderspoeng som er regnet ut automatisk
       Gitt at søkeren er 23 år på datoen for aldersberegning
       Og at alderspoengene er regnet ut automatisk til 4
@@ -205,10 +267,9 @@ Egenskap: Automatiske tilleggspoeng
 
     Scenario: Poengene som er regnet ut automatisk, er merket som det
       Gitt at søkeren er 23 år på datoen for aldersberegning
-      Når saksbehandleren velger grunnlaget "VES" for saken
+      Når saksbehandleren velger et grunnlag for saken
       Så er alderspoengene merket som regnet ut automatisk
 
-    @implemented
     Scenario: Poengene er ikke merket som automatiske etter at saksbehandleren har endret dem
       Gitt at alderspoengene er regnet ut automatisk
       Når saksbehandleren endrer alderspoengene til 2
@@ -218,7 +279,7 @@ Egenskap: Automatiske tilleggspoeng
 
     Scenario: Poengtypen har en algoritme som ikke kan regnes ut
       Gitt at poengtypen for kjønnspoeng er knyttet til en algoritme som ikke kan regnes ut
-      Når saksbehandleren velger grunnlaget "VES" for saken
+      Når saksbehandleren velger et grunnlag for saken
       Så er grunnlaget lagt til
       Og kjønnspoengene står tomme
       Og saksbehandleren ser en merknad om at algoritmen er ukjent

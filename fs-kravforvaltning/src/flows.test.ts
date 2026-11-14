@@ -20,6 +20,7 @@ import {
   partStatus,
   phaseStatus,
   progress,
+  tabOf,
 } from './flows.ts';
 
 const krav = (tags: string, title: string, body: string) => `# language: no
@@ -478,13 +479,35 @@ test('uten anker følges alle reglene i «…», ikke bare den første', () => {
 });
 
 test('ruta: #/flyter, stien og nivåene', () => {
-  assert.deepEqual(parseFlyterHash('flyter'), { path: null, depth: null });
-  assert.deepEqual(parseFlyterHash('flyter/krav/_Flyter/10 Opptaksløpet/saken.feature?nivåer=alle'), { path: 'krav/_Flyter/10 Opptaksløpet/saken.feature', depth: Infinity });
-  assert.deepEqual(parseFlyterHash('flyter/x.feature?nivåer=2'), { path: 'x.feature', depth: 2 });
+  assert.deepEqual(parseFlyterHash('flyter'), { path: null, depth: null, tab: 'details' });
+  assert.deepEqual(parseFlyterHash('flyter/krav/_Flyter/10 Opptaksløpet/saken.feature?nivåer=alle'), { path: 'krav/_Flyter/10 Opptaksløpet/saken.feature', depth: Infinity, tab: 'details' });
+  assert.deepEqual(parseFlyterHash('flyter/x.feature?nivåer=2'), { path: 'x.feature', depth: 2, tab: 'details' });
   assert.equal(parseFlyterHash('krav/README.md'), undefined);
   assert.equal(flyterHash('krav/_Flyter/a.feature', 1), '#/flyter/krav/_Flyter/a.feature');
   assert.equal(flyterHash('krav/_Flyter/a.feature', Infinity), '#/flyter/krav/_Flyter/a.feature?nivåer=alle');
   assert.equal(flyterHash(null, 3), '#/flyter');
+});
+
+test('ruta: fanen står i ruta når den ikke er «Detaljer», og bare når en flyt er valgt', () => {
+  assert.deepEqual(parseFlyterHash('flyter/x.feature?fane=kart'), { path: 'x.feature', depth: null, tab: 'map' });
+  assert.deepEqual(parseFlyterHash('flyter/x.feature?nivåer=2&fane=matrise'), { path: 'x.feature', depth: 2, tab: 'mx' });
+  assert.equal(parseFlyterHash('flyter/x.feature?fane=domene')!.tab, 'dom');
+  assert.equal(parseFlyterHash('flyter/x.feature?fane=krav')!.tab, 'krav');
+  assert.equal(parseFlyterHash('flyter/x.feature?fane=ukjent')!.tab, 'details');
+  assert.equal(parseFlyterHash('flyter?fane=kart')!.tab, 'details');
+  assert.equal(flyterHash('krav/_Flyter/a.feature', 1, 'map'), '#/flyter/krav/_Flyter/a.feature?fane=kart');
+  assert.equal(flyterHash('krav/_Flyter/a.feature', 2, 'dom'), '#/flyter/krav/_Flyter/a.feature?nivåer=2&fane=domene');
+  assert.equal(flyterHash('krav/_Flyter/a.feature', 1, 'details'), '#/flyter/krav/_Flyter/a.feature');
+  assert.equal(flyterHash('krav/_Flyter/a.feature', 1, 'phases'), '#/flyter/krav/_Flyter/a.feature?fane=fasene');
+  assert.equal(flyterHash(null, 1, 'map'), '#/flyter');
+});
+
+test('fanen fra navnet i ruta eller localStorage', () => {
+  assert.equal(tabOf('matrise'), 'mx');
+  assert.equal(tabOf('fasene'), 'phases');
+  assert.equal(tabOf('detaljer'), 'details');
+  assert.equal(tabOf('mx'), null);
+  assert.equal(tabOf(null), null);
 });
 
 test('hele kravet levert, og regler og scenarioer levert i et krav som er delvis levert', async () => {

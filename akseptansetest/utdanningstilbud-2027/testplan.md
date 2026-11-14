@@ -32,7 +32,7 @@ Testplan for «Utdanningstilbud i samordna opptak 2027». Planen sier hva som te
 
 | Nr | Navn | Rolle | Organisasjon | Brukes til |
 |---|---|---|---|---|
-| 1 | ORDENTLIG RUNDSKRIV | Opptaksforvalter ved forvaltende organisasjon | Sikt | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
+| 1 | ORDENTLIG RUNDSKRIV • OPPTAK_FORVALTER (HK-DIR) | Opptaksforvalter ved forvaltende organisasjon | HK-dir | Legge til for en annen organisasjon, fjerne, trekke, redigere etter redigeringsfristen, filtrere på organisasjon, og detaljsiden (UTD-001, 002, 003, 026 og 04 Behandle et utdanningstilbud) |
 | 2 | KORT DOMPAPP UiT | Opptaksforvalter ved deltakende organisasjon | UiT Norges arktiske universitet | Legge til og fjerne tilbud organisasjonen tilbyr innenfor redigeringsperioden, og trekkfristen (UTD-002, 003, 026) |
 | 3 | KORT DOMPAPP UIO | Opptaksforvalter ved deltakende organisasjon | Universitetet i Oslo | Den andre deltakende organisasjonen: ser bare utdanningstilbudene til UiO (UTD-001, testcase 3.7 og 3.8 i den interne akseptansetesten, som kjent mangel) |
 | 4 | VENNLIG SKOG HiØ | Opptaksforvalter ved organisasjon som ikke deltar i opptaket | Høgskolen i Østfold | Ser verken opptaket eller utdanningstilbudene i det (`@OPT-OVO-SAM-001`, testcase 3.9 og 3.10 i den interne akseptansetesten, som kjent mangel) |
@@ -199,7 +199,7 @@ Testansvarlig skriver beslutningen og begrunnelsen i sluttrapporten. Rettede fun
 | 2. Testplan | (denne siden) | Laget | 2026-10-23 |
 | 3. Testrapport – verifisering | – | Venter | |
 | 4. Intern akseptansetest | [Intern akseptansetest – Utdanningstilbud i samordna opptak 2027](https://sikt.atlassian.net/wiki/spaces/STUDIEADM/pages/5136613418) | Klar til test | 2026-10-23 |
-| 4b. CDP-kjøring (valgfri) | – | Ikke aktuell | |
+| 4b. Kjøring av agenttestene (valgfri) | – | Ikke aktuell | |
 | 5. Testrapport – intern | – | Venter | |
 | 6. Ekstern akseptansetest | – | Venter | |
 | 7. Testrapport – ekstern | – | Venter | |

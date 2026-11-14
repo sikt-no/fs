@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { after, test } from 'node:test';
 import type { ClaudeEvent } from '../shared/api.ts';
 import { mkdirSync } from 'node:fs';
-import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, nowStamp, PANEL_DENY, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, timeLine, toolSummary } from './claude.ts';
+import { allowedAlways, ClaudeRunner, codeDirs, contextPrompt, dirArgs, executeArgs, implementPrompt, mentionPaths, findClaude, nowStamp, PANEL_DENY, parseAuthStatus, parseStreamLine, projectSkills, skillArgs, skillChangedAt, skillHash, skillMeta, streamImages, timeLine, toolSummary } from './claude.ts';
 import { existsSync, readFileSync } from 'node:fs';
 
 const tmp = mkdtempSync(join(tmpdir(), 'krav-claude-'));
@@ -127,6 +127,7 @@ writeFileSync(
   fake,
   `#!/usr/bin/env node
 if (process.argv[2] === '--version') { console.log('9.9.9 (Claude Code)'); process.exit(0); }
+if (process.argv[2] === 'auth') { console.log(JSON.stringify({ loggedIn: false, authMethod: 'none' })); process.exit(1); }
 let input = '';
 process.stdin.on('data', d => (input += d));
 process.stdin.on('end', async () => {
@@ -196,7 +197,17 @@ async function collect(runner: ClaudeRunner, req: Parameters<ClaudeRunner['run']
 test('findClaude bruker KRAV_CLAUDE_PATH, og status viser versjonen', { skip: process.platform === 'win32' }, async () => {
   assert.equal(await findClaude(env), fake);
   assert.equal(await findClaude({ KRAV_CLAUDE_PATH: join(tmp, 'finnes-ikke') }), null);
-  assert.deepEqual(await new ClaudeRunner(tmp, ro).status(), { available: true, path: fake, version: '9.9.9 (Claude Code)' });
+  // claude auth status avslutter med kode 1 når brukeren ikke er logget inn, men JSON-en leses likevel
+  assert.deepEqual(await new ClaudeRunner(tmp, ro).status(), { available: true, path: fake, version: '9.9.9 (Claude Code)', loggedIn: false, account: null });
+});
+
+test('parseAuthStatus: innlogget med e-post, ikke innlogget, og det som ikke kan leses', () => {
+  assert.deepEqual(parseAuthStatus('{"loggedIn":true,"authMethod":"claude.ai","email":"a@sikt.no"}\n'), { loggedIn: true, account: 'a@sikt.no' });
+  assert.deepEqual(parseAuthStatus('{"loggedIn":true,"authMethod":"api_key"}'), { loggedIn: true, account: null });
+  assert.deepEqual(parseAuthStatus('{"loggedIn":false,"email":"gammel@sikt.no"}'), { loggedIn: false, account: null });
+  assert.deepEqual(parseAuthStatus(''), { loggedIn: null, account: null }, 'eldre Claude Code uten auth');
+  assert.deepEqual(parseAuthStatus('error: unknown command'), { loggedIn: null, account: null });
+  assert.deepEqual(parseAuthStatus('{"loggedIn":"ja"}'), { loggedIn: null, account: null });
 });
 
 test('ClaudeRunner sender meldingen på stdin, med verktøy, kontekst og resume', { skip: process.platform === 'win32' }, async () => {

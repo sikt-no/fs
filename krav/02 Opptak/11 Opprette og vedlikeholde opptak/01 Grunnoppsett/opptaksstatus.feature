@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «opptaksforvalter ved deltakende organisasjon» med «opptaksforvalter hos tilbyderen» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @OPT-OVO-GRU-004 @must @implemented
 Egenskap: Status på opptaket
   Som opptaksforvalter
@@ -87,6 +88,14 @@ Egenskap: Status på opptaket
     # ÅPNE SPØRSMÅL:
     # - Vises historiske opptak i opptaksoversikten, og skal lista kunne filtreres på aktiv og historisk?
     # - Kan et historisk opptak brukes som grunnlag for et nytt opptak (gjenbruk i opprett_opptak.feature)?
+
+    # Avklart 2026-11-10 (R14 i spec-en «Krav til RLS»): ingen kan endre søknader, saker eller plasstildeling i et
+    # historisk opptak, heller ikke gjennom API-et. Innsynet varer.
+    Scenario: Endringer i søknader og saker avvises i et historisk opptak, også i API-et
+      Gitt at opptaket "Samordna opptak 2027" er historisk
+      Når en integrasjon med rollen saksbehandler ved behandleren forsøker å endre en sak i opptaket gjennom API-et
+      Så avvises det
+      Men saksbehandleren ved behandleren ser fortsatt saken
 
     Scenario: Innstillingene kan ikke endres i et historisk opptak
       Gitt at opptaket "Samordna opptak 2027" er historisk

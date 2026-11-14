@@ -435,7 +435,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
           <span style="font-size:15px;font-weight:700;color:var(--fg)">Akseptansetesten</span>
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
             <span class="pill">fs-testplan</span><span style="color:var(--accent)">→</span>
-            <span class="pill">fs-testcaser-cdp</span><span style="color:var(--accent)">→</span>
+            <span class="pill">fs-testcaser-agent</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testrapport</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testcaser-intern</span><span style="color:var(--accent)">→</span>
             <span class="pill">fs-testrapport</span><span style="color:var(--accent)">→</span>
@@ -712,11 +712,13 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
         </ol>
       </div>
       <p class="note">De automatiske testene lages med lage-steps: step definitions i <code>tester/steps/</code> som kobler scenarioene til Playwright. Kjør kravene i et scope med <code>npx playwright test --grep @scope-&lt;slug&gt;</code>.</p>
+      <p class="note">Hvilke krav treffer en MR eller branch? fs-branch-krav leser endringen og finner kravene den implementerer, endrer eller kan bryte, og atferd ingen krav beskriver. Det siste blir forslag til regler for fs-krav.</p>
     </div>
     <aside class="facts">
       <dl>
         <div><dt>Hvem</dt><dd>En person, en Claude Code-økt i repoet, eller «Utfør i &lt;repo&gt;» fra FS Kravforvaltning</dd></div>
         <div><dt>Skill for testene</dt><dd><span class="pill">lage-steps</span></dd></div>
+        <div><dt>Krav for en MR</dt><dd><span class="pill">fs-branch-krav</span></dd></div>
         <div><dt>Status</dt><dd><span class="trans"><span class="s">@in-progress</span></span></dd></div>
         <div><dt>Filer</dt><dd><code>tasks/&lt;d&gt;/&lt;s&gt;/utforing.md</code></dd></div>
         <div><dt>Tavla</dt><dd>fs-plattform, fs-admin, … → Til verifisering</dd></div>
@@ -734,7 +736,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     <div class="body">
       <p>fs-verify leter etter implementasjonen av hvert scenario i lokale kloner av kode-repoene, og viser bevis med <code>fil:linje</code>. En kontrollør (subagenten fs-verify-kontroll) sjekker hvert svar uavhengig før du blir spurt. Når alt er funnet og du sier ja, blir kravet <code>@implemented</code>. fs-verify ser også etter åpne MR-er og brancher i GitLab som hører til kravene. Kode som bare finnes i en MR, regnes ikke som levert, men rapporten viser hvor den er. Er det mange feature-filer, gjør fs-verify-agent-teams det samme med flere finnere parallelt.</p>
       <p>Før letingen spør fs-verify hva som skal verifiseres: <code>@in-progress</code>, <code>@deprecated</code>, flyter, alle krav uansett status, eller noe annet. Den spør også hvor mange nivåer med <code>@depends-on-</code> som skal følges. Avhengighetene vises med status, og kan også verifiseres i koden, men de får aldri ny status.</p>
-      <p>Rapporten skrives til fil før du blir spurt, og hvert spørsmål viser kravet og koden det gjelder. Er noe av et krav levert, blir kravet <code>@in-progress</code>, og delene som er levert, <code>@implemented</code>. Gir du fs-verify en verify-rapport, går den gjennom resultatene med deg: det som er usikkert eller ikke funnet, og de åpne spørsmålene.</p>
+      <p>Rapporten er resultatet. Forslaget til endringer og avvikene står først, og det som stemmer, får én linje. I chat får du et sammendrag av forslaget og det som er usikkert, og blir bedt om å gå gjennom rapporten. Skillen spør bare om kravene der alt er funnet og kontrollen har bekreftet alt, skal bli <code>@implemented</code>. Er noe av et krav levert, blir kravet <code>@in-progress</code>, og delene som er levert, <code>@implemented</code>. Gir du fs-verify rapporten tilbake, går den gjennom resultatene med deg: det som er usikkert eller ikke funnet, det som kan leveres eller slettes, og de åpne spørsmålene.</p>
       <p>I tillegg til scenarioene sjekker fs-verify tre ting i koden, og rapporterer dem i egne seksjoner: <b>tilgangsstyring og datakonsistens</b> (at roller × organisasjon × opprette, lese, endre og slette er implementert slik kravet sier, uten at rollene testes, ingen ser eller endrer data fra en annen organisasjon, og sletting gir ikke foreldreløse data), <b>regler i koden uten scenario</b> (valideringer, grenser og standardverdier som kravet ikke sier noe om), og <b>antall åpne spørsmål per krav</b>. Ingenting kjøres: koden leses og sammenlignes med kravet.</p>
       <div class="cols">
         <div class="box"><h3>Gating-settet</h3><p class="small">Scenarioene som sjekkes: alle som ikke er tagget <code>@draft</code>, <code>@deprecated</code> eller <code>@demo</code>. Et scenario med bare <code>@openquestion</code> er med, og spørsmålet står i rapporten. Åpne spørsmål stopper ikke noe. Det samme settet brukes i akseptansetesten.</p></div>
@@ -747,7 +749,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <dl>
         <div><dt>Skills</dt><dd><div class="pills"><span class="pill">fs-verify</span><span class="pill">fs-verify-agent-teams</span></div></dd></div>
         <div><dt>Status</dt><dd><span class="trans"><span class="s">@in-progress</span>→<span class="s">@implemented</span></span></dd></div>
-        <div><dt>Filer</dt><dd><code>verify-&lt;dato&gt;-&lt;HHMM&gt;.md</code> i <code>spec/</code>, i <code>akseptansetest/&lt;slug&gt;/</code> for et scope, eller ved siden av kravet</dd></div>
+        <div><dt>Filer</dt><dd><code>verify-&lt;dato&gt;-&lt;HHMM&gt;.md</code>, og teamvisningen <code>verify-&lt;dato&gt;-&lt;HHMM&gt;.html</code> (publisert som artefakt, for å gå gjennom resultatet sammen), i <code>spec/</code>, i <code>akseptansetest/&lt;slug&gt;/</code> for et scope, eller ved siden av kravet</dd></div>
         <div><dt>Tavla</dt><dd>Verifisert</dd></div>
       </dl>
     </aside>
@@ -768,7 +770,7 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Lag testplanen</h2>
     </div>
     <div class="body">
-      <p>Testplanen planlegger testingen: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, av hvem, hvor og når, og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke selve testcasene: fs-testcaser-cdp lager testcasene for den agentiske testen, og fs-testcaser-intern flyttestene. Leveransen er et scope, en oppgave, en mappe under <code>krav/</code> eller feature-filer. fs-testplan finner kravene, scenarioene i gating-settet og den nyeste verify-rapporten, og foreslår fs-verify først når rapporten mangler eller er eldre enn kravene.</p>
+      <p>Testplanen planlegger testingen: hvilke krav og flyter som testes, omfanget av testcasene som skal lages, av hvem, hvor og når, og når fasene er ferdige. Kravene er kriteriene for godkjent. Den lager ikke selve testcasene: fs-testcaser-agent lager testcasene for den agentiske testen, og fs-testcaser-intern flyttestene. Leveransen er et scope, en oppgave, en mappe under <code>krav/</code> eller feature-filer. fs-testplan finner kravene, scenarioene i gating-settet og den nyeste verify-rapporten, og foreslår fs-verify først når rapporten mangler eller er eldre enn kravene.</p>
       <div class="box">
         <h3>Teamet blir spurt om</h3>
         <ol class="small">
@@ -861,11 +863,11 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
       <h2>Agentisk funksjonstest</h2>
     </div>
     <div class="body">
-      <p>Her skjer mesteparten av den funksjonelle testingen: en agent kjører testene i Chrome mot testmiljøet, og bekrefter at hver funksjon virker som kravet sier, med gyldige og ugyldige data. fs-testcaser-cdp lager testene som varige Gherkin-filer i <code>cdp-tester/</code>, og <code>cdp</code>-skillen kjører dem. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre.</p>
+      <p>Her skjer mesteparten av den funksjonelle testingen: en agent kjører testene i Chrome mot testmiljøet, og bekrefter at hver funksjon virker som kravet sier, med gyldige og ugyldige data. fs-testcaser-agent lager testene som varige Gherkin-filer i <code>tester-agent/</code>, og <code>cdp</code>-skillen kjører dem. Testansvarlig har ansvaret for at agenten blir kjørt og tester riktig, men selve kjøringen kan gjøres av andre.</p>
       <div class="cols">
         <div class="box"><h3>Hva testes</h3><ul class="small"><li>Alle scenarioer som er <code>@implemented</code>, slik de står. En scenariomal gir én test per eksempel.</li><li>Testcaser agenten utleder fra reglene, også reglene fs-verify fant uten scenario.</li><li>Negativ testing: ugyldige verdier, feil format, feil rekkefølge, data som ikke finnes eller er slettet.</li><li>Hvert obligatorisk felt tomt, med bare mellomrom og med for lang verdi, og feilmeldingen kontrolleres.</li></ul></div>
         <div class="box"><h3>Teknikk og bevis</h3><ul class="small"><li>Agenten velger teknikk per regel (grenseverdier, ekvivalensklasser, beslutningstabeller, tilstandsoverganger) og skriver hvilken som er brukt.</li><li>Hver test lagrer steg, input, faktisk resultat og skjermbilde eller logg, så et menneske kan etterprøve den. Bildene ligger i <code>akseptansetest/&lt;slug&gt;/</code>, og er ignorert av git.</li></ul></div>
-        <div class="box"><h3>Testbrukere og testdata</h3><p class="small">Testene lages fra kravene, og kjenner ikke testplanen: den velger bare hvilke krav som får tester, og hvilke tester som kjøres. Testbrukere og testdata er nøkler. Testene lager dataene sine selv: oppsettet (<code>cdp-tester/_Oppsett/&lt;sti&gt;/oppsett.feature</code>) kjøres først i hver kjøring, og lager testdataene gjennom løsningen, med kjøringen i navnet, så testene aldri bygger på data som kan være slettet. Miljøfila for testmiljøet (<code>cdp-tester/_Miljøer/&lt;miljø&gt;.md</code>) har alle personaene og rollene i FS Admin, grunndataene og det testene ikke kan lage, og vedlikeholdes jevnlig. Testplanen har en kopi til testerne. Lages testene etter testplanen, synker fs-testplan den.</p></div>
+        <div class="box"><h3>Testbrukere og testdata</h3><p class="small">Testene lages fra kravene, og kjenner ikke testplanen: den velger bare hvilke krav som får tester, og hvilke tester som kjøres. Testbrukere og testdata er nøkler. Testene lager dataene sine selv: oppsettet (<code>tester-agent/_Oppsett/&lt;sti&gt;/oppsett.feature</code>) kjøres først i hver kjøring, og lager testdataene gjennom løsningen, med kjøringen i navnet, så testene aldri bygger på data som kan være slettet. Miljøfila for testmiljøet (<code>tester-agent/_Miljøer/&lt;miljø&gt;.md</code>) har alle personaene og rollene i FS Admin, grunndataene og det testene ikke kan lage, og vedlikeholdes jevnlig. Testplanen har en kopi til testerne. Lages testene etter testplanen, synker fs-testplan den.</p></div>
       </div>
       <div class="box tint">
         <h3>Kravet dekker ikke</h3>
@@ -875,9 +877,9 @@ footer .inner{padding-block:24px 48px;display:flex;flex-direction:column;gap:6px
     </div>
     <aside class="facts">
       <dl>
-        <div><dt>Skills</dt><dd><div class="pills"><span class="pill">fs-testcaser-cdp</span><span class="pill">cdp</span><span class="pill">fs-testrapport</span></div></dd></div>
+        <div><dt>Skills</dt><dd><div class="pills"><span class="pill">fs-testcaser-agent</span><span class="pill">cdp</span><span class="pill">fs-testrapport</span></div></dd></div>
         <div><dt>Hvem</dt><dd>En agent kjører. Teamet og testansvarlig går gjennom testene før og funnene etterpå.</dd></div>
-        <div><dt>Filer</dt><dd><code>cdp-tester/&lt;kravets sti&gt;/&lt;navn&gt;.feature</code><br><code>cdp-tester/_Miljøer/&lt;miljø&gt;.md</code><br><code>kjoring-&lt;dato&gt;-&lt;HHMM&gt;/resultat.md</code><br><code>testrapport-agentisk-&lt;dato&gt;.md</code></dd></div>
+        <div><dt>Filer</dt><dd><code>tester-agent/&lt;kravets sti&gt;/&lt;navn&gt;.feature</code><br><code>tester-agent/_Miljøer/&lt;miljø&gt;.md</code><br><code>kjoring-&lt;dato&gt;-&lt;HHMM&gt;/resultat.md</code><br><code>testrapport-agentisk-&lt;dato&gt;.md</code></dd></div>
         <div><dt>Endrer aldri</dt><dd>Kravene i <code>krav/</code></dd></div>
       </dl>
     </aside>

@@ -1,8 +1,8 @@
 # language: no
 # GitHub: #216, #598
-@OPT-REG-KVO-003 @must @in-progress @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
+@OPT-REG-KVO-003 @must @implemented @scope-kvoter-i-opptaket-2027 @ref-OPT-PLA-INN-002 @ref-OPT-OPT-UTD-004
 Egenskap: Sette standard plassflyt i regelverkssamlingen
-  Som regelverksforvalter ved organisasjonen som eier regelverkssamlingen
+  Som opptaksforvalter ved organisasjonen som eier regelverkssamlingen
   ønsker jeg å sette én standard plassflyt i regelverkssamlingen
   slik at ledige plasser i opptak som bruker regelverkssamlingen går videre til riktig utdanningskvote på alle utdanningstilbud i opptakene som bruker regelverkssamlingen.
 
@@ -34,31 +34,48 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
   # Eldre skisse: https://www.figma.com/design/LmoNQlmAuE2FlE0fUo5GoO/FS-Admin---Seksjon-Opptak?node-id=22410-106608
 
   Bakgrunn:
-    Gitt at regelverksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
+    Gitt at opptaksforvalter ved organisasjonen som eier regelverkssamlingen er innlogget
     Og at regelverkssamlingen "UHG 2027" er opprettet
 
   Regel: Standard plassflyt settes i regelverkssamlingen
 
     Scenario: Sette standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
-      Og regelverksforvalter lagrer plassflyten
+      Når opptaksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
+      Og opptaksforvalter lagrer plassflyten
       Så har regelverkssamlingen "UHG 2027" standard plassflyt
 
-  # AVKLART 2026-10-19 (gjeldende skisse): Hovedkvoten velges for seg, og er kvoten ledige plasser til slutt
-  # havner i. Kvotene som er koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten.
+  # AVKLART 2026-11-11 (produkteier): Hovedkvoten er kvoten ledige plasser til slutt havner i. Kvotene som er
+  # koblet, sender ledige plasser videre i en kjede som ender i hovedkvoten. Om hovedkvoten velges for seg eller
+  # regnes ut fra kjedene, er en implementasjonsdetalj, se sette_plassflyt.design.md. Erstatter avklaringen
+  # 2026-10-19 om at hovedkvoten velges for seg.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Er minst én kvote koblet, og plassflyten
+  # ikke går i ring, finnes det alltid en kvote kjedene ender i. Plassflyten er bare uten hovedkvote når ingen
+  # kvoter er koblet, og den kan da lagres. Kvotetypene får varselet om at plassflyten mangler, og kan ikke brukes
+  # før de er koblet. Scenarioet «Plassflyten kan ikke lagres uten hovedkvote» er fjernet.
+  # AVKLART 2026-11-13 (produkteier): Har regelverkssamlingen bare én kvotetype, er den hovedkvoten uten at noen
+  # velger det, fordi ledige plasser ikke har noe annet sted å gå. Kvotetypen regnes som koblet til plassflyten, og
+  # får ikke varselet. Det erstatter at varselet også gjelder en regelverkssamling med bare én kvotetype
+  # (avklart 2026-11-12).
   Regel: Regelverkssamlingen har én hovedkvote
 
-    Scenario: Velge hovedkvote i regelverkssamlingen
-      Når regelverksforvalter velger "Ordinær kvote (ORD)" som hovedkvote i standard plassflyt i regelverkssamlingen
-      Og regelverksforvalter lagrer plassflyten
+    Scenario: Hovedkvoten er kvoten kjedene ender i
+      Gitt at "Førstegangsvitnemål (ORDF)" sender ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt i regelverkssamlingen
+      Og at "Ordinær kvote (ORD)" ikke sender ledige plasser videre
+      Når opptaksforvalter lagrer plassflyten
       Så er "Ordinær kvote (ORD)" hovedkvote i standard plassflyt i regelverkssamlingen
-      Og "Ordinær kvote (ORD)" sender ikke ledige plasser videre
 
-    Scenario: Plassflyten kan ikke lagres uten hovedkvote
-      Gitt at hovedkvoten ikke er valgt i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter lagrer plassflyten
+    Scenario: Plassflyten kan ikke lagres med flere hovedkvoter
+      Gitt at "Førstegangsvitnemål (ORDF)" sender ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt i regelverkssamlingen
+      Og at "Samisk språkkompetanse (SAM)" sender ledige plasser til "Nordnorsk kvote (NN)" i standard plassflyt i regelverkssamlingen
+      Og at verken "Ordinær kvote (ORD)" eller "Nordnorsk kvote (NN)" sender ledige plasser videre
+      Når opptaksforvalter lagrer plassflyten
       Så blir plassflyten ikke lagret
-      Og regelverksforvalter får beskjed om at regelverkssamlingen må ha en hovedkvote
+      Og opptaksforvalter får beskjed om at plassflyten bare kan ha én hovedkvote
+
+    Scenario: Den eneste kvotetypen er hovedkvoten
+      Gitt at regelverkssamlingen "UHG 2027" bare har kvotetypen "Ordinær kvote (ORD)"
+      Så er "Ordinær kvote (ORD)" hovedkvote i standard plassflyt i regelverkssamlingen
+      Og opptaksforvalter ser ikke et varsel på kvotetypen "Ordinær kvote (ORD)" om at plassflyten mangler
 
   # AVKLART 2026-10-19 (produkteier): Utdanningstilbudene bruker bare noen av kvotene, og flyten skal kunne
   # gjenbrukes, så alle kvotetypene må være knyttet inn i flyten før de kan brukes. Teksten i den gjeldende skissen
@@ -71,43 +88,35 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
     Scenario: Varsel om kvotetyper som ikke er koblet til plassflyten
       Gitt at regelverkssamlingen "UHG 2027" har kvotetypen "Idrett (IDRETT)"
       Og at kvotetypen "Idrett (IDRETT)" ikke er koblet til plassflyten
-      Når regelverksforvalter lagrer plassflyten
+      Når opptaksforvalter lagrer plassflyten
       Så er plassflyten lagret
-      Og regelverksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at plassflyten mangler
+      Og opptaksforvalter ser et varsel på kvotetypen "Idrett (IDRETT)" om at plassflyten mangler
 
-  # AVKLART 2026-10-21 (produkteier): En SPEV-kvote er en kvotetype med rangeringsmetoden SPEV (spesiell vurdering,
-  # se kvoterregelverk.feature). Den er et venterom for søkere som får tilbudsgaranti, har ingen egne plasser, og
-  # tilbudene i den tas fra hovedkvoten. Hva plasstildelingen gjør, står i
-  # 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
-  Regel: En SPEV-kvote kan bare ha hovedkvoten som mottaker
+  # AVKLART 2026-11-11 (produkteier): En kvotetype uten plasser er ikke med i plassflyten. Den har ingen plasser
+  # å avgi, og tilbudene i den tas fra hovedkvoten. Den sender ikke ledige plasser videre, kan ikke være
+  # hovedkvote, og kan ikke ta imot ledige plasser. Erstatter avklaringen 2026-11-06 om at kvotetypen kobles
+  # til hovedkvoten. Kravet bruker ikke SPEV som eksempel, se opprette_ventekvote.feature.
+  # Hva plasstildelingen gjør, står i 14 Plasstildeling/03 Tildeling/gjennomføre_plasstildeling.feature.
+  # AVKLART 2026-11-12 (produkteier, etter tilbakemelding fra backend): Scenarioet om at kvotetypen ikke sender
+  # ledige plasser videre er fjernet. Kvotetypen har ingen plasser å sende, så en mottaker ville ikke hatt noen
+  # virkning. At den ikke har mottaker i skjermbildet, står i sette_plassflyt.design.md.
+  Regel: En kvotetype uten plasser er ikke med i plassflyten
 
-    Scenario: Koble en SPEV-kvote til hovedkvoten
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
-      Og at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter kobler "Spesiell vurdering (SPEV)" til "Ordinær kvote (ORD)"
-      Og regelverksforvalter lagrer plassflyten
-      Så sender "Spesiell vurdering (SPEV)" ledige plasser til "Ordinær kvote (ORD)" i standard plassflyt
+    Scenario: En kvotetype uten plasser kan ikke være hovedkvote
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
+      Når opptaksforvalter setter standard plassflyt i regelverkssamlingen "UHG 2027"
+      Så kan "Ventekvote (VENT)" ikke bli hovedkvote
 
-    Scenario: En SPEV-kvote kan ikke kobles til en annen kvote enn hovedkvoten
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
-      Og at "Ordinær kvote (ORD)" er hovedkvoten i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter vil koble "Spesiell vurdering (SPEV)" til "Førstegangsvitnemål (ORDF)"
-      Så kan regelverksforvalter ikke koble "Spesiell vurdering (SPEV)" til "Førstegangsvitnemål (ORDF)"
-      Og regelverksforvalter ser at en SPEV-kvote bare kan kobles til hovedkvoten
+    Scenario: En kvote kan ikke sende ledige plasser til en kvotetype uten plasser
+      Gitt at kvotetypen "Ventekvote (VENT)" er uten plasser
+      Når opptaksforvalter velger mottaker for "Førstegangsvitnemål (ORDF)" i standard plassflyt
+      Så kan opptaksforvalter ikke velge "Ventekvote (VENT)" som mottaker
 
-  # AVKLART 2026-10-26 (produkteier): En SPEV-kvote har ingen egne plasser, og tilbudene i den tas fra
-  # hovedkvoten. Den kan derfor ikke være hovedkvote, og ingen kvote kan sende ledige plasser til den.
-  Regel: En SPEV-kvote kan ikke være hovedkvote eller mottaker for andre kvoter
-
-    Scenario: En SPEV-kvote kan ikke velges som hovedkvote
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
-      Når regelverksforvalter velger hovedkvote i standard plassflyt i regelverkssamlingen
-      Så kan regelverksforvalter ikke velge "Spesiell vurdering (SPEV)" som hovedkvote
-
-    Scenario: En kvote kan ikke sende ledige plasser til en SPEV-kvote
-      Gitt at kvotetypen "Spesiell vurdering (SPEV)" har rangeringsmetoden SPEV
-      Når regelverksforvalter velger mottaker for "Førstegangsvitnemål (ORDF)" i standard plassflyt
-      Så kan regelverksforvalter ikke velge "Spesiell vurdering (SPEV)" som mottaker
+    Scenario: Ingen varsel om plassflyt for en kvotetype uten plasser
+      Gitt at regelverkssamlingen "UHG 2027" har kvotetypen "Ventekvote (VENT)" uten plasser
+      Når opptaksforvalter lagrer plassflyten
+      Så er plassflyten lagret
+      Og opptaksforvalter ser ikke et varsel på kvotetypen "Ventekvote (VENT)" om at plassflyten mangler
 
   Regel: Plassflyten kan ikke gå i ring
 
@@ -116,6 +125,6 @@ Egenskap: Sette standard plassflyt i regelverkssamlingen
 
     Scenario: Sirkulær plassflyt
       Gitt at ledige plasser i "Samisk språkkompetanse (SAM)" flyter til "Nordnorsk kvote (NN)" i standard plassflyt i regelverkssamlingen
-      Når regelverksforvalter setter at ledige plasser i "Nordnorsk kvote (NN)" skal flyte til "Samisk språkkompetanse (SAM)"
+      Når opptaksforvalter setter at ledige plasser i "Nordnorsk kvote (NN)" skal flyte til "Samisk språkkompetanse (SAM)"
       Så blir plassflyten ikke lagret
-      Og regelverksforvalter får beskjed om at plassflyten ikke kan gå i ring
+      Og opptaksforvalter får beskjed om at plassflyten ikke kan gå i ring

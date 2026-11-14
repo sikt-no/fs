@@ -1,46 +1,41 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «opptaksforvalter ved forvaltende organisasjon» med «opptaksforvalter hos forvalteren», «forvaltende organisasjon» med «forvalter», «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 @FLY-OPT-SAK-001 @must @planned @e2e
 Egenskap: Saksbehandlertildeling
   Fra opptaket settes opp, til riktig organisasjon har saken. Opptaksforvalteren ved forvaltende
-  organisasjon setter opp tildelingsreglene for opptaket, og hvert utdanningstilbud får en
-  saksbehandlertildelingsregel. Når søkeren sender inn søknaden, fordeles søknadsalternativene,
+  organisasjon setter opp behandlertildelingsreglene for opptaket, og hvert utdanningstilbud får en
+  behandlertildelingsregel. Når søkeren sender inn søknaden, fordeles søknadsalternativene,
   og søknaden blir én sak hos hver saksbehandlende organisasjon. Endres utdanningsbakgrunnen
   til en bakgrunn med unntak før fristen opptaket har satt, flyttes søknadsalternativene.
 
   Bakgrunn:
     Gitt at opptaket "Samordna opptak 2027" forvaltes av HK-dir
     Og at "Universitetet i Oslo", "UiT Norges arktiske universitet", "NTNU" og "Høgskulen på Vestlandet" deltar i opptaket
-    Og at opptaket har en standard saksbehandlertildelingsregel med «Alle som deltar i opptaket»
+    Og at opptaket har en standard behandlertildelingsregel med «Alle som deltar i opptaket»
 
-  @depends-on-OPT-OVO-SAM-001 @depends-on-OPT-BEH-BEH-011 @openquestion
+  @depends-on-OPT-OVO-SAM-001 @depends-on-OPT-BEH-BEH-011
   # OPT-OVO-SAM-001: lærestedene som deltar i opptaket.
-  # OPT-BEH-BEH-011: «Opptaksforvalteren ved forvaltende organisasjon setter opp tildelingsreglene for opptaket»
+  # OPT-BEH-BEH-011: «Opptaksforvalteren ved forvaltende organisasjon setter opp behandlertildelingsreglene for opptaket»
   # og «Et lærested kan ha saksbehandlingen sin hos en annen organisasjon i opptaket».
-  Regel: Tildelingsreglene settes for opptaket
-    # ÅPNE SPØRSMÅL:
-    # - Begrepslista (nr. 17) sier at «tildelingsregel» er erstattet av «saksbehandlertildelingsregel».
-    #   Er «tildelingsreglene» et samlebegrep for saksbehandlertildelingsreglene, standardregelen og
-    #   unntakene, eller skal ordet byttes (her, i beskrivelsen og i OPT-BEH-BEH-011)?
-    # - I OPT-BEH-BEH-011 betyr «SPE» «Bare tilbyderen – også for studieønsker uten egen regel», og «UVH»
-    #   betyr «Bare tilbyderen – bare dette studieønsket». Skal flyten bruke «UVH», så testdataene
-    #   betyr det samme i flyten og i kravet?
+  Regel: Behandlertildelingsreglene settes for opptaket
+    # AVKLART 04.11.2026: flyten bruker «UVH», som i OPT-BEH-BEH-011 betyr «Bare tilbyderen – bare dette studieønsket».
 
-    Scenario: Lærestedene kan velge saksbehandlertildelingsregelen opptaket har satt opp
-      Når opptaksforvalteren ved HK-dir oppretter den aktive saksbehandlertildelingsregelen "SPE" med «Bare tilbyderen – bare dette studieønsket»
-      Så kan opptaksforvalteren ved NTNU velge "SPE" for utdanningstilbudene ved NTNU i opptaket
+    Scenario: Lærestedene kan velge behandlertildelingsregelen opptaket har satt opp
+      Når opptaksforvalteren ved HK-dir oppretter den aktive behandlertildelingsregelen "UVH" med «Bare tilbyderen – bare dette studieønsket»
+      Så kan opptaksforvalteren ved NTNU velge "UVH" for utdanningstilbudene ved NTNU i opptaket
 
   @depends-on-OPT-OPT-UTD-004 @openquestion
-  # «Opptaksforvalter kan velge saksbehandlertildelingsregel per utdanningstilbud»
-  Regel: Utdanningstilbudet får saksbehandlertildelingsregel
+  # «Opptaksforvalter kan velge behandlertildelingsregel per utdanningstilbud»
+  Regel: Utdanningstilbudet får behandlertildelingsregel
     # ÅPNE SPØRSMÅL:
-    # - Fasen tester den samme overleveringen som fase 1: en aktiv saksbehandlertildelingsregel i
-    #   opptaket kan velges på utdanningstilbudet. Skal fase 1 slutte med at «SPE» er aktiv i
+    # - Fasen tester den samme overleveringen som fase 1: en aktiv behandlertildelingsregel i
+    #   opptaket kan velges på utdanningstilbudet. Skal fase 1 slutte med at «UVH» er aktiv i
     #   opptaket, eller skal de to fasene slås sammen?
 
-    Scenario: Utdanningstilbudet får saksbehandlertildelingsregelen fra opptaket
-      Gitt at saksbehandlertildelingsregelen "SPE" er aktiv i opptaket
-      Når opptaksforvalteren ved NTNU velger "SPE" for utdanningstilbudet "Utøvende musikk, NTNU"
-      Så har "Utøvende musikk, NTNU" saksbehandlertildelingsregelen "SPE"
+    Scenario: Utdanningstilbudet får behandlertildelingsregelen fra opptaket
+      Gitt at behandlertildelingsregelen "UVH" er aktiv i opptaket
+      Når opptaksforvalteren ved NTNU velger "UVH" for utdanningstilbudet "Utøvende musikk, NTNU"
+      Så har "Utøvende musikk, NTNU" behandlertildelingsregelen "UVH"
 
   @depends-on-OPT-BEH-BEH-011
   # «Søknadsalternativene fordeles når søknaden sendes inn eller endres, og fordelingen ligger fast»
@@ -51,22 +46,18 @@ Egenskap: Saksbehandlertildeling
       # ÅPNE SPØRSMÅL:
       # - Steget om at "Universitetet i Oslo" er saksbehandlende organisasjon for "Informatikk, UiO" og
       #   "Historie, UiT", og steget om "NTNU", gjentar fordelingsreglene i OPT-BEH-BEH-011. Overleveringen
-      #   er at saksbehandlertildelingsregelen på utdanningstilbudet brukes når søknaden sendes inn, og at
+      #   er at behandlertildelingsregelen på utdanningstilbudet brukes når søknaden sendes inn, og at
       #   søknaden blir én sak per organisasjon. Holder det med de to siste stegene?
-      Gitt at "Utøvende musikk, NTNU" har saksbehandlertildelingsregelen "SPE"
-      Og at "Informatikk, UiO" og "Historie, UiT" ikke har egen saksbehandlertildelingsregel
+      Gitt at "Utøvende musikk, NTNU" har behandlertildelingsregelen "UVH"
+      Og at "Informatikk, UiO" og "Historie, UiT" ikke har egen behandlertildelingsregel
       Når søkeren sender inn søknaden med "Informatikk, UiO", "Utøvende musikk, NTNU" og "Historie, UiT" i den rekkefølgen
       Så er "Universitetet i Oslo" saksbehandlende organisasjon for "Informatikk, UiO" og "Historie, UiT"
       Og "NTNU" er saksbehandlende organisasjon for "Utøvende musikk, NTNU"
       Og søknaden har én sak hos "Universitetet i Oslo" og én sak hos "NTNU"
 
-    @openquestion
     Scenario: Organisasjonen som saksbehandler på vegne av lærestedet får saken
-      # ÅPNE SPØRSMÅL:
-      # - "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar ikke i opptaket i bakgrunnen, og
-      #   OPT-BEH-BEH-011 krever at organisasjonen som saksbehandler på vegne av lærestedet, deltar. Skal
-      #   scenarioet få steget `Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket`?
-      Gitt at "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo" i opptaket
+      Gitt at "Arkitektur- og designhøgskolen i Oslo" og "OsloMet" deltar i opptaket
+      Og at standardregelen har unntak for lærested der "OsloMet" saksbehandler på vegne av "Arkitektur- og designhøgskolen i Oslo"
       Når søkeren sender inn søknaden med "Arkitektur, AHO"
       Så har søknaden én sak hos "OsloMet"
 

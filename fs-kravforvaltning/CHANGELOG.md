@@ -1,5 +1,53 @@
 # krav-viewer
 
+## 1.15.2
+
+### Patch Changes
+
+- 94f6eca: Treet i Flyter kan gjøres bredere eller smalere ved å dra i høyre kant, som filtreet i Krav. Bredden er den samme i begge.
+
+## 1.15.1
+
+### Patch Changes
+
+- 2688baa: Treet i Flyter viser ID-en til flyten på en egen linje under filnavnet, som filtreet i Krav.
+- ca1a0c6: Knappen som viser og skjuler innholdet i et krav, har fått teksten «Innhold», som knappen for Claude.
+
+## 1.15.0
+
+### Minor Changes
+
+- 820934d: Flyter har fått fanen «Kart», som viser fasene i flyten og kravene de bygger på som et kart: fasene i rekkefølge til venstre, og kravene til høyre med domenet og sub-domenet på kortet, én kolonne per nivå. Kantene viser om delen fasen bygger på, er levert. Kartet kan vises i fullskjerm over hele appen, med «Avhengigheter» og «Følg» over kartet. Esc lukker. Fanene og valgene står nå øverst på flytsiden, under navnet på flyten, og blir stående når du bytter flyt: fanene på en egen rad med strek under den valgte, og «Avhengigheter» (før «Nivåer») og «Følg» på raden under, med et sammendrag av hva som vises. Det som sto over fanene (beskrivelsen, fremdriften, statusen, kjente brudd og varslene), er flyttet til den nye fanen «Detaljer», som en flyt åpnes på. Fanen huskes: velger du en annen flyt, eller går til Krav og tilbake, står du fortsatt i samme fane, og fanen står i lenken til flyten.
+
+### Patch Changes
+
+- afe9ffe: Kartet i Flyter blinker ikke lenger når musen står over et krav.
+- afe9ffe: Windows-versjonen bygges ikke foreløpig, fordi den ikke kan bygges uten et sertifikat til signeringen. Har du appen på Windows, får du ikke denne versjonen før Windows er med igjen.
+
+## 1.14.0
+
+### Minor Changes
+
+- e5460db: Desktop-appen finnes igjen for Windows (`.exe`), og oppdaterer seg selv som på macOS. Har du en Windows-versjon fra 1.1.0 eller eldre, må du installere den nye versjonen for hånd én gang. Appen er ikke signert, så velg **Mer informasjon → Kjør likevel** hvis SmartScreen stopper den.
+
+## 1.13.1
+
+### Patch Changes
+
+- 18f5f9c: «Ny samtale» etter innlogging i Claude-panelet åpner en ny samtale. Før ble innloggingsterminalen valgt på nytt, så ingenting skjedde.
+
+## 1.13.0
+
+### Minor Changes
+
+- ddcdb56: Claude-panelet kan logge inn Claude Code. Er Claude Code ikke logget inn, viser panelet «Logg inn», som kjører `claude auth login` i terminalen i panelet. `/login` sendt som melding gjør det samme.
+
+## 1.12.0
+
+### Minor Changes
+
+- 7c392f0: Ny visning, Verifisering: verify-rapportene i krav/, tasks/ og akseptansetest/ i et eget filtre, med rapportvisningen (HTML-fila ved siden av rapporten) eller markdown. Verify-rapportene vises ikke lenger i Krav.
+
 ## 1.11.1
 
 ### Patch Changes

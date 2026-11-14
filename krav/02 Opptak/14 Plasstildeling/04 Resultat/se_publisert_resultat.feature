@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «saksbehandlende organisasjon» med «behandler» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #585
 @OPT-PLA-RES-003 @must @draft @scope-plasstildeling-2027
 Egenskap: Se publisert resultat av plasstildelingen
@@ -58,6 +59,14 @@ Egenskap: Se publisert resultat av plasstildelingen
         | Tilbud                        |
         | Tilbud på første prioritet    |
         | Søkere på venteliste          |
+
+    # Avklart 2026-11-10 (svar 26): søkertallene i FS Admin gjelder bare utdanningstilbudene organisasjonen forvalter,
+    # tilbyr eller behandler søknader til. Søkertall på tvers av institusjoner løses i analyseplattformen.
+    Scenario: Totaltallene gjelder bare utdanningstilbudene organisasjonen har tilknytning til
+      Gitt at saksbehandler har tilgang fra "Universitetet i Bergen", som tilbyr "Medisin, høst 2027"
+      Og at "Universitetet i Bergen" verken tilbyr eller behandler søknader til "Vernepleie, høst 2027"
+      Når saksbehandler ser resultatet av plasstildelingen
+      Så er søkerne til "Vernepleie, høst 2027" ikke med i totaltallene
 
   Regel: Saksbehandler ser søknadene organisasjonen er saksbehandlende organisasjon for og søknadene til utdanningstilbudene organisasjonen tilbyr
 

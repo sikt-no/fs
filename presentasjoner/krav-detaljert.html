@@ -119,8 +119,8 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
       <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
         <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; color:#b4481a">Fase 2</p>
         <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; font-weight:600; color:#14213d">Agentisk test</h3>
-        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>cdp</p>
-        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">cdp-tester/ og oppsettet</p>
+        <p style="font-family:'IBM Plex Mono', 'Courier New', monospace; font-size:24px; font-weight:600; color:#2f6fb0">/fs-testcaser-<br>agent</p>
+        <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.4; color:#4a5568">tester-agent/ og oppsettet</p>
       </div>
       <x-shape kind="arrow-right" style="width:28px; height:18px; align-self:center; background:#c9c3b4"></x-shape>
       <div style="display:flex; flex-direction:column; gap:6px; flex:1; padding:20px; background:#ffffff; border:1px solid #e1ded6; border-radius:16px">
@@ -145,7 +145,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
       </div>
     </div>
   </div>
-  <aside>Samme bilde som side 2 i den korte presentasjonen, med skillen for hvert steg og hva den skriver. Øverst er statusen kravet har etter steget. /fs-specify-delta gjør det samme som /fs-specify for en endring, og /fs-verify-agent-teams det samme som /fs-verify, parallelt, når det er mange feature-filer. /fs-krav-avvik ser etter avvik som krever skjønn, og /fs-implementasjonsdetaljer skriver design.md når /fs-specify trenger den. Fase 1 er planen: /fs-verify og så /fs-testplan. Testene i fase 2 lager testdataene sine selv, i et oppsett i cdp-tester/_Oppsett/. Fase 3 har fire deler: det agenten ikke klarte, flyter og avhengigheter, opplevelse og helhet, og det med høyest risiko. Testrapporten fra /fs-testrapport lages etter hver fase, og agenten foreslår bare et utfall. Alle fs-skillene sjekker først at branchen er oppdatert mot main, også i kodeklonene de leser.</aside>
+  <aside>Samme bilde som side 2 i den korte presentasjonen, med skillen for hvert steg og hva den skriver. Øverst er statusen kravet har etter steget. /fs-specify-delta gjør det samme som /fs-specify for en endring, og /fs-verify-agent-teams det samme som /fs-verify, parallelt, når det er mange feature-filer. /fs-krav-avvik ser etter avvik som krever skjønn, og /fs-implementasjonsdetaljer skriver design.md når /fs-specify trenger den. Fase 1 er planen: /fs-verify og så /fs-testplan. Testene i fase 2 lager testdataene sine selv, i et oppsett i tester-agent/_Oppsett/. Fase 3 har fire deler: det agenten ikke klarte, flyter og avhengigheter, opplevelse og helhet, og det med høyest risiko. Testrapporten fra /fs-testrapport lages etter hver fase, og agenten foreslår bare et utfall. Alle fs-skillene sjekker først at branchen er oppdatert mot main, også i kodeklonene de leser.</aside>
 </section>
 </div>
 <div class="slide">
@@ -361,7 +361,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Gjør</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Finner bevis med fil og linje for hvert scenario, får funnene kontrollert, og spør deg om det som er usikkert.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Finner bevis med fil og linje for hvert scenario, får funnene kontrollert, og skriver rapporten med forslag til endringer og det som er usikkert.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
@@ -375,7 +375,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Ingenting kjøres, og @implemented betyr at koden er funnet. Mangler noe, sendes steget tilbake til repoet der koden mangler.</p>
 </div>
-<aside>Er noe av et krav levert, men ikke alt, blir egenskapen @in-progress og de leverte delene @implemented. @deprecated-krav slettes når koden er borte, ellers viser rapporten hvor koden fortsatt finnes. /fs-verify verifiserer også flytene: at overleveringene mellom kravene virker i koden. Tilgangsradene (rolle × organisasjon × opprette, lese, endre, slette) er grunnlaget for testbrukerne i testplanen. Mange feature-filer? /fs-verify-agent-teams gjør det samme med finnere og kontrollører parallelt, men bare i en interaktiv økt i terminalen.</aside>
+<aside>Du går gjennom rapporten. Det som er sikkert (alt funnet, og bekreftet av kontrolløren), settes til @implemented med ett ja. Det usikre avklares når du gir rapporten tilbake til /fs-verify. Er noe av et krav levert, men ikke alt, blir egenskapen @in-progress og de leverte delene @implemented. @deprecated-krav slettes når koden er borte, ellers viser rapporten hvor koden fortsatt finnes. /fs-verify verifiserer også flytene: at overleveringene mellom kravene virker i koden. Tilgangsradene (rolle × organisasjon × opprette, lese, endre, slette) er grunnlaget for testbrukerne i testplanen. Mange feature-filer? /fs-verify-agent-teams gjør det samme med finnere og kontrollører parallelt, men bare i en interaktiv økt i terminalen.</aside>
 </section>
 </div>
 <div class="slide">
@@ -442,7 +442,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <div style="display:flex;flex-direction:column;gap:16px">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Akseptansetesten · Fase 2 · Agentisk test</p>
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-cdp</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#2F6FB0">/fs-testcaser-agent</p>
 </div>
 <h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">En agent tester i nettleseren mot testmiljøet</h2>
 </div>
@@ -457,17 +457,17 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFFFF;padding:36px;border:1px solid #E1DED6;border-radius:16px">
 <h3 style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#B4481A">Lager</h3>
-<p style="font-size:26px;line-height:1.4;color:#14213D">Varige tester i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">cdp-tester/</span>, og et oppsett som lager testdataene i hver kjøring. Kjøringen, med bevis og skjermbilder, havner i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">akseptansetest/</span>.</p>
+<p style="font-size:26px;line-height:1.4;color:#14213D">Varige tester i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">tester-agent/</span>, og et oppsett som lager testdataene i hver kjøring. Kjøringen, med bevis og skjermbilder, havner i <span style="font-family:'IBM Plex Mono', 'Courier New', monospace;color:#2F6FB0">akseptansetest/</span>.</p>
 </div>
 </div>
 <div style="display:flex;align-items:center;gap:40px;background:#14213D;padding:28px 40px;border-radius:16px">
 <div style="width:300px;display:flex;flex-direction:column;gap:4px">
 <p style="font-size:24px;color:#C9D3E3">Kjøres med</p>
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">/cdp</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">Vibium</p>
 </div>
 <p style="flex:1;font-size:26px;line-height:1.4;color:#F7F6F2">Et tilfelle agenten finner, men som kravet ikke dekker, blir funnet «Kravet dekker ikke», og går tilbake til kravarbeidet.</p>
 </div>
-<aside>Testbrukere og testdata er nøkler, som opptak-forvalter-deltakende. Testbrukerne slås opp i miljøfila cdp-tester/_Miljøer/&lt;miljø&gt;.md. Testdataene lager testene selv: oppsettet i cdp-tester/_Oppsett/ kjøres først i hver kjøring, og lager dem gjennom løsningen, med kjøringen i navnet, fordi data i testmiljøet kan slettes når som helst. Det testene ikke kan lage, testes i fase 3. Testene har bare det som varer: ingen kravstatus, kjente mangler, testplan eller miljøverdier. Hver test har @depends-on- til kravet og en header med commit og blob-hash, så det blir en diff når kravet endres. Testteknikken velges og skrives ned per regel. Roller og tilgang får ikke egne testcaser, siden de er verifisert i koden i fase 1. Overleveringene i flytene blir tester i cdp-tester/_Løp/. /cdp er ikke i repoet, og installeres av hver bruker.</aside>
+<aside>Testbrukere og testdata er nøkler, som opptak-forvalter-deltakende. Testbrukerne slås opp i miljøfila tester-agent/_Miljøer/&lt;miljø&gt;.md. Testdataene lager testene selv: oppsettet i tester-agent/_Oppsett/ kjøres først i hver kjøring, og lager dem gjennom løsningen, med kjøringen i navnet, fordi data i testmiljøet kan slettes når som helst. Det testene ikke kan lage, testes i fase 3. Testene har bare det som varer: ingen kravstatus, kjente mangler, testplan eller miljøverdier. Hver test har @depends-on- til kravet og en header med commit og blob-hash, så det blir en diff når kravet endres. Testteknikken velges og skrives ned per regel. Roller og tilgang får ikke egne testcaser, siden de er verifisert i koden i fase 1. Overleveringene i flytene blir tester i tester-agent/_Løp/. Vibium installeres i tester-agent/ med npm install, og agenten logger inn med Feide-testbrukeren.</aside>
 </section>
 </div>
 <div class="slide">
@@ -624,7 +624,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 <p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Scope-filene og én mappe per oppgave, delt av mennesker og agenter</p>
 </div>
 <div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
-<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">cdp-tester/</p>
+<p style="width:500px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;font-weight:600;color:#14213D">tester-agent/</p>
 <p style="flex:1;font-size:28px;line-height:1.4;color:#4A5568">Varige tester for den agentiske testen, og miljøfilene</p>
 </div>
 <div style="display:flex;gap:48px;padding:16px 0px;border-bottom:1px solid #E1DED6">
@@ -703,7 +703,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#14213D;padding:36px 40px;border-radius:16px">
-<p style="font-size:28px;line-height:1.4;color:#F7F6F2">Den samme definisjonen brukes av fs-verify, testplanen, CDP-testene og tavla.</p>
+<p style="font-size:28px;line-height:1.4;color:#F7F6F2">Den samme definisjonen brukes av fs-verify, testplanen, agenttestene og tavla.</p>
 <p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#F0A070">tasks/README.md · fs-kravforvaltning/src/specboard.ts (gating)</p>
 </div>
 <aside>De to stedene holdes i synk. Endrer du definisjonen ett sted, endrer du den det andre stedet i samme PR.</aside>
@@ -739,7 +739,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 </div>
 </div>
-<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#14213D">grep -rn "@depends-on-OPT-OVO-SAM-001" krav/ cdp-tester/</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#14213D">grep -rn "@depends-on-OPT-OVO-SAM-001" krav/ tester-agent/</p>
 <aside>Den andre retningen, «hva bygger på dette kravet?», skrives ikke ned, men finnes med grep. Ring-avhengigheter, ID-er som ikke finnes, og ankre som ikke stemmer med regeltitlene, sjekkes av fs-krav-avvik, siden det krever flere filer. Eksempelet med ankeret er forenklet.</aside>
 </section>
 </div>
@@ -839,13 +839,13 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;padding:28px;border:1px solid #E1DED6;border-radius:16px">
-<h3 style="font-size:28px;font-weight:600;color:#14213D">Du bekrefter</h3>
-<p style="font-size:24px;line-height:1.4;color:#4A5568">Usikre og ikke funne scenarioer</p>
+<h3 style="font-size:28px;font-weight:600;color:#14213D">Rapporten</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5568">Forslaget og det usikre først</p>
 </div>
 <x-shape kind="arrow-right" style="background:#C9C3B4;width:48px;height:24px"></x-shape>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#14213D;padding:28px;border-radius:16px">
-<h3 style="font-size:28px;font-weight:600;color:#F7F6F2">Retagging</h3>
-<p style="font-size:24px;line-height:1.4;color:#C9D3E3">og spec/verify-&lt;dato&gt;-&lt;HHMM&gt;.md</p>
+<h3 style="font-size:28px;font-weight:600;color:#F7F6F2">Du går gjennom</h3>
+<p style="font-size:24px;line-height:1.4;color:#C9D3E3">Det sikre settes med ett ja, resten avklares i rapporten</p>
 </div>
 </div>
 <div style="display:flex;gap:32px">
@@ -860,15 +860,15 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 <div style="display:flex;align-items:center;gap:32px;background:#14213D;padding:28px 40px;border-radius:16px">
 <p style="width:520px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#F0A070">fs-verify-agent-teams</p>
-<p style="flex:1;font-size:26px;line-height:1.4;color:#C9D3E3">Mange feature-filer? Én finner og én kontrollør per fil, parallelt. Lead-en avgjør, spør deg og skriver rapporten.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;color:#C9D3E3">Mange feature-filer? Én finner og én kontrollør per fil, parallelt. Lead-en avgjør og skriver rapporten.</p>
 </div>
-<aside>Dette er første del av fase 1, planen, i teststrategien: white-box, ingenting kjøres, og @implemented betyr bare at koden er funnet. Mangler noe, står det i rapporten, med hvilket repo koden mangler i. fs-verify-agent-teams stiller de samme spørsmålene og skriver rapporten i samme format. Den krever CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, og virker bare i en interaktiv økt: i terminalen, også terminalen i FS Kravforvaltning, men ikke i Claude-panelet.</aside>
+<aside>Dette er første del av fase 1, planen, i teststrategien: white-box, ingenting kjøres, og @implemented betyr bare at koden er funnet. Rapporten er resultatet: forslaget til endringer og det som er usikkert står først, og det som stemmer, får én linje. Mangler noe, står det i rapporten, med hvilket repo koden mangler i. Skillen spør bare om det sikre (alt funnet, og bekreftet av kontrolløren) skal bli @implemented. Det usikre og slettingen av @deprecated avklares når du gir rapporten tilbake til fs-verify. fs-verify-agent-teams gjør det samme, og skriver rapporten i samme format. Den krever CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, og virker bare i en interaktiv økt: i terminalen, også terminalen i FS Kravforvaltning, men ikke i Claude-panelet.</aside>
 </section>
 </div>
 <div class="slide">
 <section id="cdp" data-transition="fade" style="background:#F7F6F2;color:#1F2A44;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
 <div style="display:flex;flex-direction:column;gap:16px">
-<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Agentisk test · cdp-tester/</p>
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B4481A">Agentisk test · tester-agent/</p>
 <h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#14213D">Tester en agent kjører i Chrome mot testmiljøet</h2>
 </div>
 <div style="display:flex;gap:48px">
@@ -899,7 +899,7 @@ html,body{margin:0;height:100%;background:#0E1628;color:#F7F6F2;font-family:'IBM
 </div>
 </div>
 <p style="font-size:26px;line-height:1.4;color:#4A5568">Testcasene utledes også fra reglene: tomt felt, bare mellomrom, 100 og 101 tegn. Kjøringen 27. oktober hadde 23 testcaser.</p>
-<aside>Data i testmiljøet kan slettes når som helst, så oppsettet i cdp-tester/_Oppsett/ kjøres først og lager testdataene gjennom løsningen, med kjøringen i navnet. Navnene står i «Kjøringens testdata» i resultatet. Lages av fs-testcaser-cdp, og kjøres med cdp-skillen, som hver bruker installerer selv. Resultatet, med skjermbilder, ligger i akseptansetest/&lt;slug&gt;/kjoring-&lt;dato&gt;/. Et tilfelle agenten utleder som kravet ikke dekker, blir et funn av typen «Kravet dekker ikke», og går til kravarbeidet. Overleveringene i flytene blir tester i cdp-tester/_Løp/.</aside>
+<aside>Data i testmiljøet kan slettes når som helst, så oppsettet i tester-agent/_Oppsett/ kjøres først og lager testdataene gjennom løsningen, med kjøringen i navnet. Navnene står i «Kjøringens testdata» i resultatet. Lages av fs-testcaser-agent, og kjøres med Vibium, som installeres i tester-agent/ med npm install. Resultatet, med skjermbilder, ligger i akseptansetest/&lt;slug&gt;/kjoring-&lt;dato&gt;/. Et tilfelle agenten utleder som kravet ikke dekker, blir et funn av typen «Kravet dekker ikke», og går til kravarbeidet. Overleveringene i flytene blir tester i tester-agent/_Løp/.</aside>
 </section>
 </div>
 <div class="slide">

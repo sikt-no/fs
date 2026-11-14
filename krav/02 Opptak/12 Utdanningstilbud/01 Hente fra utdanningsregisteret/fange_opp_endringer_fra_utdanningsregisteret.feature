@@ -1,4 +1,5 @@
 # language: no
+# BEGREPER (2026-11-10): Bytt «forvaltende organisasjon» med «forvalter» når fila likevel endres. Se krav/02 Opptak/begreper.md.
 # GitHub: #591, #592
 @OPT-OPT-UTD-006 @must @draft @scope-utdanningstilbud-i-opptak-2027
 Egenskap: Fange opp endringer fra utdanningsregisteret

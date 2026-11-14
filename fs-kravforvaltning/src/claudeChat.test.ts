@@ -217,7 +217,7 @@ test('editedFiles: filene Claude har endret, relative til repoet, også under ta
   assert.deepEqual(editedFiles(c), ['tasks/brukere/spec/verify-2026-09-29.md', 'krav/b.feature']);
 });
 
-import { allowAlways, needsAuth, pendingPermissions, pendingQuestions, toolLabel } from './claudeChat.ts';
+import { allowAlways, type Chat, isLoginCommand, needsAuth, needsLogin, pendingPermissions, pendingQuestions, toolLabel } from './claudeChat.ts';
 
 test('spørsmål om lov: kortet legges til én gang, og svaret oppdaterer det', () => {
   let c = started(EMPTY_CHAT, 'r');
@@ -265,6 +265,19 @@ test('tillat alltid lagres på samtalen, og MCP-servere som må logges inn', () 
   assert.deepEqual(needsAuth(apply(started(EMPTY_CHAT, 'r'), 'r', { kind: 'init', sessionId: 's', model: null, skills: [] })), []);
 });
 
+test('needsLogin: svaret på siste melding sier at Claude Code ikke er logget inn', () => {
+  const user = { kind: 'user' as const, text: 'hei', path: null };
+  const chat = (items: Chat['items']) => ({ ...EMPTY_CHAT, items });
+  assert.ok(needsLogin(chat([user, { kind: 'assistant', text: 'Not logged in · Please run /login' }, { kind: 'done', ok: false, text: 'Not logged in · Please run /login' }])));
+  assert.ok(needsLogin(chat([user, { kind: 'assistant', text: "/login isn't available in this environment." }, { kind: 'done', ok: true, text: 'Ferdig' }])));
+  assert.ok(needsLogin(chat([user, { kind: 'done', ok: false, text: 'OAuth token has expired' }])));
+  assert.ok(!needsLogin(chat([user, { kind: 'done', ok: false, text: 'Not logged in' }, user, { kind: 'done', ok: true, text: 'Ferdig' }])), 'bare svaret på siste melding');
+  assert.ok(!needsLogin(chat([user, { kind: 'assistant', text: 'Not logged in. ' + 'x'.repeat(400) }])), 'et langt svar teller ikke');
+  assert.ok(!needsLogin(EMPTY_CHAT));
+  assert.ok(isLoginCommand(' /login ') && isLoginCommand('/LOGIN'));
+  assert.ok(!isLoginCommand('/login nå') && !isLoginCommand('logg inn'));
+});
+
 test('gamle samtaler uten alwaysAllowed og mcp kan leses, og ventende spørsmål avsluttes', () => {
   const old = { list: [{ id: 'a', title: 't', createdAt: 1, updatedAt: 1, chat: { items: [{ kind: 'permission', id: 'x:1', tool: 'WebFetch', input: {}, state: 'pending' }], runId: 'x' } }], current: 'a' };
   const cs = restoreConversations(old, []);
@@ -304,4 +317,12 @@ test('terminal-samtale: lagres med økten, avsluttes én gang, og leses tilbake'
   assert.equal(terminalExited(EMPTY_CHAT, 0), EMPTY_CHAT);
   const back = restoreConversations(JSON.parse(JSON.stringify(cs)), []);
   assert.deepEqual(back.list[0].chat.terminal, { id: 't1', mode: 'execute', repo: 'fs-admin' });
+});
+
+test('ny samtale gjenbruker ikke en terminal-samtale eller en utførekjøring uten meldinger', () => {
+  const login = createTerminalConversation(NO_CONVERSATIONS, 'l', 1, { id: 't', mode: 'login', exited: true, code: 0 }, 'Logg inn på Claude Code');
+  const cs = createConversation(login, 'n', 2);
+  assert.equal(cs.current, 'n');
+  assert.equal(cs.list.length, 2);
+  assert.equal(cs.list[0].chat.terminal, undefined);
 });

@@ -1,6 +1,6 @@
 # language: no
 # GitHub: #413
-@OPT-BEH-BEH-008 @must @planned
+@OPT-BEH-BEH-008 @must @in-progress @scope-meldinger-varslinger-og-oppgaver
 Egenskap: Søknadsmangler
   Som saksbehandler ved saksbehandlende organisasjon
   ønsker jeg å registrere mangler i saken og gi søkeren beskjed om manglene
@@ -42,6 +42,7 @@ Egenskap: Søknadsmangler
 
   # ── 1. Mangelkoder ───────────────────────────────────────────
 
+  @implemented @ref-OPT-BEH-BEH-036
   Regel: Opptaksforvalteren forvalter mangelkodene i regelverkssamlingen
 
     Scenario: Opprette mangelkode
@@ -76,6 +77,7 @@ Egenskap: Søknadsmangler
 
   # ── 2. Registrering ──────────────────────────────────────────
 
+  @implemented
   Regel: Mangler hindrer ikke kvalifiseringen eller at saken blir ferdig behandlet
     # Avklart 2026-11-02 i gjennomgangen av flyten automatisk saksbehandling: kvalifiseringen
     # beregnes fra kravelementene, og leser ikke manglene. At en mangelkode som stopper for
@@ -102,6 +104,7 @@ Egenskap: Søknadsmangler
 
   Regel: Saksbehandlende organisasjon registrerer mangler i saken sin
 
+    @implemented
     Scenario: Registrere mangel på spesielle krav
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel i saken med følgende opplysninger
         | felt                | verdi                                                      |
@@ -110,6 +113,7 @@ Egenskap: Søknadsmangler
         | Kommentar           | Du mangler karakter i R2. Dokumenter ett av kravene under. |
       Så har saken mangelen "KAR" på kompetanseregelverket "Regelverk B"
 
+    @implemented
     Scenario: Saksbehandleren velger blant mangelkodene i regelverkssamlingen til opptaket
       Gitt at regelverkssamlingen "UHG 2027" har mangelkodene "KAR" og "STEMPEL"
       Og at en annen regelverkssamling har mangelkoden "ATT"
@@ -117,6 +121,7 @@ Egenskap: Søknadsmangler
       Så kan saksbehandleren velge "KAR" og "STEMPEL"
       Og saksbehandleren kan ikke velge "ATT"
 
+    @implemented
     Scenario: Saksbehandleren velger blant kompetanseregelverkene til søknadsalternativene i saken
       Gitt at søknadsalternativene i saken hos "Universitetet i Oslo" har kompetanseregelverkene "Regelverk A" og "Regelverk B"
       Når saksbehandleren ved Universitetet i Oslo velger kompetanseregelverk for en mangel
@@ -144,10 +149,12 @@ Egenskap: Søknadsmangler
         | Poeng          | kan ikke mangelen knyttes til et kompetanseregelverk eller kvotespørsmål |
         | Kvote          | knyttes mangelen til et kvotespørsmål                                 |
 
+    @implemented
     Scenario: Kommentaren til søkeren er valgfri
       Når saksbehandleren ved Universitetet i Oslo registrerer en mangel uten kommentar
       Så har saken mangelen
 
+    @implemented
     Scenario: En sak kan ha flere mangler
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo registrerer mangelen "STEMPEL"
@@ -165,6 +172,7 @@ Egenskap: Søknadsmangler
         | Generelle krav | GSK     | ikke    | avvises mangelen                                            |
         | Poeng          | STEMPEL | ikke    | avvises mangelen                                            |
 
+    @implemented
     Scenario: Slette mangel som er registrert ved en feil
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når saksbehandleren ved Universitetet i Oslo sletter mangelen "KAR"
@@ -181,12 +189,14 @@ Egenskap: Søknadsmangler
         | sjekker ut en mangel  |
         | sletter en mangel     |
 
+  @ref-OPT-BEH-BEH-036
   Regel: Saksbehandleren sjekker ut mangelen når søkeren har dokumentert på nytt
 
     Når saksbehandleren har vurdert ny dokumentasjon og mener at mangelen er løst, sjekker
     saksbehandleren ut mangelen. En mangel som er sjekket ut, står fortsatt i saken, så det
-    går an å se hva som har manglet, men den hindrer ikke lenger noe og vises ikke for søkeren.
+    går an å se hva som har manglet, men den hindrer ikke lenger noe, og søkeren ser den som utført.
 
+    @implemented
     Scenario: Saksbehandleren ser at søkeren har lastet opp ny dokumentasjon
       Gitt at saken hos "Universitetet i Oslo" har mangelen "KAR"
       Når søkeren laster opp dokumentasjon
@@ -313,6 +323,19 @@ Egenskap: Søknadsmangler
       Og søkeren ser fristen for å laste opp dokumentasjon
       Og søkeren kan gå til dokumentasjonssiden
 
+  @draft @openquestion
+  Regel: Søkeren ser at en mangel er sjekket ut
+    # ÅPNE SPØRSMÅL:
+    # - Løsningen er trolig allerede tenkt ut (grønn hake i søknadsflyten). Hvor er den beskrevet?
+    # Kilde: workshop om meldinger 2026-11-09 (Miro), K5-2.
+    # Hvordan det vises (grønn hake), hører hjemme i søknadsmangler.design.md.
+
+    Scenario: Søkeren ser at mangelen er utført
+      Gitt at søkeren har lastet opp dokumentasjon for den publiserte mangelen "KAR"
+      Når saksbehandleren ved Universitetet i Oslo sjekker ut mangelen "KAR"
+      Så ser søkeren at mangelen "KAR" er utført i søknaden
+      Men søkeren mottar ikke en melding om at mangelen er sjekket ut
+
   Regel: Fristen for en mangel er ettersendingsfristen, med mindre en tidligere dokumentasjonsfrist ikke har gått ut
 
     Scenariomal: Fristen for en mangel publisert <publisert> når <situasjon>
@@ -403,10 +426,15 @@ Egenskap: Søknadsmangler
         | Poeng    |
         | Kvote    |
 
-    Scenario: Mangel som er sjekket ut vises ikke for søkeren
+    @draft @openquestion
+    Scenario: Mangel som er sjekket ut vises som utført for søkeren
+      # ÅPNE SPØRSMÅL:
+      # - Endret fra «vises ikke for søkeren» etter workshopen om meldinger 2026-11-09 (K5-2).
+      #   Ikke gått gjennom med teamet. I dag holder API-et mangler som er sjekket ut, unna
+      #   søkeren (verify-søknadsmangler-2026-10-08.md).
       Gitt at den publiserte mangelen "KAR" er sjekket ut
       Når søkeren åpner dokumentasjonssiden
-      Så ser ikke søkeren mangelen "KAR"
+      Så ser søkeren at mangelen "KAR" er utført
 
   @draft @openquestion
   Regel: Søkeren laster opp dokumentasjon for manglene
@@ -426,6 +454,17 @@ Egenskap: Søknadsmangler
       Når søkeren åpner dokumentasjonssiden
       Så ser søkeren fortsatt mangelen "KAR"
 
+    @openquestion
+    Scenario: Søkeren får ny melding når dokumentasjonen ikke dekker mangelen
+      # ÅPNE SPØRSMÅL:
+      # - Lagt til fra workshopen om meldinger 2026-11-09 (K5-4). Ikke gått gjennom med teamet.
+      Gitt at søkeren har lastet opp dokumentasjon for den publiserte mangelen "KAR"
+      Når saksbehandleren ved Universitetet i Oslo lagrer en ny kommentar på mangelen "KAR"
+      Og saksbehandleren publiserer manglene i saken
+      Så ser søkeren fortsatt mangelen "KAR"
+      Og søkeren ser den nye kommentaren
+      Og søkeren mottar en ny melding om mangler
+
   # ── 5. Innsyn ────────────────────────────────────────────────
 
   Regel: Organisasjonene som behandler søknaden ser manglene i alle sakene, men endrer bare manglene i saken sin
@@ -441,6 +480,7 @@ Egenskap: Søknadsmangler
       Når saksbehandleren ved Universitetet i Oslo ser mangelen "KAR"
       Så ser ikke saksbehandleren muligheten til å endre, sjekke ut eller slette mangelen "KAR"
 
+    @implemented
     Scenario: Opptaksforvalteren ved forvaltende organisasjon ser manglene i alle sakene
       Gitt at sakene hos "Universitetet i Oslo" og "UiT Norges arktiske universitet" har mangler
       Når opptaksforvalteren ved HK-dir åpner søknaden
