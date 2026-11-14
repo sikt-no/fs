@@ -257,11 +257,24 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, tab, onTab: setTab,
               </div>
               {open &&
                 shown.map(f => (
-                  <div key={f.path} role="treeitem" tabIndex={0} class={'fl-trow file' + (f.path === path ? ' sel' : '')} onClick={() => openFlow(f)} onKeyDown={e => e.key === 'Enter' && openFlow(f)} title={f.title}>
+                  <div key={f.path} role="treeitem" tabIndex={0} class={'fl-trow file' + (f.id ? ' two' : '') + (f.path === path ? ' sel' : '')} onClick={() => openFlow(f)} onKeyDown={e => e.key === 'Enter' && openFlow(f)} title={f.id ? `${f.id} · ${f.title}` : f.title}>
                     <span class="chev" />
                     {f.overview ? <span class="fl-ovicon" style={{ borderColor: stColor(f.status) }}><span style={{ background: stColor(f.status) }} /><span style={{ background: stColor(f.status) }} /></span> : <Dot c={stColor(f.status)} />}
-                    <span class="name">{f.file}</span>
-                    {f.overview && <span class="mono sub">oversikt</span>}
+                    {/* Filnavnet, og ID-en på en egen linje under, som i filtreet i Krav */}
+                    {f.id ? (
+                      <span class="namecol">
+                        <span class="name">{f.file}</span>
+                        <span class="idline">
+                          <span class="id">{f.id}</span>
+                          {f.overview && ' · oversikt'}
+                        </span>
+                      </span>
+                    ) : (
+                      <>
+                        <span class="name">{f.file}</span>
+                        {f.overview && <span class="mono sub">oversikt</span>}
+                      </>
+                    )}
                     {f.error && <span class="fl-errmark" title="Fila kan ikke leses">!</span>}
                   </div>
                 ))}
