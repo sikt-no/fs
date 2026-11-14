@@ -1,5 +1,12 @@
 # krav-viewer
 
+## 1.15.1
+
+### Patch Changes
+
+- 2688baa: Treet i Flyter viser ID-en til flyten på en egen linje under filnavnet, som filtreet i Krav.
+- ca1a0c6: Knappen som viser og skjuler innholdet i et krav, har fått teksten «Innhold», som knappen for Claude.
+
 ## 1.15.0
 
 ### Minor Changes
