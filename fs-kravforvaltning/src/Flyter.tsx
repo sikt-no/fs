@@ -4,6 +4,8 @@
 import type { JSX } from 'preact';
 import { lazy, Suspense } from 'preact/compat';
 import { Dot, phaseLook, STC, stColor } from './flowLook';
+import { ResizeHandle } from './ResizeHandle';
+import { TREE_MIN, TREE_WIDTH, treeMax } from './Sidebar';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { Status } from '../shared/model';
 import {
@@ -59,6 +61,9 @@ interface Props {
   onOpen: (path: string, line?: number) => void;
   sideHidden: boolean;
   outlineHidden: boolean;
+  /** Bredden på treet, som kan dras i høyre kant (den samme som filtreet i Krav) */
+  width: number;
+  onWidth: (w: number) => void;
 }
 
 type Tab = FlowTab;
@@ -146,7 +151,7 @@ const WARN_LABEL: Record<FlowWarning['kind'], string> = {
   break: 'kjent brudd',
 };
 
-export function Flyter({ ix, path, depth, onSelect, onDepth, tab, onTab: setTab, goPhase, onOpen, sideHidden, outlineHidden }: Props) {
+export function Flyter({ ix, path, depth, onSelect, onDepth, tab, onTab: setTab, goPhase, onOpen, sideHidden, outlineHidden, width, onWidth }: Props) {
   const flow = path ? (ix.flows.find(f => f.path === path) ?? null) : null;
   const [q, setQ] = useState('');
   const [closed, setClosed] = useState<Record<string, boolean>>({});
@@ -224,6 +229,7 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, tab, onTab: setTab,
   const ql = q.trim().toLowerCase();
   const side = (
     <aside class="fl-side">
+      <ResizeHandle width={width} onWidth={onWidth} edge="right" min={TREE_MIN} max={treeMax} fallback={TREE_WIDTH} label="Endre bredden på flyttreet" />
       <div class="fl-sidehead">
         <div class="fl-sidepath mono">
           <span>krav</span>
@@ -346,7 +352,7 @@ export function Flyter({ ix, path, depth, onSelect, onDepth, tab, onTab: setTab,
   }
 
   return (
-    <div class={'flyter' + (sideHidden ? ' noside' : '') + (outlineHidden || !outline ? ' nooutline' : '')}>
+    <div class={'flyter' + (sideHidden ? ' noside' : '') + (outlineHidden || !outline ? ' nooutline' : '')} style={{ '--tree-w': `min(${width}px, 50vw)` }}>
       {!sideHidden && side}
       <main class="fl-main" ref={mainRef}>
         {body}

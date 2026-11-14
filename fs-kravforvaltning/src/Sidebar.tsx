@@ -132,8 +132,8 @@ interface Props {
 
 /** Standardbredden på treet, og grensene når det dras */
 export const TREE_WIDTH = 300;
-const TREE_MIN = 200;
-const treeMax = () => Math.max(TREE_MIN, Math.min(640, Math.round(innerWidth * 0.5)));
+export const TREE_MIN = 200;
+export const treeMax = () => Math.max(TREE_MIN, Math.min(640, Math.round(innerWidth * 0.5)));
 
 export function Sidebar({ entries, tree, current, open, query, onQuery, onToggle, onSelect, mode, onMode, git, onPr, onPull, pulling, canOpen, width, onWidth }: Props) {
   // Lukkede mapper i endringstreet; alle er åpne som standard

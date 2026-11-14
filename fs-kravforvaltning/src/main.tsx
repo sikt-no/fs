@@ -899,6 +899,8 @@ function App() {
             onOpen={(p, ln) => void select(p, ln)}
             sideHidden={treeHidden}
             outlineHidden={tocHidden}
+            width={treeWidth}
+            onWidth={setTreeWidth}
           />
         ) : mode === 'verifisering' ? (
           <Verifisering
