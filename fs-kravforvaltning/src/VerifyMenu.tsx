@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { createPortal } from 'preact/compat';
+import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { useVerifyScreenshots } from './verifyScreenshots';
 
 interface Props {
@@ -18,17 +19,49 @@ export function VerifyMenu({ what, onVerify, onTerminal }: Props) {
   const [open, setOpen] = useState(false);
   const [shots, setShots] = useVerifyScreenshots();
   const ref = useRef<HTMLSpanElement>(null);
+  const popRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
   useEffect(() => {
     if (!open) return;
     const close = (e: Event) => {
-      if (e instanceof KeyboardEvent ? e.key === 'Escape' : !ref.current?.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (e instanceof KeyboardEvent ? e.key === 'Escape' : !ref.current?.contains(t) && !popRef.current?.contains(t)) setOpen(false);
     };
     addEventListener('mousedown', close);
     addEventListener('keydown', close);
     return () => {
       removeEventListener('mousedown', close);
       removeEventListener('keydown', close);
+    };
+  }, [open]);
+
+  // Menyen ligger i body med position: fixed, så den ikke klippes av den rullende hovedkolonnen
+  // (og havner bak treet). Den høyrestilles mot knappen, holdes innenfor vinduet, og åpner
+  // oppover når det ikke er plass under.
+  useLayoutEffect(() => {
+    if (!open) {
+      setPos(null);
+      return;
+    }
+    const place = () => {
+      const btn = ref.current?.getBoundingClientRect();
+      const pop = popRef.current;
+      if (!btn || !pop) return;
+      const m = 8;
+      const w = pop.offsetWidth;
+      const h = pop.offsetHeight;
+      const left = Math.max(m, Math.min(btn.right - w, innerWidth - w - m));
+      const below = btn.bottom + 6;
+      const above = btn.top - 6 - h;
+      setPos({ top: below + h > innerHeight - m && above >= m ? above : below, left });
+    };
+    place();
+    addEventListener('resize', place);
+    addEventListener('scroll', place, true);
+    return () => {
+      removeEventListener('resize', place);
+      removeEventListener('scroll', place, true);
     };
   }, [open]);
 
@@ -42,37 +75,45 @@ export function VerifyMenu({ what, onVerify, onTerminal }: Props) {
       >
         Verifiser
       </button>
-      {open && (
-        <div class="vmenu-pop" role="dialog" aria-label={`Verifiser ${what}`}>
-          <div class="vmenu-h">Verifiser {what} mot koden</div>
-          <div class="vmenu-sub muted">fs-verify i Claude-panelet, uansett status. Er alt funnet, foreslår Claude ny status.</div>
-          <label class="spd-check">
-            <input type="checkbox" checked={shots} onChange={e => setShots((e.currentTarget as HTMLInputElement).checked)} />
-            Ta skjermbilder (test-fsadmin)
-          </label>
-          <button
-            class="primbtn"
-            onClick={() => {
-              setOpen(false);
-              onVerify(shots);
-            }}
+      {open &&
+        createPortal(
+          <div
+            class="vmenu-pop"
+            ref={popRef}
+            role="dialog"
+            aria-label={`Verifiser ${what}`}
+            style={pos ? { top: pos.top, left: pos.left } : { visibility: 'hidden' }}
           >
-            Verifiser i Claude-panelet
-          </button>
-          {onTerminal && (
+            <div class="vmenu-h">Verifiser {what} mot koden</div>
+            <div class="vmenu-sub muted">fs-verify i Claude-panelet, uansett status. Er alt funnet, foreslår Claude ny status.</div>
+            <label class="spd-check">
+              <input type="checkbox" checked={shots} onChange={e => setShots((e.currentTarget as HTMLInputElement).checked)} />
+              Ta skjermbilder (test-fsadmin)
+            </label>
             <button
-              class="smallbtn"
-              title="fs-verify-agent-teams: interaktiv Claude Code med agent teams i en terminal i Claude-panelet"
+              class="primbtn"
               onClick={() => {
                 setOpen(false);
-                onTerminal(shots);
+                onVerify(shots);
               }}
             >
-              I terminal med agent team
+              Verifiser i Claude-panelet
             </button>
-          )}
-        </div>
-      )}
+            {onTerminal && (
+              <button
+                class="smallbtn"
+                title="fs-verify-agent-teams: interaktiv Claude Code med agent teams i en terminal i Claude-panelet"
+                onClick={() => {
+                  setOpen(false);
+                  onTerminal(shots);
+                }}
+              >
+                I terminal med agent team
+              </button>
+            )}
+          </div>,
+          document.body,
+        )}
     </span>
   );
 }
