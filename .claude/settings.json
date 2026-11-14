@@ -17,7 +17,12 @@
       "mcp__claude_ai_Atlassian_Rovo__getAccessibleAtlassianResources",
       "mcp__claude_ai_Atlassian_Rovo__searchJiraIssuesUsingJql",
       "mcp__plugin_atlassian_atlassian__getAccessibleAtlassianResources",
-      "mcp__plugin_atlassian_atlassian__searchJiraIssuesUsingJql"
+      "mcp__plugin_atlassian_atlassian__searchJiraIssuesUsingJql",
+      "mcp__plugin_sta-development-starter-pack_fs-rollekatalog__finn_roller",
+      "mcp__plugin_sta-development-starter-pack_fs-rollekatalog__sjekk_rollenavn",
+      "mcp__plugin_sta-development-starter-pack_fs-rollekatalog__rolle_gir",
+      "mcp__plugin_sta-development-starter-pack_fs-rollekatalog__roller_som_gir",
+      "mcp__plugin_sta-development-starter-pack_fs-rollekatalog__rolle_detaljer"
     ]
   }
 }
